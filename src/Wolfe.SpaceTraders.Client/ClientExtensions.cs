@@ -18,8 +18,8 @@ public static class ClientExtensions
             {
                 AuthorizationHeaderValueGetter = async (_, ct) =>
                 {
-                    var tokenService = provider.GetRequiredService<ITokenGetService>();
-                    var token = await tokenService.GetToken(ct);
+                    var tokenService = provider.GetRequiredService<ITokenReader>();
+                    var token = await tokenService.Read(ct);
                     return token ?? "";
                 }
             })
@@ -31,7 +31,7 @@ public static class ClientExtensions
 
         var tokenService = new FileTokenService();
         return services
-            .AddSingleton<ITokenGetService>(tokenService)
-            .AddSingleton<ITokenSetService>(tokenService);
+            .AddSingleton<ITokenReader>(tokenService)
+            .AddSingleton<ITokenWriter>(tokenService);
     }
 }

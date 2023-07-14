@@ -5,9 +5,9 @@ namespace Wolfe.SpaceTraders.Commands.Login;
 
 internal class LoginCommandHandler : CommandHandler
 {
-    private readonly ITokenSetService _token;
+    private readonly ITokenWriter _token;
 
-    public LoginCommandHandler(ITokenSetService token)
+    public LoginCommandHandler(ITokenWriter token)
     {
         _token = token;
     }
@@ -15,7 +15,7 @@ internal class LoginCommandHandler : CommandHandler
     public override async Task<int> InvokeAsync(InvocationContext context)
     {
         var token = context.BindingContext.ParseResult.GetValueForArgument(LoginCommand.TokenArgument);
-        await _token.SetToken(token, context.GetCancellationToken());
+        await _token.Write(token, context.GetCancellationToken());
         return ExitCodes.Success;
     }
 }

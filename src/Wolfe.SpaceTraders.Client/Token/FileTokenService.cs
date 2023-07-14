@@ -1,6 +1,6 @@
 ﻿namespace Wolfe.SpaceTraders.Token
 {
-    internal class FileTokenService : ITokenGetService, ITokenSetService
+    internal class FileTokenService : ITokenReader, ITokenWriter
     {
         private readonly string _tempFile;
         private string? _token;
@@ -10,13 +10,19 @@
             _tempFile = Path.Combine(Path.GetTempPath(), "spaceTraders.token");
         }
 
-        public Task SetToken(string token, CancellationToken cancellationToken)
+        public Task Write(string token, CancellationToken cancellationToken)
         {
             _token = token;
             return File.WriteAllTextAsync(_tempFile, token, cancellationToken);
         }
 
-        public async Task<string?> GetToken(CancellationToken cancellationToken)
+        public Task Clear(CancellationToken cancellationToken)
+        {
+            File.Delete(_tempFile);
+            return Task.CompletedTask;
+        }
+
+        public async Task<string?> Read(CancellationToken cancellationToken)
         {
             return _token ??= await File.ReadAllTextAsync(_tempFile, cancellationToken);
         }
