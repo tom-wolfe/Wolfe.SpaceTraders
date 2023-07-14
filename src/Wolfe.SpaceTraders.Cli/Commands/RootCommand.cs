@@ -1,4 +1,5 @@
 ﻿using System.CommandLine;
+using Wolfe.SpaceTraders.Commands.Contracts;
 using Wolfe.SpaceTraders.Commands.Login;
 using Wolfe.SpaceTraders.Commands.Logout;
 using Wolfe.SpaceTraders.Commands.Me;
@@ -13,6 +14,7 @@ internal static class RootCommand
         command.AddCommand(LoginCommand.CreateCommand(services));
         command.AddCommand(LogoutCommand.CreateCommand(services));
         command.AddCommand(MeCommand.CreateCommand(services));
+        command.AddCommand(ContractsCommand.CreateCommand(services));
 
         return command;
     }

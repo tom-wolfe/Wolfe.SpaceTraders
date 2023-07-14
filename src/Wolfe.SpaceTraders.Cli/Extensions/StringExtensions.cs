@@ -1,24 +1,12 @@
 ﻿namespace Wolfe.SpaceTraders.Extensions;
 
-internal static class TextWriterExtensions
+internal static class StringExtensions
 {
     private const string DefaultForegroundColor = "\x1B[39m\x1B[22m"; // reset to default foreground color
     private const string DefaultBackgroundColor = "\x1B[49m"; // reset to the background color
 
-    public static void WriteColored(this TextWriter textWriter, string message, ConsoleColors colors)
-    {
-        textWriter.Write(GetBackgroundColorEscapeCode(colors.Background));
-        textWriter.Write(GetForegroundColorEscapeCode(colors.Foreground));
-        textWriter.Write(message);
-        textWriter.Write(DefaultForegroundColor);
-        textWriter.Write(DefaultBackgroundColor);
-    }
-
-    public static void WriteLineColored(this TextWriter textWriter, string message, ConsoleColors colors)
-    {
-        textWriter.WriteColored(message, colors);
-        textWriter.Write(Environment.NewLine);
-    }
+    public static string Color(this string input, ConsoleColors colors) =>
+        $"{GetBackgroundColorEscapeCode(colors.Background)}{GetForegroundColorEscapeCode(colors.Foreground)}{input}{DefaultForegroundColor}{DefaultBackgroundColor}";
 
     private static string GetForegroundColorEscapeCode(ConsoleColor? color) =>
         color switch

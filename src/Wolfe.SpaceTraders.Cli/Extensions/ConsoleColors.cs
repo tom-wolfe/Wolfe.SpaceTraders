@@ -7,4 +7,8 @@ internal record ConsoleColors(ConsoleColor? Foreground, ConsoleColor? Background
     public static readonly ConsoleColors Warning = new(ConsoleColor.Yellow, ConsoleColor.DarkRed);
     public static readonly ConsoleColors Critical = new(ConsoleColor.White, ConsoleColor.DarkRed);
     public static readonly ConsoleColors Error = new(ConsoleColor.Black, ConsoleColor.DarkRed);
+    public static readonly ConsoleColors Category = new(ConsoleColor.Cyan, ConsoleColor.Black);
+
+    public static readonly ConsoleColors Id = new(ConsoleColor.DarkGreen, ConsoleColor.Black);
+    public static readonly ConsoleColors Code = new(ConsoleColor.Blue, ConsoleColor.Black);
 };

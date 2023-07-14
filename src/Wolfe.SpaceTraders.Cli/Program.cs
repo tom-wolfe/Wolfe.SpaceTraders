@@ -28,7 +28,7 @@ public static class Program
         var lastResult = 0;
         do
         {
-            Console.WriteLine("Enter command: ");
+            Console.Write("Enter command: ");
             commandLine = Console.ReadLine();
             if (!string.IsNullOrEmpty(commandLine))
             {

@@ -12,9 +12,9 @@ internal static class Configuration
         .Build();
 
     public static IServiceProvider CreateServices(IConfiguration configuration) => new ServiceCollection()
-        .AddLogger(configuration)
+        // .AddLogger(configuration)
         .AddSpaceTradersClient(configuration)
-        .AddCommandHandlers(configuration)
+        .AddCommandHandlers()
         .BuildServiceProvider();
 
     private static IServiceCollection AddLogger(this IServiceCollection services, IConfiguration configuration) => services
@@ -24,7 +24,7 @@ internal static class Configuration
             .AddConsoleFormatter<ColoredConsoleFormatter, ConsoleFormatterOptions>()
         );
 
-    private static IServiceCollection AddCommandHandlers(this IServiceCollection services, IConfiguration configuration)
+    private static IServiceCollection AddCommandHandlers(this IServiceCollection services)
     {
         var handlers = Assembly
             .GetExecutingAssembly()
