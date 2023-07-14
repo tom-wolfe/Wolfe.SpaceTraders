@@ -3,6 +3,7 @@ using Wolfe.SpaceTraders.Commands.Contracts;
 using Wolfe.SpaceTraders.Commands.Login;
 using Wolfe.SpaceTraders.Commands.Logout;
 using Wolfe.SpaceTraders.Commands.Me;
+using Wolfe.SpaceTraders.Commands.Systems;
 
 namespace Wolfe.SpaceTraders.Commands;
 
@@ -15,6 +16,7 @@ internal static class RootCommand
         command.AddCommand(LogoutCommand.CreateCommand(services));
         command.AddCommand(MeCommand.CreateCommand(services));
         command.AddCommand(ContractsCommand.CreateCommand(services));
+        command.AddCommand(SystemsCommand.CreateCommand(services));
 
         return command;
     }

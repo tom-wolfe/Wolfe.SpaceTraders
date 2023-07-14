@@ -16,11 +16,11 @@ internal class MeCommandHandler : CommandHandler
         var response = await _client.GetAgent(context.GetCancellationToken());
         var agent = response.Content!.Data;
 
-        Console.WriteLine($"ID: {agent.AccountId}");
-        Console.WriteLine($"Symbol: {agent.Symbol}");
-        Console.WriteLine($"Headquarters: {agent.Headquarters}");
+        Console.WriteLine($"ID: {agent.AccountId.Color(ConsoleColors.Id)}");
+        Console.WriteLine($"Symbol: {agent.Symbol.Value.Color(ConsoleColors.Code)}");
+        Console.WriteLine($"Headquarters: {agent.Headquarters.Color(ConsoleColors.Code)}");
         Console.WriteLine($"Credits: {agent.Credits}");
-        Console.WriteLine($"Faction: {agent.StartingFaction}");
+        Console.WriteLine($"Faction: {agent.StartingFaction.Value.Color(ConsoleColors.Code)}");
         Console.WriteLine($"Ships: {agent.ShipCount}");
 
         return ExitCodes.Success;

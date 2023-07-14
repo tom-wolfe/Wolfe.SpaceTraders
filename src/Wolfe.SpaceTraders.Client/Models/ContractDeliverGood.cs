@@ -1,8 +1,8 @@
 ﻿namespace Wolfe.SpaceTraders.Models;
 
-public class ContractDeliveryTerm
+public class ContractDeliverGood
 {
-    public required string TradeSymbol { get; set; }
+    public required TradeSymbol TradeSymbol { get; set; }
     public required string DestinationSymbol { get; set; }
     public int UnitsRequired { get; set; }
     public int UnitsFulfilled { get; set; }

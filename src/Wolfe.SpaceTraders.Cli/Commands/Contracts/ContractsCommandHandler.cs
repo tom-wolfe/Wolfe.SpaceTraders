@@ -30,7 +30,7 @@ internal class ContractsCommandHandler : CommandHandler
 
         var contract = response.Content!.Data;
 
-        Console.WriteLine($"ID: {contract.Id.Color(ConsoleColors.Id)}");
+        Console.WriteLine($"ID: {contract.Id.Value.Color(ConsoleColors.Id)}");
         Console.WriteLine($"Type: {contract.Type.Value.Color(ConsoleColors.Code)}");
         Console.WriteLine($"Faction: {contract.FactionSymbol.Value.Color(ConsoleColors.Code)}");
         Console.WriteLine($"Accepted?: {contract.Accepted.Humanize()}");
@@ -45,7 +45,7 @@ internal class ContractsCommandHandler : CommandHandler
         Console.WriteLine($" - Deliver: ");
         foreach (var deliver in contract.Terms.Deliver)
         {
-            Console.WriteLine($"   - Trade: {deliver.TradeSymbol.Color(ConsoleColors.Code)}");
+            Console.WriteLine($"   - Trade: {deliver.TradeSymbol.Value.Color(ConsoleColors.Code)}");
             Console.WriteLine($"   - Destination: {deliver.DestinationSymbol.Color(ConsoleColors.Code)}");
             Console.WriteLine($"   - Units: {deliver.UnitsFulfilled}/{deliver.UnitsRequired}");
             if (deliver != contract.Terms.Deliver.Last())
@@ -63,7 +63,7 @@ internal class ContractsCommandHandler : CommandHandler
         var contracts = response.Content!.Data.ToList();
         foreach (var contract in contracts)
         {
-            Console.WriteLine($"ID: {contract.Id.Color(ConsoleColors.Id)}");
+            Console.WriteLine($"ID: {contract.Id.Value.Color(ConsoleColors.Id)}");
             Console.WriteLine($"Type: {contract.Type.Value.Color(ConsoleColors.Code)}");
             Console.WriteLine($"Accepted?: {contract.Accepted.Humanize()}");
             Console.WriteLine($"Fulfilled?: {contract.Fulfilled.Humanize()}");
