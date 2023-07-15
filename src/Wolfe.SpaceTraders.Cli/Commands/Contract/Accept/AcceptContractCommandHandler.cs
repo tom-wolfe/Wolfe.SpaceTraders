@@ -1,6 +1,6 @@
 ﻿using System.CommandLine.Invocation;
 
-namespace Wolfe.SpaceTraders.Commands.Contracts.Accept;
+namespace Wolfe.SpaceTraders.Commands.Contract.Accept;
 
 internal class AcceptContractCommandHandler : CommandHandler
 {

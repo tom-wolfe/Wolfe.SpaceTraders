@@ -1,10 +1,11 @@
 ﻿using System.CommandLine;
+using Wolfe.SpaceTraders.Models;
 
 namespace Wolfe.SpaceTraders.Commands.Waypoint;
 
 internal static class WaypointCommand
 {
-    public static readonly Argument<string> WaypointIdArgument = new("waypoint-id");
+    public static readonly Argument<WaypointSymbol> WaypointIdArgument = new("waypoint-id", r => new WaypointSymbol(string.Join(' ', r.Tokens.Select(t => t.Value))));
 
     public static Command CreateCommand(IServiceProvider services)
     {

@@ -1,5 +1,5 @@
 ﻿using System.CommandLine;
-using Wolfe.SpaceTraders.Commands.Contracts.Accept;
+using Wolfe.SpaceTraders.Commands.Contract.Accept;
 
 namespace Wolfe.SpaceTraders.Commands.Contracts;
 
