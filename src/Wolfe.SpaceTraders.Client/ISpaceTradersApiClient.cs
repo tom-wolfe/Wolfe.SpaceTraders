@@ -1,11 +1,12 @@
 ﻿using Refit;
 using Wolfe.SpaceTraders.Models;
+using Wolfe.SpaceTraders.Requests;
 using Wolfe.SpaceTraders.Responses;
 
 namespace Wolfe.SpaceTraders;
 
 [Headers("Authorization: Bearer")]
-public interface ISpaceTradersApiClient
+internal interface ISpaceTradersApiClient
 {
     [Get("/my/agent")]
     public Task<IApiResponse<SpaceTradersResponse<Agent>>> GetAgent(CancellationToken cancellationToken = default);
@@ -34,6 +35,6 @@ public interface ISpaceTradersApiClient
     [Get("/systems/{systemId}/waypoints/{waypointId}/shipyard")]
     Task<IApiResponse<SpaceTradersResponse<Shipyard>>> GetShipyard(SystemSymbol systemId, WaypointSymbol waypointId, CancellationToken cancellationToken = default);
 
-    //[Post("/my/ships")]
-    //Task<IApiResponse<SpaceTradersResponse<Shipyard>>> PurchaseShip(PurchaseShipRequest request, CancellationToken cancellationToken = default);
+    [Post("/my/ships")]
+    Task<IApiResponse<SpaceTradersResponse<PurchaseShipResponse>>> PurchaseShip(PurchaseShipRequest request, CancellationToken cancellationToken = default);
 }
