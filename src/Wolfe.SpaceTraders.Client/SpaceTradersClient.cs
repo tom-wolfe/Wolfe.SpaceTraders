@@ -57,6 +57,20 @@ namespace Wolfe.SpaceTraders
             return response.Content!.Data;
         }
 
+        public IAsyncEnumerable<ShallowShip> GetShips(CancellationToken cancellationToken = default)
+        {
+            return AsyncEnumerate(10, (limit, page) => _client.GetShips(limit, page, cancellationToken));
+        }
+
+        public async Task<Ship?> GetShip(ShipSymbol shipId, CancellationToken cancellationToken = default)
+        {
+            var response = await _client.GetShip(shipId, cancellationToken);
+            if (response.StatusCode == HttpStatusCode.NotFound) { return null; }
+            response.EnsureSuccessStatusCode();
+            return response.Content!.Data;
+        }
+
+
         public IAsyncEnumerable<ShallowStarSystem> GetSystems(CancellationToken cancellationToken = default)
         {
             return AsyncEnumerate(10, (limit, page) => _client.GetSystems(limit, page, cancellationToken));

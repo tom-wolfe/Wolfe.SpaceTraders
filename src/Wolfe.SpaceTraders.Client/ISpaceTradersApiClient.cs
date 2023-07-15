@@ -33,8 +33,14 @@ internal interface ISpaceTradersApiClient
     public Task<IApiResponse<SpaceTradersResponse<Waypoint>>> GetWaypoint(SystemSymbol systemId, WaypointSymbol waypointId, CancellationToken cancellationToken = default);
 
     [Get("/systems/{systemId}/waypoints/{waypointId}/shipyard")]
-    Task<IApiResponse<SpaceTradersResponse<Shipyard>>> GetShipyard(SystemSymbol systemId, WaypointSymbol waypointId, CancellationToken cancellationToken = default);
+    public Task<IApiResponse<SpaceTradersResponse<Shipyard>>> GetShipyard(SystemSymbol systemId, WaypointSymbol waypointId, CancellationToken cancellationToken = default);
 
     [Post("/my/ships")]
-    Task<IApiResponse<SpaceTradersResponse<PurchaseShipResponse>>> PurchaseShip(PurchaseShipRequest request, CancellationToken cancellationToken = default);
+    public Task<IApiResponse<SpaceTradersResponse<PurchaseShipResponse>>> PurchaseShip(PurchaseShipRequest request, CancellationToken cancellationToken = default);
+
+    [Get("/my/ships")]
+    public Task<IApiResponse<SpaceTradersListResponse<ShallowShip>>> GetShips(int limit, int page, CancellationToken cancellationToken = default);
+
+    [Get("/my/ships/{shipId}")]
+    public Task<IApiResponse<SpaceTradersResponse<Ship>>> GetShip(ShipSymbol shipId, CancellationToken cancellationToken = default);
 }

@@ -14,7 +14,7 @@ internal class ContractCommandHandler : CommandHandler
 
     public override async Task<int> InvokeAsync(InvocationContext context)
     {
-        var id = context.BindingContext.ParseResult.GetValueForArgument(ContractCommand.IdArgument);
+        var id = context.BindingContext.ParseResult.GetValueForArgument(ContractCommand.ContractIdArgument);
         try
         {
             var contract = await _client.GetContract(id, context.GetCancellationToken());

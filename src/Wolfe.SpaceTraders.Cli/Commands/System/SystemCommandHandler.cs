@@ -13,7 +13,7 @@ internal class SystemCommandHandler : CommandHandler
 
     public override async Task<int> InvokeAsync(InvocationContext context)
     {
-        var id = context.BindingContext.ParseResult.GetValueForArgument(SystemCommand.IdArgument);
+        var id = context.BindingContext.ParseResult.GetValueForArgument(SystemCommand.SystemIdArgument);
         try
         {
             var system = await _client.GetSystem(id, context.GetCancellationToken());
