@@ -1,6 +1,7 @@
 ﻿using Refit;
 using System.Net;
 using Wolfe.SpaceTraders.Models;
+using Wolfe.SpaceTraders.Requests;
 using Wolfe.SpaceTraders.Responses;
 
 namespace Wolfe.SpaceTraders
@@ -45,6 +46,13 @@ namespace Wolfe.SpaceTraders
         {
             var response = await _client.GetShipyard(waypointId.SystemSymbol, waypointId, cancellationToken);
             if (response.StatusCode == HttpStatusCode.NotFound) { return null; }
+            response.EnsureSuccessStatusCode();
+            return response.Content!.Data;
+        }
+
+        public async Task<PurchaseShipResponse> PurchaseShip(PurchaseShipRequest request, CancellationToken cancellationToken = default)
+        {
+            var response = await _client.PurchaseShip(request, cancellationToken);
             response.EnsureSuccessStatusCode();
             return response.Content!.Data;
         }

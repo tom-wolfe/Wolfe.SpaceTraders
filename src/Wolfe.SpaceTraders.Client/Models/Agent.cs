@@ -7,5 +7,4 @@ public class Agent
     public required string Headquarters { get; set; }
     public long Credits { get; set; }
     public required FactionSymbol StartingFaction { get; set; }
-    public int ShipCount { get; set; }
 }

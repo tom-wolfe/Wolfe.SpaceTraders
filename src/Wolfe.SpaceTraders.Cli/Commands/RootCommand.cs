@@ -5,6 +5,7 @@ using Wolfe.SpaceTraders.Commands.Contracts;
 using Wolfe.SpaceTraders.Commands.Login;
 using Wolfe.SpaceTraders.Commands.Logout;
 using Wolfe.SpaceTraders.Commands.Me;
+using Wolfe.SpaceTraders.Commands.Purchase;
 using Wolfe.SpaceTraders.Commands.Shipyard;
 using Wolfe.SpaceTraders.Commands.System;
 using Wolfe.SpaceTraders.Commands.Systems;
@@ -24,6 +25,7 @@ internal static class RootCommand
         command.AddCommand(MeCommand.CreateCommand(services));
         command.AddCommand(ContractCommand.CreateCommand(services));
         command.AddCommand(ContractsCommand.CreateCommand(services));
+        command.AddCommand(PurchaseCommand.CreateCommand(services));
         command.AddCommand(ShipyardCommand.CreateCommand(services));
         command.AddCommand(SystemCommand.CreateCommand(services));
         command.AddCommand(SystemsCommand.CreateCommand(services));
