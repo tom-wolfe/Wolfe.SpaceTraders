@@ -27,7 +27,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\Wolfe.SpaceTraders.Client\Wolfe.SpaceTraders.Client.csproj" />
+    <ProjectReference Include="..\Wolfe.SpaceTraders.Client\Wolfe.SpaceTraders.Infrastructure.csproj" />
   </ItemGroup>
 
 </Project>

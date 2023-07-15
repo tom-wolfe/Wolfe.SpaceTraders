@@ -1,8 +1,10 @@
 ﻿using Refit;
 using System.Net;
-using Wolfe.SpaceTraders.Models;
-using Wolfe.SpaceTraders.Requests;
-using Wolfe.SpaceTraders.Responses;
+using Wolfe.SpaceTraders.Core.Models;
+using Wolfe.SpaceTraders.Core.Requests;
+using Wolfe.SpaceTraders.Core.Responses;
+using Wolfe.SpaceTraders.Infrastructure;
+using Wolfe.SpaceTraders.Service;
 
 namespace Wolfe.SpaceTraders
 {
@@ -13,6 +15,13 @@ namespace Wolfe.SpaceTraders
         public SpaceTradersClient(ISpaceTradersApiClient client)
         {
             _client = client;
+        }
+
+        public async Task<RegisterResponse> Register(RegisterRequest request, CancellationToken cancellationToken = default)
+        {
+            var response = await _client.Register(request, cancellationToken);
+            response.EnsureSuccessStatusCode();
+            return response.Content!.Data;
         }
 
         public async Task<Agent> GetAgent(CancellationToken cancellationToken = default)

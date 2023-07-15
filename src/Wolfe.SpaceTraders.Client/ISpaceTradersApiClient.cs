@@ -1,13 +1,18 @@
 ﻿using Refit;
-using Wolfe.SpaceTraders.Models;
-using Wolfe.SpaceTraders.Requests;
-using Wolfe.SpaceTraders.Responses;
+using Wolfe.SpaceTraders.Core.Models;
+using Wolfe.SpaceTraders.Core.Requests;
+using Wolfe.SpaceTraders.Core.Responses;
+using Wolfe.SpaceTraders.Infrastructure;
 
 namespace Wolfe.SpaceTraders;
 
 [Headers("Authorization: Bearer")]
 internal interface ISpaceTradersApiClient
 {
+    [Post("/register")]
+    [Headers("Authorization:")]
+    public Task<IApiResponse<SpaceTradersResponse<RegisterResponse>>> Register(RegisterRequest request, CancellationToken cancellationToken = default);
+
     [Get("/my/agent")]
     public Task<IApiResponse<SpaceTradersResponse<Agent>>> GetAgent(CancellationToken cancellationToken = default);
 

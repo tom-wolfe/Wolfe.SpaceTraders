@@ -15,6 +15,7 @@ internal class LogoutCommandHandler : CommandHandler
     public override async Task<int> InvokeAsync(InvocationContext context)
     {
         await _token.Clear(context.GetCancellationToken());
+        Console.WriteLine("Logged out successfully.".Color(ConsoleColors.Information));
         return ExitCodes.Success;
     }
 }
