@@ -4,7 +4,7 @@ using Wolfe.SpaceTraders.Token;
 
 namespace Wolfe.SpaceTraders;
 
-public static class ClientExtensions
+public static class ServiceCollectionExtensions
 {
     public static IServiceCollection AddSpaceTradersClient(this IServiceCollection services, IConfiguration configuration)
     {
@@ -14,7 +14,7 @@ public static class ClientExtensions
             .Validate(o => !string.IsNullOrEmpty(o.ApiBaseUri), $"{nameof(SpaceTradersOptions.ApiBaseUri)} cannot be null or empty.");
 
         services
-            .AddRefitClient<ISpaceTradersClient>(provider => new RefitSettings
+            .AddRefitClient<ISpaceTradersApiClient>(provider => new RefitSettings
             {
                 AuthorizationHeaderValueGetter = async (_, ct) =>
                 {
@@ -31,6 +31,7 @@ public static class ClientExtensions
 
         var tokenService = new FileTokenService();
         return services
+            .AddSingleton<ISpaceTradersClient, SpaceTradersClient>()
             .AddSingleton<ITokenReader>(tokenService)
             .AddSingleton<ITokenWriter>(tokenService);
     }

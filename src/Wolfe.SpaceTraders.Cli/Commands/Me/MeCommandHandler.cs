@@ -13,8 +13,7 @@ internal class MeCommandHandler : CommandHandler
 
     public override async Task<int> InvokeAsync(InvocationContext context)
     {
-        var response = await _client.GetAgent(context.GetCancellationToken());
-        var agent = response.Content!.Data;
+        var agent = await _client.GetAgent(context.GetCancellationToken());
 
         Console.WriteLine($"ID: {agent.AccountId.Color(ConsoleColors.Id)}");
         Console.WriteLine($"Symbol: {agent.Symbol.Value.Color(ConsoleColors.Code)}");

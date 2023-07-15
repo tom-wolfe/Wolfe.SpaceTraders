@@ -7,6 +7,6 @@ public class StarSystem
     public required SystemType Type { get; set; }
     public int X { get; set; }
     public int Y { get; set; }
-    public List<ShallowWaypoint> Waypoints { get; } = new();
-    public List<ShallowFaction> Factions { get; } = new();
+    public required List<ShallowWaypoint> Waypoints { get; set; } = new();
+    public required List<ShallowFaction> Factions { get; set; } = new();
 }
