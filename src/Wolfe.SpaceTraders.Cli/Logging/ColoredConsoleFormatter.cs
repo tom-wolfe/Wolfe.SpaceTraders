@@ -1,7 +1,8 @@
-﻿using Microsoft.Extensions.Logging.Console;
-using System.Globalization;
+﻿using System.Globalization;
+using Microsoft.Extensions.Logging.Console;
+using Wolfe.SpaceTraders.Cli.Extensions;
 
-namespace Wolfe.SpaceTraders.Logging;
+namespace Wolfe.SpaceTraders.Cli.Logging;
 
 internal class ColoredConsoleFormatter : ConsoleFormatter
 {

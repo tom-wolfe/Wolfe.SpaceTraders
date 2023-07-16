@@ -1,6 +1,6 @@
 ﻿using System.CommandLine;
 
-namespace Wolfe.SpaceTraders.Commands.Login;
+namespace Wolfe.SpaceTraders.Cli.Commands.Login;
 
 internal static class LoginCommand
 {

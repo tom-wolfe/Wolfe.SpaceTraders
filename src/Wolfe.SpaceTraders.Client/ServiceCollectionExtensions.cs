@@ -1,12 +1,13 @@
 ﻿using Microsoft.Extensions.Options;
 using Refit;
-using Wolfe.SpaceTraders.Token;
+using Wolfe.SpaceTraders.Infrastructure.Token;
+using Wolfe.SpaceTraders.Service;
 
 namespace Wolfe.SpaceTraders.Infrastructure;
 
 public static class ServiceCollectionExtensions
 {
-    public static IServiceCollection AddSpaceTradersClient(this IServiceCollection services, IConfiguration configuration)
+    public static IServiceCollection AddInfrastructureLayer(this IServiceCollection services, IConfiguration configuration)
     {
         services
             .AddOptions<SpaceTradersOptions>()

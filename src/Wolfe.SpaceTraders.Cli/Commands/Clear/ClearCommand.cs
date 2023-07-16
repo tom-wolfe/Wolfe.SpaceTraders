@@ -1,6 +1,6 @@
 ﻿using System.CommandLine;
 
-namespace Wolfe.SpaceTraders.Commands.Clear;
+namespace Wolfe.SpaceTraders.Cli.Commands.Clear;
 
 internal static class ClearCommand
 {

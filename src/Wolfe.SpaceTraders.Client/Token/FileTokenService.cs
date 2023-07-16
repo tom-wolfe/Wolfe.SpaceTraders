@@ -1,4 +1,4 @@
-﻿namespace Wolfe.SpaceTraders.Token
+﻿namespace Wolfe.SpaceTraders.Infrastructure.Token
 {
     internal class FileTokenService : ITokenReader, ITokenWriter
     {

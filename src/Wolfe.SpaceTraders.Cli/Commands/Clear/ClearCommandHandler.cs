@@ -1,6 +1,6 @@
 ﻿using System.CommandLine.Invocation;
 
-namespace Wolfe.SpaceTraders.Commands.Clear;
+namespace Wolfe.SpaceTraders.Cli.Commands.Clear;
 
 internal class ClearCommandHandler : CommandHandler
 {

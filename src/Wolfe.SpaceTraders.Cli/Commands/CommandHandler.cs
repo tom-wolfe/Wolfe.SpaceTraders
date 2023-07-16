@@ -1,6 +1,6 @@
 ﻿using System.CommandLine.Invocation;
 
-namespace Wolfe.SpaceTraders.Commands;
+namespace Wolfe.SpaceTraders.Cli.Commands;
 
 internal abstract class CommandHandler : ICommandHandler
 {

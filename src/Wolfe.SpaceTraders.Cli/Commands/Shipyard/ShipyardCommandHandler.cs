@@ -1,6 +1,8 @@
 ﻿using System.CommandLine.Invocation;
+using Wolfe.SpaceTraders.Cli.Extensions;
+using Wolfe.SpaceTraders.Service;
 
-namespace Wolfe.SpaceTraders.Commands.Shipyard;
+namespace Wolfe.SpaceTraders.Cli.Commands.Shipyard;
 
 internal class ShipyardCommandHandler : CommandHandler
 {

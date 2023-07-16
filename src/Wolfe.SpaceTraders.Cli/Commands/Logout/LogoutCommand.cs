@@ -1,6 +1,6 @@
 ﻿using System.CommandLine;
 
-namespace Wolfe.SpaceTraders.Commands.Logout;
+namespace Wolfe.SpaceTraders.Cli.Commands.Logout;
 
 internal static class LogoutCommand
 {

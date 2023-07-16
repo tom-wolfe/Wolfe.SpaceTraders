@@ -1,21 +1,21 @@
 ﻿using System.CommandLine;
-using Wolfe.SpaceTraders.Commands.Clear;
-using Wolfe.SpaceTraders.Commands.Contract;
-using Wolfe.SpaceTraders.Commands.Contracts;
-using Wolfe.SpaceTraders.Commands.Login;
-using Wolfe.SpaceTraders.Commands.Logout;
-using Wolfe.SpaceTraders.Commands.Me;
-using Wolfe.SpaceTraders.Commands.Purchase;
-using Wolfe.SpaceTraders.Commands.Register;
-using Wolfe.SpaceTraders.Commands.Ship;
-using Wolfe.SpaceTraders.Commands.Ships;
-using Wolfe.SpaceTraders.Commands.Shipyard;
-using Wolfe.SpaceTraders.Commands.System;
-using Wolfe.SpaceTraders.Commands.Systems;
-using Wolfe.SpaceTraders.Commands.Waypoint;
-using Wolfe.SpaceTraders.Commands.Waypoints;
+using Wolfe.SpaceTraders.Cli.Commands.Clear;
+using Wolfe.SpaceTraders.Cli.Commands.Contract;
+using Wolfe.SpaceTraders.Cli.Commands.Contracts;
+using Wolfe.SpaceTraders.Cli.Commands.Login;
+using Wolfe.SpaceTraders.Cli.Commands.Logout;
+using Wolfe.SpaceTraders.Cli.Commands.Me;
+using Wolfe.SpaceTraders.Cli.Commands.Purchase;
+using Wolfe.SpaceTraders.Cli.Commands.Register;
+using Wolfe.SpaceTraders.Cli.Commands.Ship;
+using Wolfe.SpaceTraders.Cli.Commands.Ships;
+using Wolfe.SpaceTraders.Cli.Commands.Shipyard;
+using Wolfe.SpaceTraders.Cli.Commands.System;
+using Wolfe.SpaceTraders.Cli.Commands.Systems;
+using Wolfe.SpaceTraders.Cli.Commands.Waypoint;
+using Wolfe.SpaceTraders.Cli.Commands.Waypoints;
 
-namespace Wolfe.SpaceTraders.Commands;
+namespace Wolfe.SpaceTraders.Cli.Commands;
 
 internal static class RootCommand
 {

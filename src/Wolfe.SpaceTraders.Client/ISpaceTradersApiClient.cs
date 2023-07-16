@@ -2,9 +2,8 @@
 using Wolfe.SpaceTraders.Core.Models;
 using Wolfe.SpaceTraders.Core.Requests;
 using Wolfe.SpaceTraders.Core.Responses;
-using Wolfe.SpaceTraders.Infrastructure;
 
-namespace Wolfe.SpaceTraders;
+namespace Wolfe.SpaceTraders.Infrastructure;
 
 [Headers("Authorization: Bearer")]
 internal interface ISpaceTradersApiClient
@@ -44,8 +43,23 @@ internal interface ISpaceTradersApiClient
     public Task<IApiResponse<SpaceTradersResponse<PurchaseShipResponse>>> PurchaseShip(PurchaseShipRequest request, CancellationToken cancellationToken = default);
 
     [Get("/my/ships")]
-    public Task<IApiResponse<SpaceTradersListResponse<ShallowShip>>> GetShips(int limit, int page, CancellationToken cancellationToken = default);
+    public Task<IApiResponse<SpaceTradersListResponse<Ship>>> GetShips(int limit, int page, CancellationToken cancellationToken = default);
 
     [Get("/my/ships/{shipId}")]
     public Task<IApiResponse<SpaceTradersResponse<Ship>>> GetShip(ShipSymbol shipId, CancellationToken cancellationToken = default);
+
+    [Post("/my/ships/{shipId}/orbit")]
+    public Task<IApiResponse<SpaceTradersResponse<ShipOrbitResponse>>> ShipOrbit(ShipSymbol shipId, CancellationToken cancellationToken = default);
+
+    [Post("/my/ships/{shipId}/dock")]
+    public Task<IApiResponse<SpaceTradersResponse<ShipDockResponse>>> ShipDock(ShipSymbol shipId, CancellationToken cancellationToken = default);
+
+    [Post("/my/ships/{shipId}/navigate")]
+    public Task<IApiResponse<SpaceTradersResponse<ShipNavigateResponse>>> ShipNavigate(ShipSymbol shipId, [Body] ShipNavigateRequest request, CancellationToken cancellationToken = default);
+
+    [Post("/my/ships/{shipId}/refuel")]
+    Task<IApiResponse<SpaceTradersResponse<ShipRefuelResponse>>> ShipRefuel(ShipSymbol shipId, CancellationToken cancellationToken = default);
+
+    //[Post("/my/ships/{shipId}/extract")]
+    //public Task<IApiResponse<SpaceTradersResponse<ShipExtractResponse>>> ShipExtract(ShipSymbol shipId, [Body] ShipNavigateRequest request, CancellationToken cancellationToken = default);
 }

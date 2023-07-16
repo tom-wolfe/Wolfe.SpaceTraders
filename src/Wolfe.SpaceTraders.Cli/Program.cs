@@ -1,8 +1,8 @@
 ﻿using System.CommandLine.Builder;
 using System.CommandLine.Parsing;
-using Wolfe.SpaceTraders.Commands;
+using Wolfe.SpaceTraders.Cli.Commands;
 
-namespace Wolfe.SpaceTraders;
+namespace Wolfe.SpaceTraders.Cli;
 
 public static class Program
 {

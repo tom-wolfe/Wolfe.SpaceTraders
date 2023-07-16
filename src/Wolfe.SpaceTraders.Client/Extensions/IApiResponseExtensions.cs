@@ -1,6 +1,6 @@
 ﻿using Refit;
 
-namespace Wolfe.SpaceTraders.Extensions;
+namespace Wolfe.SpaceTraders.Infrastructure.Extensions;
 
 internal static class ApiResponseExtensions
 {

@@ -1,7 +1,7 @@
 ﻿using System.CommandLine;
-using Wolfe.SpaceTraders.Models;
+using Wolfe.SpaceTraders.Core.Models;
 
-namespace Wolfe.SpaceTraders.Commands.System;
+namespace Wolfe.SpaceTraders.Cli.Commands.System;
 
 internal static class SystemCommand
 {

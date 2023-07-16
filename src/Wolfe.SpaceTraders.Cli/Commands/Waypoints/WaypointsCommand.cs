@@ -1,7 +1,7 @@
 ﻿using System.CommandLine;
-using Wolfe.SpaceTraders.Models;
+using Wolfe.SpaceTraders.Core.Models;
 
-namespace Wolfe.SpaceTraders.Commands.Waypoints;
+namespace Wolfe.SpaceTraders.Cli.Commands.Waypoints;
 
 internal static class WaypointsCommand
 {

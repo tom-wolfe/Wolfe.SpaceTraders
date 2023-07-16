@@ -1,7 +1,9 @@
-﻿using Humanizer;
-using System.CommandLine.Invocation;
+﻿using System.CommandLine.Invocation;
+using Humanizer;
+using Wolfe.SpaceTraders.Cli.Extensions;
+using Wolfe.SpaceTraders.Service;
 
-namespace Wolfe.SpaceTraders.Commands.Contract;
+namespace Wolfe.SpaceTraders.Cli.Commands.Contract;
 
 internal class ContractCommandHandler : CommandHandler
 {

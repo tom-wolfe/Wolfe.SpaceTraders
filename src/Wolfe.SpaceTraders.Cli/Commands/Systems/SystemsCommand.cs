@@ -1,6 +1,6 @@
 ﻿using System.CommandLine;
 
-namespace Wolfe.SpaceTraders.Commands.Systems;
+namespace Wolfe.SpaceTraders.Cli.Commands.Systems;
 
 internal static class SystemsCommand
 {

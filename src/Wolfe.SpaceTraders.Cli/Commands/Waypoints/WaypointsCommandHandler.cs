@@ -1,6 +1,8 @@
 ﻿using System.CommandLine.Invocation;
+using Wolfe.SpaceTraders.Cli.Extensions;
+using Wolfe.SpaceTraders.Service;
 
-namespace Wolfe.SpaceTraders.Commands.Waypoints;
+namespace Wolfe.SpaceTraders.Cli.Commands.Waypoints;
 
 internal class WaypointsCommandHandler : CommandHandler
 {

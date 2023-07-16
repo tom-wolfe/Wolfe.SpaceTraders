@@ -1,7 +1,11 @@
 ﻿using System.CommandLine;
-using Wolfe.SpaceTraders.Models;
+using Wolfe.SpaceTraders.Cli.Commands.Ship.Dock;
+using Wolfe.SpaceTraders.Cli.Commands.Ship.Navigate;
+using Wolfe.SpaceTraders.Cli.Commands.Ship.Orbit;
+using Wolfe.SpaceTraders.Cli.Commands.Ship.Refuel;
+using Wolfe.SpaceTraders.Core.Models;
 
-namespace Wolfe.SpaceTraders.Commands.Ship;
+namespace Wolfe.SpaceTraders.Cli.Commands.Ship;
 
 internal static class ShipCommand
 {
@@ -12,6 +16,11 @@ internal static class ShipCommand
         var command = new Command("ship");
         command.AddArgument(ShipIdArgument);
         command.SetHandler(context => services.GetRequiredService<ShipCommandHandler>().InvokeAsync(context));
+
+        command.AddCommand(ShipOrbitCommand.CreateCommand(services));
+        command.AddCommand(ShipDockCommand.CreateCommand(services));
+        command.AddCommand(ShipNavigateCommand.CreateCommand(services));
+        command.AddCommand(ShipRefuelCommand.CreateCommand(services));
 
         return command;
     }

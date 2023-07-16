@@ -1,6 +1,8 @@
 ﻿using System.CommandLine.Invocation;
+using Wolfe.SpaceTraders.Cli.Extensions;
+using Wolfe.SpaceTraders.Service;
 
-namespace Wolfe.SpaceTraders.Commands.Contract.Accept;
+namespace Wolfe.SpaceTraders.Cli.Commands.Contract.Accept;
 
 internal class AcceptContractCommandHandler : CommandHandler
 {
@@ -13,10 +15,10 @@ internal class AcceptContractCommandHandler : CommandHandler
 
     public override async Task<int> InvokeAsync(InvocationContext context)
     {
-        var id = context.BindingContext.ParseResult.GetValueForArgument(AcceptContractCommand.IdArgument);
-        await _client.AcceptContract(id, context.GetCancellationToken());
+        var contractId = context.BindingContext.ParseResult.GetValueForArgument(AcceptContractCommand.ContractIdArgument);
+        await _client.AcceptContract(contractId, context.GetCancellationToken());
 
-        Console.WriteLine("Accepted contract successfully.".Color(ConsoleColors.Information));
+        Console.WriteLine("Accepted contract successfully.".Color(ConsoleColors.Success));
         return ExitCodes.Success;
     }
 }

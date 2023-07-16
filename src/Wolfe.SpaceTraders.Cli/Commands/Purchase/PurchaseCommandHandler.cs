@@ -1,7 +1,9 @@
 ﻿using System.CommandLine.Invocation;
-using Wolfe.SpaceTraders.Requests;
+using Wolfe.SpaceTraders.Cli.Extensions;
+using Wolfe.SpaceTraders.Core.Requests;
+using Wolfe.SpaceTraders.Service;
 
-namespace Wolfe.SpaceTraders.Commands.Purchase;
+namespace Wolfe.SpaceTraders.Cli.Commands.Purchase;
 
 internal class PurchaseCommandHandler : CommandHandler
 {
@@ -26,7 +28,7 @@ internal class PurchaseCommandHandler : CommandHandler
             };
             var response = await _client.PurchaseShip(request, context.GetCancellationToken());
 
-            Console.WriteLine("Purchased ship successfully".Color(ConsoleColors.Information));
+            Console.WriteLine("Purchased ship successfully".Color(ConsoleColors.Success));
 
             return ExitCodes.Success;
         }

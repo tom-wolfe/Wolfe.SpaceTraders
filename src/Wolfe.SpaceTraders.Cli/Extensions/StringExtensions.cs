@@ -1,4 +1,4 @@
-﻿namespace Wolfe.SpaceTraders.Extensions;
+﻿namespace Wolfe.SpaceTraders.Cli.Extensions;
 
 internal static class StringExtensions
 {

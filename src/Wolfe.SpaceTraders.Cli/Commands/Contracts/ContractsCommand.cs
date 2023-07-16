@@ -1,7 +1,7 @@
 ﻿using System.CommandLine;
-using Wolfe.SpaceTraders.Commands.Contract.Accept;
+using Wolfe.SpaceTraders.Cli.Commands.Contract.Accept;
 
-namespace Wolfe.SpaceTraders.Commands.Contracts;
+namespace Wolfe.SpaceTraders.Cli.Commands.Contracts;
 
 internal static class ContractsCommand
 {

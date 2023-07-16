@@ -1,4 +1,4 @@
-﻿namespace Wolfe.SpaceTraders;
+﻿namespace Wolfe.SpaceTraders.Infrastructure;
 
 internal class SpaceTradersOptions
 {

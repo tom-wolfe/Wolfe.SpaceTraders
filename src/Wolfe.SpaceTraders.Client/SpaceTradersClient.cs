@@ -3,10 +3,10 @@ using System.Net;
 using Wolfe.SpaceTraders.Core.Models;
 using Wolfe.SpaceTraders.Core.Requests;
 using Wolfe.SpaceTraders.Core.Responses;
-using Wolfe.SpaceTraders.Infrastructure;
+using Wolfe.SpaceTraders.Infrastructure.Extensions;
 using Wolfe.SpaceTraders.Service;
 
-namespace Wolfe.SpaceTraders
+namespace Wolfe.SpaceTraders.Infrastructure
 {
     internal class SpaceTradersClient : ISpaceTradersClient
     {
@@ -66,7 +66,7 @@ namespace Wolfe.SpaceTraders
             return response.Content!.Data;
         }
 
-        public IAsyncEnumerable<ShallowShip> GetShips(CancellationToken cancellationToken = default)
+        public IAsyncEnumerable<Ship> GetShips(CancellationToken cancellationToken = default)
         {
             return AsyncEnumerate(10, (limit, page) => _client.GetShips(limit, page, cancellationToken));
         }
@@ -79,6 +79,33 @@ namespace Wolfe.SpaceTraders
             return response.Content!.Data;
         }
 
+        public async Task<ShipOrbitResponse> ShipOrbit(ShipSymbol shipId, CancellationToken cancellationToken = default)
+        {
+            var response = await _client.ShipOrbit(shipId, cancellationToken);
+            response.EnsureSuccessStatusCode();
+            return response.Content!.Data;
+        }
+
+        public async Task<ShipDockResponse> ShipDock(ShipSymbol shipId, CancellationToken cancellationToken = default)
+        {
+            var response = await _client.ShipDock(shipId, cancellationToken);
+            response.EnsureSuccessStatusCode();
+            return response.Content!.Data;
+        }
+
+        public async Task<ShipNavigateResponse> ShipNavigate(ShipSymbol shipId, ShipNavigateRequest request, CancellationToken cancellationToken = default)
+        {
+            var response = await _client.ShipNavigate(shipId, request, cancellationToken);
+            response.EnsureSuccessStatusCode();
+            return response.Content!.Data;
+        }
+
+        public async Task<ShipRefuelResponse> ShipRefuel(ShipSymbol shipId, CancellationToken cancellationToken = default)
+        {
+            var response = await _client.ShipRefuel(shipId, cancellationToken);
+            response.EnsureSuccessStatusCode();
+            return response.Content!.Data;
+        }
 
         public IAsyncEnumerable<ShallowStarSystem> GetSystems(CancellationToken cancellationToken = default)
         {

@@ -1,7 +1,7 @@
 ﻿using System.CommandLine.Invocation;
-using Wolfe.SpaceTraders.Token;
+using Wolfe.SpaceTraders.Infrastructure.Token;
 
-namespace Wolfe.SpaceTraders.Commands.Login;
+namespace Wolfe.SpaceTraders.Cli.Commands.Login;
 
 internal class LoginCommandHandler : CommandHandler
 {

@@ -1,6 +1,8 @@
 ﻿using System.CommandLine.Invocation;
+using Wolfe.SpaceTraders.Cli.Extensions;
+using Wolfe.SpaceTraders.Service;
 
-namespace Wolfe.SpaceTraders.Commands.Me;
+namespace Wolfe.SpaceTraders.Cli.Commands.Me;
 
 internal class MeCommandHandler : CommandHandler
 {
@@ -17,7 +19,7 @@ internal class MeCommandHandler : CommandHandler
 
         Console.WriteLine($"ID: {agent.AccountId.Color(ConsoleColors.Id)}");
         Console.WriteLine($"Symbol: {agent.Symbol.Value.Color(ConsoleColors.Code)}");
-        Console.WriteLine($"Headquarters: {agent.Headquarters.Color(ConsoleColors.Code)}");
+        Console.WriteLine($"Headquarters: {agent.Headquarters.Value.Color(ConsoleColors.Code)}");
         Console.WriteLine($"Credits: {agent.Credits}");
         Console.WriteLine($"Faction: {agent.StartingFaction.Value.Color(ConsoleColors.Code)}");
 

@@ -1,6 +1,8 @@
 ﻿using System.CommandLine.Invocation;
+using Wolfe.SpaceTraders.Cli.Extensions;
+using Wolfe.SpaceTraders.Service;
 
-namespace Wolfe.SpaceTraders.Commands.Systems;
+namespace Wolfe.SpaceTraders.Cli.Commands.Systems;
 
 internal class SystemsCommandHandler : CommandHandler
 {

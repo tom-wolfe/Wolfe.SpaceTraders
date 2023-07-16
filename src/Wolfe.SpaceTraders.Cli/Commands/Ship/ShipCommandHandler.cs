@@ -1,6 +1,10 @@
-﻿using System.CommandLine.Invocation;
+﻿using Humanizer;
+using System.CommandLine.Invocation;
+using Wolfe.SpaceTraders.Cli.Extensions;
+using Wolfe.SpaceTraders.Core.Models;
+using Wolfe.SpaceTraders.Service;
 
-namespace Wolfe.SpaceTraders.Commands.Ship;
+namespace Wolfe.SpaceTraders.Cli.Commands.Ship;
 
 internal class ShipCommandHandler : CommandHandler
 {
@@ -23,6 +27,11 @@ internal class ShipCommandHandler : CommandHandler
             }
 
             Console.WriteLine($"ID: {ship.Symbol.Value.Color(ConsoleColors.Id)}");
+            Console.WriteLine($"Status: {ship.Nav.Status.Value.Color(ConsoleColors.Code)}");
+            if (ship.Nav.Status == ShipNavStatus.InTransit)
+            {
+                Console.WriteLine($"Arrival: {ship.Nav.Route.Arrival.Humanize().Color(ConsoleColors.Information)}");
+            }
 
             // TODO: List everything else.
 
@@ -30,7 +39,7 @@ internal class ShipCommandHandler : CommandHandler
         }
         catch (Exception ex)
         {
-            Console.WriteLine($"Error getting system: {ex.Message}.".Color(ConsoleColors.Error));
+            Console.WriteLine($"Error getting ship: {ex.Message}.".Color(ConsoleColors.Error));
             return ExitCodes.Error;
         }
     }

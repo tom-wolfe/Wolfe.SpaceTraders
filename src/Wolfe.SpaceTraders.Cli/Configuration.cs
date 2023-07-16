@@ -1,9 +1,11 @@
-﻿using Microsoft.Extensions.Logging.Console;
-using System.CommandLine.Invocation;
+﻿using System.CommandLine.Invocation;
 using System.Reflection;
-using Wolfe.SpaceTraders.Logging;
+using Microsoft.Extensions.Logging.Console;
+using Wolfe.SpaceTraders.Cli.Logging;
+using Wolfe.SpaceTraders.Infrastructure;
+using Wolfe.SpaceTraders.Service;
 
-namespace Wolfe.SpaceTraders;
+namespace Wolfe.SpaceTraders.Cli;
 
 internal static class Configuration
 {
@@ -13,7 +15,8 @@ internal static class Configuration
 
     public static IServiceProvider CreateServices(IConfiguration configuration) => new ServiceCollection()
         // .AddLogger(configuration)
-        .AddSpaceTradersClient(configuration)
+        .AddInfrastructureLayer(configuration)
+        .AddServiceLayer(configuration)
         .AddCommandHandlers()
         .BuildServiceProvider();
 
