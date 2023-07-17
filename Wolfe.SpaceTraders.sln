@@ -5,7 +5,7 @@ VisualStudioVersion = 17.6.33829.357
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Wolfe.SpaceTraders.Cli", "src\Wolfe.SpaceTraders.Cli\Wolfe.SpaceTraders.Cli.csproj", "{3F20F787-D164-4EE6-B5E3-BC1626D37C65}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Wolfe.SpaceTraders.Infrastructure", "src\Wolfe.SpaceTraders.Client\Wolfe.SpaceTraders.Infrastructure.csproj", "{59ACA534-0720-414A-AB74-2EC36F1B657B}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Wolfe.SpaceTraders.Infrastructure", "src\Wolfe.SpaceTraders.Infrastructure\Wolfe.SpaceTraders.Infrastructure.csproj", "{59ACA534-0720-414A-AB74-2EC36F1B657B}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Wolfe.SpaceTraders.Service", "src\Wolfe.SpaceTraders.Service\Wolfe.SpaceTraders.Service.csproj", "{C812CF72-52ED-4871-B215-926775682662}"
 EndProject

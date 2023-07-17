@@ -21,13 +21,15 @@
   </ItemGroup>
 
   <ItemGroup>
-    <None Update="appsettings.json">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
+    <ProjectReference Include="..\Wolfe.SpaceTraders.Core\Wolfe.SpaceTraders.Core.csproj" />
+    <ProjectReference Include="..\Wolfe.SpaceTraders.Infrastructure\Wolfe.SpaceTraders.Infrastructure.csproj" />
+    <ProjectReference Include="..\Wolfe.SpaceTraders.Service\Wolfe.SpaceTraders.Service.csproj" />
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\Wolfe.SpaceTraders.Client\Wolfe.SpaceTraders.Infrastructure.csproj" />
+    <None Update="appsettings.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
   </ItemGroup>
 
 </Project>
