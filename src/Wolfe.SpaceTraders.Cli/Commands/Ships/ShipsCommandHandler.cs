@@ -23,6 +23,7 @@ internal class ShipsCommandHandler : CommandHandler
         foreach (var ship in ships)
         {
             Console.WriteLine($"- {ship.Symbol.Value.Color(ConsoleColors.Id)} ({ship.Registration.Role.Value.Color(ConsoleColors.Code)}) [{ship.Nav.Status.Value.Color(ConsoleColors.Status)}]");
+            Console.WriteLine($"  Location: {ship.Nav.WaypointSymbol.Value.Color(ConsoleColors.Code)}");
             Console.WriteLine($"  Frame: {ship.Frame.Symbol.Value.Color(ConsoleColors.Code)}");
             if (ship.Fuel.Capacity > 0)
             {

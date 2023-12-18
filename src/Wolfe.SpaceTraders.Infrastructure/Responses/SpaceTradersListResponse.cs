@@ -1,4 +1,4 @@
-﻿namespace Wolfe.SpaceTraders.Infrastructure;
+﻿namespace Wolfe.SpaceTraders.Infrastructure.Responses;
 
 public class SpaceTradersListResponse<T>
 {

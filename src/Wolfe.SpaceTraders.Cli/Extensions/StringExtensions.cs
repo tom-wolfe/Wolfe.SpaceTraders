@@ -8,6 +8,9 @@ internal static class StringExtensions
     public static string Color(this string input, ConsoleColors colors) =>
         $"{GetBackgroundColorEscapeCode(colors.Background)}{GetForegroundColorEscapeCode(colors.Foreground)}{input}{DefaultForegroundColor}{DefaultBackgroundColor}";
 
+    public static string Heading(this string input) =>
+        $"=== {input.ToUpper()} ===";
+
     private static string GetForegroundColorEscapeCode(ConsoleColor? color) =>
         color switch
         {

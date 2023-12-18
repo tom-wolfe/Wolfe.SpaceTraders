@@ -13,4 +13,5 @@ internal record ConsoleColors(ConsoleColor? Foreground, ConsoleColor? Background
     public static readonly ConsoleColors Id = new(ConsoleColor.DarkGreen, ConsoleColor.Black);
     public static readonly ConsoleColors Code = new(ConsoleColor.Blue, ConsoleColor.Black);
     public static readonly ConsoleColors Status = new(ConsoleColor.DarkYellow, ConsoleColor.Black);
+    public static readonly ConsoleColors Currency = new(ConsoleColor.Red, ConsoleColor.Black);
 };

@@ -5,10 +5,26 @@ namespace Wolfe.SpaceTraders.Cli.Commands.Waypoints;
 
 internal static class WaypointsCommand
 {
-    public static readonly Argument<SystemSymbol> SystemIdArgument = new("system-id", r => new SystemSymbol(string.Join(' ', r.Tokens.Select(t => t.Value))));
+    public static readonly Argument<SystemSymbol> SystemIdArgument = new(
+        name: "system-id",
+        parse: r => new SystemSymbol(string.Join(' ', r.Tokens.Select(t => t.Value))),
+        description: "The ID of the system to list waypoints for."
+    );
+
+    public static readonly Option<WaypointType> TypeOption = new(
+        aliases: ["-t", "--type"],
+        parseArgument: r => new WaypointType(r.Tokens[0].Value),
+        description: "The type of waypoint to filter by."
+    )
+    {
+        Arity = ArgumentArity.ZeroOrOne,
+        IsRequired = false
+    };
+
     public static readonly Option<WaypointTraitSymbol[]> TraitsOption = new(
-        aliases: ["-t", "--traits"],
-        parseArgument: r => r.Tokens.Select(t => new WaypointTraitSymbol(t.Value)).ToArray()
+        aliases: ["-r", "--traits"],
+        parseArgument: r => r.Tokens.Select(t => new WaypointTraitSymbol(t.Value)).ToArray(),
+        description: "The traits to filter by."
     )
     {
         Arity = ArgumentArity.ZeroOrMore,
@@ -22,6 +38,7 @@ internal static class WaypointsCommand
             description: "Displays the waypoints in the given system."
         );
         command.AddArgument(SystemIdArgument);
+        command.AddOption(TypeOption);
         command.AddOption(TraitsOption);
         command.SetHandler(context => services.GetRequiredService<WaypointsCommandHandler>().InvokeAsync(context));
 

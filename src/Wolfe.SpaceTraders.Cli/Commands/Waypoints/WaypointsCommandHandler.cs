@@ -17,8 +17,9 @@ internal class WaypointsCommandHandler : CommandHandler
     {
         var systemId = context.BindingContext.ParseResult.GetValueForArgument(WaypointsCommand.SystemIdArgument);
         var traits = context.BindingContext.ParseResult.GetValueForOption(WaypointsCommand.TraitsOption);
+        var type = context.BindingContext.ParseResult.GetValueForOption(WaypointsCommand.TypeOption);
         var waypoints = _client
-            .GetWaypoints(systemId, traits, context.GetCancellationToken())
+            .GetWaypoints(systemId, type, traits, context.GetCancellationToken())
             .ToBlockingEnumerable(context.GetCancellationToken())
             .ToList();
 
@@ -27,6 +28,11 @@ internal class WaypointsCommandHandler : CommandHandler
             Console.WriteLine($"ID: {waypoint.Symbol.Value.Color(ConsoleColors.Id)}");
             Console.WriteLine($"Type: {waypoint.Type.Value.Color(ConsoleColors.Code)}");
             Console.WriteLine($"Position: {waypoint.X}, {waypoint.Y}");
+            Console.WriteLine("Traits:");
+            foreach (var trait in waypoint.Traits)
+            {
+                Console.WriteLine($"- {trait.Name.Color(ConsoleColors.Information)} ({trait.Symbol.Value.Color(ConsoleColors.Code)})");
+            }
 
             if (waypoint != waypoints.Last())
             {

@@ -34,7 +34,7 @@ internal class PurchaseCommandHandler : CommandHandler
         }
         catch (Exception ex)
         {
-            Console.WriteLine($"Error getting shipyard: {ex.Message}.".Color(ConsoleColors.Error));
+            Console.WriteLine($"Error getting shipyard: {ex.Message}".Color(ConsoleColors.Error));
             return ExitCodes.Error;
         }
     }

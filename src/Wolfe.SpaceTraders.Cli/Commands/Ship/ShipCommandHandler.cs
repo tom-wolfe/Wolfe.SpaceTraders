@@ -33,7 +33,14 @@ internal class ShipCommandHandler : CommandHandler
                 Console.WriteLine($"Arrival: {ship.Nav.Route.Arrival.Humanize().Color(ConsoleColors.Information)}");
             }
 
-            // TODO: List everything else.
+            Console.WriteLine($"Engine: {ship.Engine.Symbol.Value.Color(ConsoleColors.Information)}");
+            Console.WriteLine($"Frame: {ship.Frame.Symbol.Value.Color(ConsoleColors.Information)}");
+
+            Console.WriteLine("Modules".Heading());
+            foreach (var module in ship.Modules)
+            {
+                Console.WriteLine($"- {module.Symbol.Value.Color(ConsoleColors.Information)}");
+            }
 
             return ExitCodes.Success;
         }

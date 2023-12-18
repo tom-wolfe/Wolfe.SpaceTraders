@@ -4,6 +4,8 @@ using Wolfe.SpaceTraders.Core.Models;
 using Wolfe.SpaceTraders.Core.Requests;
 using Wolfe.SpaceTraders.Core.Responses;
 using Wolfe.SpaceTraders.Infrastructure.Extensions;
+using Wolfe.SpaceTraders.Infrastructure.Requests;
+using Wolfe.SpaceTraders.Infrastructure.Responses;
 using Wolfe.SpaceTraders.Service;
 
 namespace Wolfe.SpaceTraders.Infrastructure
@@ -19,7 +21,7 @@ namespace Wolfe.SpaceTraders.Infrastructure
 
         public async Task<RegisterResponse> Register(RegisterRequest request, CancellationToken cancellationToken = default)
         {
-            var response = await _client.Register(request, cancellationToken);
+            var response = await _client.Register(ApiRegisterRequest.FromDomain(request), cancellationToken);
             response.EnsureSuccessStatusCode();
             return response.Content!.Data;
         }
@@ -38,7 +40,7 @@ namespace Wolfe.SpaceTraders.Infrastructure
 
         public async Task<Contract?> GetContract(ContractId contractId, CancellationToken cancellationToken = default)
         {
-            var response = await _client.GetContract(contractId, cancellationToken);
+            var response = await _client.GetContract(contractId.Value, cancellationToken);
             if (response.StatusCode == HttpStatusCode.NotFound) { return null; }
             response.EnsureSuccessStatusCode();
             return response.Content!.Data;
@@ -46,14 +48,14 @@ namespace Wolfe.SpaceTraders.Infrastructure
 
         public async Task<AcceptContractResponse> AcceptContract(ContractId contractId, CancellationToken cancellationToken = default)
         {
-            var response = await _client.AcceptContract(contractId, cancellationToken);
+            var response = await _client.AcceptContract(contractId.Value, cancellationToken);
             response.EnsureSuccessStatusCode();
             return response.Content!.Data;
         }
 
         public async Task<Shipyard?> GetShipyard(WaypointSymbol waypointId, CancellationToken cancellationToken = default)
         {
-            var response = await _client.GetShipyard(waypointId.SystemSymbol, waypointId, cancellationToken);
+            var response = await _client.GetShipyard(waypointId.SystemSymbol.Value, waypointId.Value, cancellationToken);
             if (response.StatusCode == HttpStatusCode.NotFound) { return null; }
             response.EnsureSuccessStatusCode();
             return response.Content!.Data;
@@ -61,7 +63,7 @@ namespace Wolfe.SpaceTraders.Infrastructure
 
         public async Task<PurchaseShipResponse> PurchaseShip(PurchaseShipRequest request, CancellationToken cancellationToken = default)
         {
-            var response = await _client.PurchaseShip(request, cancellationToken);
+            var response = await _client.PurchaseShip(ApiPurchaseShipRequest.FromDomain(request), cancellationToken);
             response.EnsureSuccessStatusCode();
             return response.Content!.Data;
         }
@@ -73,7 +75,7 @@ namespace Wolfe.SpaceTraders.Infrastructure
 
         public async Task<Ship?> GetShip(ShipSymbol shipId, CancellationToken cancellationToken = default)
         {
-            var response = await _client.GetShip(shipId, cancellationToken);
+            var response = await _client.GetShip(shipId.Value, cancellationToken);
             if (response.StatusCode == HttpStatusCode.NotFound) { return null; }
             response.EnsureSuccessStatusCode();
             return response.Content!.Data;
@@ -81,28 +83,28 @@ namespace Wolfe.SpaceTraders.Infrastructure
 
         public async Task<ShipOrbitResponse> ShipOrbit(ShipSymbol shipId, CancellationToken cancellationToken = default)
         {
-            var response = await _client.ShipOrbit(shipId, cancellationToken);
+            var response = await _client.ShipOrbit(shipId.Value, cancellationToken);
             response.EnsureSuccessStatusCode();
             return response.Content!.Data;
         }
 
         public async Task<ShipDockResponse> ShipDock(ShipSymbol shipId, CancellationToken cancellationToken = default)
         {
-            var response = await _client.ShipDock(shipId, cancellationToken);
+            var response = await _client.ShipDock(shipId.Value, cancellationToken);
             response.EnsureSuccessStatusCode();
             return response.Content!.Data;
         }
 
         public async Task<ShipNavigateResponse> ShipNavigate(ShipSymbol shipId, ShipNavigateRequest request, CancellationToken cancellationToken = default)
         {
-            var response = await _client.ShipNavigate(shipId, request, cancellationToken);
+            var response = await _client.ShipNavigate(shipId.Value, ApiShipNavigateRequest.FromDomain(request), cancellationToken);
             response.EnsureSuccessStatusCode();
             return response.Content!.Data;
         }
 
         public async Task<ShipRefuelResponse> ShipRefuel(ShipSymbol shipId, CancellationToken cancellationToken = default)
         {
-            var response = await _client.ShipRefuel(shipId, cancellationToken);
+            var response = await _client.ShipRefuel(shipId.Value, cancellationToken);
             response.EnsureSuccessStatusCode();
             return response.Content!.Data;
         }
@@ -122,21 +124,21 @@ namespace Wolfe.SpaceTraders.Infrastructure
 
         public async Task<StarSystem?> GetSystem(SystemSymbol systemId, CancellationToken cancellationToken = default)
         {
-            var response = await _client.GetSystem(systemId, cancellationToken);
+            var response = await _client.GetSystem(systemId.Value, cancellationToken);
             if (response.StatusCode == HttpStatusCode.NotFound) { return null; }
             response.EnsureSuccessStatusCode();
             return response.Content!.Data;
         }
 
-        public IAsyncEnumerable<ShallowWaypoint> GetWaypoints(SystemSymbol systemId, WaypointTraitSymbol[] traits, CancellationToken cancellationToken = default)
+        public IAsyncEnumerable<ShallowWaypoint> GetWaypoints(SystemSymbol systemId, WaypointType? type, IEnumerable<WaypointTraitSymbol> traits, CancellationToken cancellationToken = default)
         {
             var traitValues = traits.Select(t => t.Value).ToArray();
-            return AsyncEnumerate(10, (limit, page) => _client.GetWaypoints(systemId, traitValues, limit, page, cancellationToken));
+            return AsyncEnumerate(10, (limit, page) => _client.GetWaypoints(systemId.Value, type?.Value, traitValues, limit, page, cancellationToken));
         }
 
         public async Task<Waypoint?> GetWaypoint(WaypointSymbol waypointId, CancellationToken cancellationToken = default)
         {
-            var response = await _client.GetWaypoint(waypointId.SystemSymbol, waypointId, cancellationToken);
+            var response = await _client.GetWaypoint(waypointId.SystemSymbol.Value, waypointId.Value, cancellationToken);
             if (response.StatusCode == HttpStatusCode.NotFound) { return null; }
             response.EnsureSuccessStatusCode();
             return response.Content!.Data;

@@ -25,11 +25,10 @@ internal class ShipyardCommandHandler : CommandHandler
                 throw new Exception($"Shipyard '{waypointId}' not found.");
             }
 
-            Console.WriteLine("=== SHIPYARD ===");
-
-            foreach (var ship in shipyard.ShipTypes)
+            Console.WriteLine("Shipyard".Heading());
+            foreach (var ship in shipyard.Ships)
             {
-                Console.WriteLine($"- {ship.Type.Value.Color(ConsoleColors.Code)}");
+                Console.WriteLine($"- {ship.Type.Value.Color(ConsoleColors.Code)} ({ship.PurchasePrice.Currency()})");
             }
             return ExitCodes.Success;
         }

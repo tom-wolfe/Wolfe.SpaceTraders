@@ -20,7 +20,7 @@ internal class MeCommandHandler : CommandHandler
         Console.WriteLine($"ID: {agent.AccountId.Color(ConsoleColors.Id)}");
         Console.WriteLine($"Symbol: {agent.Symbol.Value.Color(ConsoleColors.Code)}");
         Console.WriteLine($"Headquarters: {agent.Headquarters.Value.Color(ConsoleColors.Code)}");
-        Console.WriteLine($"Credits: {agent.Credits}");
+        Console.WriteLine($"Credits: {agent.Credits.Currency()}");
         Console.WriteLine($"Faction: {agent.StartingFaction.Value.Color(ConsoleColors.Code)}");
 
         return ExitCodes.Success;

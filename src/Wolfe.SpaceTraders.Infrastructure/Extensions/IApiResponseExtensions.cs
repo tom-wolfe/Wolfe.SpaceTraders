@@ -1,10 +1,11 @@
 ﻿using Refit;
+using Wolfe.SpaceTraders.Infrastructure.Responses;
 
 namespace Wolfe.SpaceTraders.Infrastructure.Extensions;
 
 internal static class ApiResponseExtensions
 {
-    public static void EnsureSuccessStatusCode<T>(this IApiResponse<T> response)
+    public static async Task EnsureSuccessStatusCode<T>(this IApiResponse<T> response)
     {
         if (response.Error?.InnerException != null)
         {
@@ -13,7 +14,8 @@ internal static class ApiResponseExtensions
 
         if (!response.IsSuccessStatusCode)
         {
-            throw new HttpRequestException($"Error calling endpoint: {response.StatusCode}");
+            var error = await response.Error.GetContentAsAsync<SpaceTradersErrorResponse>();
+            throw new SpaceTradersApiException(error!.Error.Message, error.Error.Code, response.StatusCode);
         }
     }
 }
