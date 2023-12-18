@@ -9,7 +9,10 @@ internal static class SystemCommand
 
     public static Command CreateCommand(IServiceProvider services)
     {
-        var command = new Command("system");
+        var command = new Command(
+            name: "system",
+            description: "Displays the details of the given system."
+        );
         command.AddArgument(SystemIdArgument);
         command.SetHandler(context => services.GetRequiredService<SystemCommandHandler>().InvokeAsync(context));
 

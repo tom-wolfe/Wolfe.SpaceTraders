@@ -13,7 +13,10 @@ internal static class ShipCommand
 
     public static Command CreateCommand(IServiceProvider services)
     {
-        var command = new Command("ship");
+        var command = new Command(
+            name: "ship",
+            description: "Displays the details of the given ship."
+        );
         command.AddArgument(ShipIdArgument);
         command.SetHandler(context => services.GetRequiredService<ShipCommandHandler>().InvokeAsync(context));
 

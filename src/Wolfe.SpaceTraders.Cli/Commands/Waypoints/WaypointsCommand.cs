@@ -9,7 +9,10 @@ internal static class WaypointsCommand
 
     public static Command CreateCommand(IServiceProvider services)
     {
-        var command = new Command("waypoints");
+        var command = new Command(
+            name: "waypoints",
+            description: "Displays the waypoints in the given system."
+        );
         command.AddArgument(SystemIdArgument);
         command.SetHandler(context => services.GetRequiredService<WaypointsCommandHandler>().InvokeAsync(context));
 

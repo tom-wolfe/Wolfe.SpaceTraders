@@ -6,7 +6,10 @@ internal static class ShipsCommand
 {
     public static Command CreateCommand(IServiceProvider services)
     {
-        var command = new Command("ships");
+        var command = new Command(
+            name: "ships",
+            description: "Displays the ships owned by the current player."
+        );
         command.SetHandler(context => services.GetRequiredService<ShipsCommandHandler>().InvokeAsync(context));
 
         return command;

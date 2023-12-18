@@ -10,7 +10,10 @@ internal static class ShipNavigateCommand
 
     public static Command CreateCommand(IServiceProvider services)
     {
-        var command = new Command("navigate");
+        var command = new Command(
+            name: "navigate",
+            description: "Begins navigating the given ship to the given waypoint."
+        );
         command.AddArgument(ShipIdArgument);
         command.AddArgument(WaypointIdArgument);
         command.SetHandler(context => services.GetRequiredService<ShipNavigateCommandHandler>().InvokeAsync(context));
