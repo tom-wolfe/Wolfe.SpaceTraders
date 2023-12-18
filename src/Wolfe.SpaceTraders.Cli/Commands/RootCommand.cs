@@ -12,6 +12,7 @@ using Wolfe.SpaceTraders.Cli.Commands.Ships;
 using Wolfe.SpaceTraders.Cli.Commands.Shipyard;
 using Wolfe.SpaceTraders.Cli.Commands.System;
 using Wolfe.SpaceTraders.Cli.Commands.Systems;
+using Wolfe.SpaceTraders.Cli.Commands.Token;
 using Wolfe.SpaceTraders.Cli.Commands.Waypoint;
 using Wolfe.SpaceTraders.Cli.Commands.Waypoints;
 
@@ -21,7 +22,11 @@ internal static class RootCommand
 {
     public static Command CreateCommand(IServiceProvider services)
     {
-        var command = new global::System.CommandLine.RootCommand();
+        var command = new global::System.CommandLine.RootCommand
+        {
+            Name = "space",
+            Description = "Provides command-line access to the Space Traders API."
+        };
         command.AddCommand(ClearCommand.CreateCommand(services));
         command.AddCommand(LoginCommand.CreateCommand(services));
         command.AddCommand(LogoutCommand.CreateCommand(services));
@@ -35,6 +40,7 @@ internal static class RootCommand
         command.AddCommand(ShipyardCommand.CreateCommand(services));
         command.AddCommand(SystemCommand.CreateCommand(services));
         command.AddCommand(SystemsCommand.CreateCommand(services));
+        command.AddCommand(TokenCommand.CreateCommand(services));
         command.AddCommand(WaypointCommand.CreateCommand(services));
         command.AddCommand(WaypointsCommand.CreateCommand(services));
 

@@ -13,23 +13,14 @@ internal class SystemsCommandHandler : CommandHandler
         _client = client;
     }
 
-    public override Task<int> InvokeAsync(InvocationContext context)
+    public override async Task<int> InvokeAsync(InvocationContext context)
     {
-        var systems = _client
-            .GetSystems(context.GetCancellationToken())
-            .ToBlockingEnumerable(context.GetCancellationToken())
-            .ToList();
-
-        foreach (var system in systems)
+        var response = await _client.GetSystems(20, 1, context.GetCancellationToken());
+        foreach (var system in response.Systems)
         {
             Console.WriteLine($"ID: {system.Symbol.Value.Color(ConsoleColors.Id)}");
             Console.WriteLine($"Type: {system.Type.Value.Color(ConsoleColors.Code)}");
-
-            if (system != systems.Last())
-            {
-                Console.WriteLine();
-            }
         }
-        return Task.FromResult(ExitCodes.Success);
+        return ExitCodes.Success;
     }
 }

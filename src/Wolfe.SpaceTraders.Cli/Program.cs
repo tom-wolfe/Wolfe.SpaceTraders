@@ -45,7 +45,7 @@ string? commandLine;
 var lastResult = 0;
 do
 {
-    Console.Write("Enter command: ");
+    Console.Write("> ");
     commandLine = Console.ReadLine();
     if (!string.IsNullOrEmpty(commandLine))
     {

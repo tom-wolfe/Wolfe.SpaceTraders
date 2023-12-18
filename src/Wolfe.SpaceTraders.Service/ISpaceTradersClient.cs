@@ -11,7 +11,7 @@ public interface ISpaceTradersClient
     public IAsyncEnumerable<Contract> GetContracts(CancellationToken cancellationToken = default);
     public Task<Contract?> GetContract(ContractId contractId, CancellationToken cancellationToken = default);
     public Task<AcceptContractResponse> AcceptContract(ContractId contractId, CancellationToken cancellationToken = default);
-    public IAsyncEnumerable<ShallowStarSystem> GetSystems(CancellationToken cancellationToken = default);
+    public Task<GetSystemsResponse> GetSystems(int limit, int page, CancellationToken cancellationToken = default);
     public Task<StarSystem?> GetSystem(SystemSymbol systemId, CancellationToken cancellationToken = default);
     public IAsyncEnumerable<ShallowWaypoint> GetWaypoints(SystemSymbol systemId, CancellationToken cancellationToken = default);
     public Task<Waypoint?> GetWaypoint(WaypointSymbol waypointId, CancellationToken cancellationToken = default);

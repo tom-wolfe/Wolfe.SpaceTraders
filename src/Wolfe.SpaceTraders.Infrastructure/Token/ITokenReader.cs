@@ -1,6 +1,6 @@
 ﻿namespace Wolfe.SpaceTraders.Infrastructure.Token;
 
-internal interface ITokenReader
+public interface ITokenReader
 {
     Task<string?> Read(CancellationToken cancellationToken);
 }

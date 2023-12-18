@@ -68,7 +68,7 @@ namespace Wolfe.SpaceTraders.Infrastructure
 
         public IAsyncEnumerable<Ship> GetShips(CancellationToken cancellationToken = default)
         {
-            return AsyncEnumerate(10, (limit, page) => _client.GetShips(limit, page, cancellationToken));
+            return AsyncEnumerate(50, (limit, page) => _client.GetShips(limit, page, cancellationToken));
         }
 
         public async Task<Ship?> GetShip(ShipSymbol shipId, CancellationToken cancellationToken = default)
@@ -107,9 +107,17 @@ namespace Wolfe.SpaceTraders.Infrastructure
             return response.Content!.Data;
         }
 
-        public IAsyncEnumerable<ShallowStarSystem> GetSystems(CancellationToken cancellationToken = default)
+        public async Task<GetSystemsResponse> GetSystems(int limit, int page, CancellationToken cancellationToken = default)
         {
-            return AsyncEnumerate(10, (limit, page) => _client.GetSystems(limit, page, cancellationToken));
+            var response = await _client.GetSystems(limit, page, cancellationToken);
+            response.EnsureSuccessStatusCode();
+            var meta = response.Content!.Meta;
+            var remaining = meta.Total - meta.Page * meta.Limit;
+            return new GetSystemsResponse
+            {
+                Systems = response.Content!.Data.ToList(),
+                Remaining = remaining
+            };
         }
 
         public async Task<StarSystem?> GetSystem(SystemSymbol systemId, CancellationToken cancellationToken = default)
