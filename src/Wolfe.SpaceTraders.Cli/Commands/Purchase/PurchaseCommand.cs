@@ -1,5 +1,4 @@
 ﻿using System.CommandLine;
-using Wolfe.SpaceTraders.Cli.Commands.Purchase.First;
 using Wolfe.SpaceTraders.Core.Models;
 
 namespace Wolfe.SpaceTraders.Cli.Commands.Purchase;
@@ -18,8 +17,6 @@ internal static class PurchaseCommand
         command.AddArgument(ShipyardIdArgument);
         command.AddArgument(ShipTypeArgument);
         command.SetHandler(context => services.GetRequiredService<PurchaseCommandHandler>().InvokeAsync(context));
-
-        command.AddCommand(PurchaseFirstShipCommand.CreateCommand(services));
 
         return command;
     }

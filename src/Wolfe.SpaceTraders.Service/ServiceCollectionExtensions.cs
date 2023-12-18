@@ -7,7 +7,6 @@ public static class ServiceCollectionExtensions
 {
     public static IServiceCollection AddServiceLayer(this IServiceCollection services, IConfiguration configuration)
     {
-        return services
-            .AddSingleton<ISpaceTradersService, SpaceTradersService>();
+        return services;
     }
 }

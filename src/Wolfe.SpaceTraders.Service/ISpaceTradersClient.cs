@@ -13,7 +13,7 @@ public interface ISpaceTradersClient
     public Task<AcceptContractResponse> AcceptContract(ContractId contractId, CancellationToken cancellationToken = default);
     public Task<GetSystemsResponse> GetSystems(int limit, int page, CancellationToken cancellationToken = default);
     public Task<StarSystem?> GetSystem(SystemSymbol systemId, CancellationToken cancellationToken = default);
-    public IAsyncEnumerable<ShallowWaypoint> GetWaypoints(SystemSymbol systemId, CancellationToken cancellationToken = default);
+    public IAsyncEnumerable<ShallowWaypoint> GetWaypoints(SystemSymbol systemId, WaypointTraitSymbol[] traits, CancellationToken cancellationToken = default);
     public Task<Waypoint?> GetWaypoint(WaypointSymbol waypointId, CancellationToken cancellationToken = default);
     public Task<Shipyard?> GetShipyard(WaypointSymbol waypointId, CancellationToken cancellationToken = default);
     public Task<PurchaseShipResponse> PurchaseShip(PurchaseShipRequest request, CancellationToken cancellationToken = default);

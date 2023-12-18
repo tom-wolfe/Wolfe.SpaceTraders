@@ -68,7 +68,7 @@ namespace Wolfe.SpaceTraders.Infrastructure
 
         public IAsyncEnumerable<Ship> GetShips(CancellationToken cancellationToken = default)
         {
-            return AsyncEnumerate(50, (limit, page) => _client.GetShips(limit, page, cancellationToken));
+            return AsyncEnumerate(10, (limit, page) => _client.GetShips(limit, page, cancellationToken));
         }
 
         public async Task<Ship?> GetShip(ShipSymbol shipId, CancellationToken cancellationToken = default)
@@ -128,9 +128,10 @@ namespace Wolfe.SpaceTraders.Infrastructure
             return response.Content!.Data;
         }
 
-        public IAsyncEnumerable<ShallowWaypoint> GetWaypoints(SystemSymbol systemId, CancellationToken cancellationToken = default)
+        public IAsyncEnumerable<ShallowWaypoint> GetWaypoints(SystemSymbol systemId, WaypointTraitSymbol[] traits, CancellationToken cancellationToken = default)
         {
-            return AsyncEnumerate(10, (limit, page) => _client.GetWaypoints(systemId, limit, page, cancellationToken));
+            var traitValues = traits.Select(t => t.Value).ToArray();
+            return AsyncEnumerate(10, (limit, page) => _client.GetWaypoints(systemId, traitValues, limit, page, cancellationToken));
         }
 
         public async Task<Waypoint?> GetWaypoint(WaypointSymbol waypointId, CancellationToken cancellationToken = default)

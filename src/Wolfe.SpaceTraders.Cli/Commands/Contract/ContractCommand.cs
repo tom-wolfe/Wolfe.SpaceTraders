@@ -6,7 +6,17 @@ namespace Wolfe.SpaceTraders.Cli.Commands.Contract;
 
 internal static class ContractCommand
 {
-    public static readonly Argument<ContractId> ContractIdArgument = new("contract-id", r => new ContractId(string.Join(' ', r.Tokens.Select(t => t.Value))));
+    public static readonly Argument<ContractId> ContractIdArgument = new(
+        name: "contract-id",
+        parse: r =>
+        {
+            var contractId = r.Tokens.Select(t => t.Value).First();
+            return new ContractId(contractId);
+        }
+    )
+    {
+        Arity = ArgumentArity.ExactlyOne
+    };
 
     public static Command CreateCommand(IServiceProvider services)
     {

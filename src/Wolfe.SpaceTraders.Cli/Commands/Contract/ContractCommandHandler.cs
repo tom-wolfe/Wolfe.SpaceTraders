@@ -1,5 +1,5 @@
-﻿using System.CommandLine.Invocation;
-using Humanizer;
+﻿using Humanizer;
+using System.CommandLine.Invocation;
 using Wolfe.SpaceTraders.Cli.Extensions;
 using Wolfe.SpaceTraders.Service;
 
@@ -17,6 +17,7 @@ internal class ContractCommandHandler : CommandHandler
     public override async Task<int> InvokeAsync(InvocationContext context)
     {
         var id = context.BindingContext.ParseResult.GetValueForArgument(ContractCommand.ContractIdArgument);
+
         try
         {
             var contract = await _client.GetContract(id, context.GetCancellationToken());

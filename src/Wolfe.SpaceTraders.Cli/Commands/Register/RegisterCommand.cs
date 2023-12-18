@@ -12,7 +12,7 @@ internal static class RegisterCommand
     );
 
     public static readonly Option<FactionSymbol?> FactionOption = new(
-        aliases: ["f", "faction"],
+        aliases: ["-f", "--faction"],
         parseArgument: r =>
         {
             var faction = r.Tokens.Select(t => t.Value).FirstOrDefault()?.ToString();
@@ -26,7 +26,7 @@ internal static class RegisterCommand
     };
 
     public static readonly Option<string?> EmailOption = new(
-        aliases: ["e", "email"],
+        aliases: ["-e", "--email"],
         getDefaultValue: () => null,
         description: "Your email address. This is used if you reserved your call sign between resets."
     )

@@ -31,7 +31,7 @@ internal interface ISpaceTradersApiClient
     public Task<IApiResponse<SpaceTradersResponse<StarSystem>>> GetSystem(SystemSymbol systemId, CancellationToken cancellationToken = default);
 
     [Get("/systems/{systemId}/waypoints?limit={limit}&page={page}")]
-    public Task<IApiResponse<SpaceTradersListResponse<ShallowWaypoint>>> GetWaypoints(SystemSymbol systemId, int limit = 10, int page = 1, CancellationToken cancellationToken = default);
+    public Task<IApiResponse<SpaceTradersListResponse<ShallowWaypoint>>> GetWaypoints(SystemSymbol systemId, [Query(CollectionFormat.Multi)] string[] traits, int limit = 10, int page = 1, CancellationToken cancellationToken = default);
 
     [Get("/systems/{systemId}/waypoints/{waypointId}")]
     public Task<IApiResponse<SpaceTradersResponse<Waypoint>>> GetWaypoint(SystemSymbol systemId, WaypointSymbol waypointId, CancellationToken cancellationToken = default);

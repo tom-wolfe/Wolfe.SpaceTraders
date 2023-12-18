@@ -16,8 +16,9 @@ internal class WaypointsCommandHandler : CommandHandler
     public override Task<int> InvokeAsync(InvocationContext context)
     {
         var systemId = context.BindingContext.ParseResult.GetValueForArgument(WaypointsCommand.SystemIdArgument);
+        var traits = context.BindingContext.ParseResult.GetValueForOption(WaypointsCommand.TraitsOption);
         var waypoints = _client
-            .GetWaypoints(systemId, context.GetCancellationToken())
+            .GetWaypoints(systemId, traits, context.GetCancellationToken())
             .ToBlockingEnumerable(context.GetCancellationToken())
             .ToList();
 
