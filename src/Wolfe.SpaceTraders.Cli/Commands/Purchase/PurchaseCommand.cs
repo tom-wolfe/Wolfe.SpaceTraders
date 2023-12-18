@@ -11,7 +11,10 @@ internal static class PurchaseCommand
 
     public static Command CreateCommand(IServiceProvider services)
     {
-        var command = new Command("purchase");
+        var command = new Command(
+            name: "purchase",
+            description: "Purchases a ship."
+        );
         command.AddArgument(ShipyardIdArgument);
         command.AddArgument(ShipTypeArgument);
         command.SetHandler(context => services.GetRequiredService<PurchaseCommandHandler>().InvokeAsync(context));

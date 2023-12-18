@@ -10,7 +10,10 @@ internal static class ContractCommand
 
     public static Command CreateCommand(IServiceProvider services)
     {
-        var command = new Command("contract");
+        var command = new Command(
+            name: "contract",
+            description: "Displays the details of a contract."
+        );
         command.AddArgument(ContractIdArgument);
         command.SetHandler(context => services.GetRequiredService<ContractCommandHandler>().InvokeAsync(context));
 

@@ -20,7 +20,7 @@ public class SpaceTradersService : ISpaceTradersService
 
         var waypoints = _client.GetWaypoints(system, cancellationToken);
 
-        await foreach (var waypoint in waypoints.WithCancellation(cancellationToken))
+        await foreach (var waypoint in waypoints)
         {
             if (waypoint.Type != WaypointType.Shipyard && waypoint.Type != WaypointType.OrbitalStation)
             {
