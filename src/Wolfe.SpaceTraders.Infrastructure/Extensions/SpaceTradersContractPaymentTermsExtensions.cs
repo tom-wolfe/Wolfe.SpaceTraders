@@ -7,7 +7,7 @@ internal static class SpaceTradersContractPaymentTermsExtensions
 {
     public static ContractPaymentTerms ToDomain(this SpaceTradersContractPaymentTerms terms) => new()
     {
-        OnAccepted = terms.OnAccepted,
-        OnFulfilled = terms.OnFulfilled,
+        OnAccepted = new Credits(terms.OnAccepted),
+        OnFulfilled = new Credits(terms.OnFulfilled),
     };
 }
