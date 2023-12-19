@@ -2,6 +2,6 @@
 
 public class ContractPaymentTerms
 {
-    public int OnAccepted { get; set; }
-    public int OnFulfilled { get; set; }
+    public Credits OnAccepted { get; set; } = Credits.Zero;
+    public Credits OnFulfilled { get; set; } = Credits.Zero;
 }

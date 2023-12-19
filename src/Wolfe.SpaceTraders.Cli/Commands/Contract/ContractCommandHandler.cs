@@ -38,7 +38,7 @@ internal class ContractCommandHandler : CommandHandler
 
             Console.WriteLine($"Terms:");
             Console.WriteLine($" - Deadline: {contract.Terms.Deadline.Humanize()}");
-            Console.WriteLine($" - Payment: {contract.Terms.Payment.OnAccepted.ToMetric()}/{contract.Terms.Payment.OnFulfilled.ToMetric()} ({(contract.Terms.Payment.OnAccepted + contract.Terms.Payment.OnFulfilled).ToMetric()} total)");
+            Console.WriteLine($" - Payment: {contract.Terms.Payment.OnAccepted}/{contract.Terms.Payment.OnFulfilled} ({(contract.Terms.Payment.OnAccepted + contract.Terms.Payment.OnFulfilled)} total)");
             Console.WriteLine($" - Deliver: ");
             foreach (var deliver in contract.Terms.Deliver)
             {

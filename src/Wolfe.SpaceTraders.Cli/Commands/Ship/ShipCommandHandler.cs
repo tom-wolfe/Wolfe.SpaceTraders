@@ -27,7 +27,7 @@ internal class ShipCommandHandler : CommandHandler
             }
 
             Console.WriteLine($"ID: {ship.Symbol.Value.Color(ConsoleColors.Id)}");
-            Console.WriteLine($"Status: {ship.Navigation.Status.Value.Color(ConsoleColors.Code)}");
+            Console.WriteLine($"Status: {ship.Navigation.Status.Value.Color(ConsoleColors.Status)}");
             if (ship.Navigation.Status == NavigationStatus.InTransit)
             {
                 Console.WriteLine($"Arrival: {ship.Navigation.Route.Arrival.Humanize().Color(ConsoleColors.Information)}");

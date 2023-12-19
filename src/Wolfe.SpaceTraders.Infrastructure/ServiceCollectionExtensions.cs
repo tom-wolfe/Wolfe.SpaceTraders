@@ -10,7 +10,15 @@ public static class ServiceCollectionExtensions
     {
         var tokenService = new FileTokenService();
         return services
-            .AddSpaceTradersApi(configuration.GetSection("SpaceTraders").Bind)
+            .AddSpaceTradersApi(o =>
+            {
+                configuration.GetSection("SpaceTraders").Bind(o);
+                o.ApiKeyProvider = async (x, ct) =>
+                {
+                    var y = await tokenService.Read(ct);
+                    return y ?? throw new InvalidOperationException("Missing API token.");
+                };
+            })
             .AddSingleton<ISpaceTradersClient, SpaceTradersClient>()
             .AddSingleton<ITokenReader>(tokenService)
             .AddSingleton<ITokenWriter>(tokenService);

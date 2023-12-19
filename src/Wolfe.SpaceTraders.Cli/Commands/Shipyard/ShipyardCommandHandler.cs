@@ -28,7 +28,7 @@ internal class ShipyardCommandHandler : CommandHandler
             Console.WriteLine("Shipyard".Heading());
             foreach (var ship in shipyard.Ships)
             {
-                Console.WriteLine($"- {ship.Type.Value.Color(ConsoleColors.Code)} ({ship.PurchasePrice.Currency()})");
+                Console.WriteLine($"- {ship.Type.Value.Color(ConsoleColors.Code)} ({ship.PurchasePrice})");
             }
             return ExitCodes.Success;
         }
