@@ -9,5 +9,7 @@ internal static class SpaceTradersShipExtensions
     {
         Symbol = new ShipSymbol(ship.Symbol),
         Navigation = ship.Nav.ToDomain(),
+        Registration = ship.Registration.ToDomain(),
+        Fuel = ship.Fuel.ToDomain()
     };
 }

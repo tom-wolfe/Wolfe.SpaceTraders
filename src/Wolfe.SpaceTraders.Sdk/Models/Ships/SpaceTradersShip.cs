@@ -6,4 +6,6 @@ public class SpaceTradersShip
 {
     public required string Symbol { get; set; }
     public required SpaceTradersNavigation Nav { get; set; }
+    public required SpaceTradersShipRegistration Registration { get; set; }
+    public required SpaceTradersShipFuel Fuel { get; set; }
 }
