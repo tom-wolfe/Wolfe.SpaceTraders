@@ -15,8 +15,8 @@ internal class SystemsCommandHandler : CommandHandler
 
     public override async Task<int> InvokeAsync(InvocationContext context)
     {
-        var response = await _client.GetSystems(20, 1, context.GetCancellationToken());
-        foreach (var system in response.Systems)
+        var response = _client.GetSystems(context.GetCancellationToken());
+        await foreach (var system in response)
         {
             Console.WriteLine($"ID: {system.Symbol.Value.Color(ConsoleColors.Id)}");
             Console.WriteLine($"Type: {system.Type.Value.Color(ConsoleColors.Code)}");

@@ -43,7 +43,7 @@ internal class ContractCommandHandler : CommandHandler
             foreach (var deliver in contract.Terms.Deliver)
             {
                 Console.WriteLine($"   - Trade: {deliver.TradeSymbol.Value.Color(ConsoleColors.Code)}");
-                Console.WriteLine($"   - Destination: {deliver.DestinationSymbol.Color(ConsoleColors.Code)}");
+                Console.WriteLine($"   - Destination: {deliver.DestinationSymbol.Value.Color(ConsoleColors.Code)}");
                 Console.WriteLine($"   - Units: {deliver.UnitsFulfilled}/{deliver.UnitsRequired}");
                 if (deliver != contract.Terms.Deliver.Last()) { Console.WriteLine(); }
             }

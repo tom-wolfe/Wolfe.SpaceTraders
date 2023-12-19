@@ -17,7 +17,7 @@ internal class MeCommandHandler : CommandHandler
     {
         var agent = await _client.GetAgent(context.GetCancellationToken());
 
-        Console.WriteLine($"ID: {agent.AccountId.Color(ConsoleColors.Id)}");
+        Console.WriteLine($"ID: {agent.AccountId.Value.Color(ConsoleColors.Id)}");
         Console.WriteLine($"Symbol: {agent.Symbol.Value.Color(ConsoleColors.Code)}");
         Console.WriteLine($"Headquarters: {agent.Headquarters.Value.Color(ConsoleColors.Code)}");
         Console.WriteLine($"Credits: {agent.Credits.Currency()}");

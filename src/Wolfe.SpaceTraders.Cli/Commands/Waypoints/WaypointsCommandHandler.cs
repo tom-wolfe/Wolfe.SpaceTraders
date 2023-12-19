@@ -13,32 +13,29 @@ internal class WaypointsCommandHandler : CommandHandler
         _client = client;
     }
 
-    public override Task<int> InvokeAsync(InvocationContext context)
+    public override async Task<int> InvokeAsync(InvocationContext context)
     {
         var systemId = context.BindingContext.ParseResult.GetValueForArgument(WaypointsCommand.SystemIdArgument);
         var traits = context.BindingContext.ParseResult.GetValueForOption(WaypointsCommand.TraitsOption);
         var type = context.BindingContext.ParseResult.GetValueForOption(WaypointsCommand.TypeOption);
-        var waypoints = _client
-            .GetWaypoints(systemId, type, traits, context.GetCancellationToken())
-            .ToBlockingEnumerable(context.GetCancellationToken())
-            .ToList();
+        var distance = context.BindingContext.ParseResult.GetValueForOption(WaypointsCommand.DistanceOption);
+        var waypoints = _client.GetWaypoints(systemId, type, traits!, context.GetCancellationToken());
 
-        foreach (var waypoint in waypoints)
+        await foreach (var waypoint in waypoints)
         {
             Console.WriteLine($"ID: {waypoint.Symbol.Value.Color(ConsoleColors.Id)}");
             Console.WriteLine($"Type: {waypoint.Type.Value.Color(ConsoleColors.Code)}");
-            Console.WriteLine($"Position: {waypoint.X}, {waypoint.Y}");
-            Console.WriteLine("Traits:");
-            foreach (var trait in waypoint.Traits)
-            {
-                Console.WriteLine($"- {trait.Name.Color(ConsoleColors.Information)} ({trait.Symbol.Value.Color(ConsoleColors.Code)})");
-            }
 
-            if (waypoint != waypoints.Last())
-            {
-                Console.WriteLine();
-            }
+            Console.WriteLine($"Position: {waypoint.X}, {waypoint.Y}");
+
+            // TODO: Restore waypoint traits.
+            //Console.WriteLine("Traits:");
+            //foreach (var trait in waypoint.Traits)
+            //{
+            //    Console.WriteLine($"- {trait.Name.Color(ConsoleColors.Information)} ({trait.Symbol.Value.Color(ConsoleColors.Code)})");
+            //}
+            Console.WriteLine();
         }
-        return Task.FromResult(ExitCodes.Success);
+        return ExitCodes.Success;
     }
 }

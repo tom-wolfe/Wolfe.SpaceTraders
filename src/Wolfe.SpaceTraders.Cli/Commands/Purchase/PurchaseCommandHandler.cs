@@ -1,7 +1,7 @@
 ﻿using System.CommandLine.Invocation;
 using Wolfe.SpaceTraders.Cli.Extensions;
-using Wolfe.SpaceTraders.Core.Requests;
 using Wolfe.SpaceTraders.Service;
+using Wolfe.SpaceTraders.Service.Requests;
 
 namespace Wolfe.SpaceTraders.Cli.Commands.Purchase;
 

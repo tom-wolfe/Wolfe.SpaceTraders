@@ -7,9 +7,11 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Wolfe.SpaceTraders.Cli", "s
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Wolfe.SpaceTraders.Infrastructure", "src\Wolfe.SpaceTraders.Infrastructure\Wolfe.SpaceTraders.Infrastructure.csproj", "{59ACA534-0720-414A-AB74-2EC36F1B657B}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Wolfe.SpaceTraders.Service", "src\Wolfe.SpaceTraders.Service\Wolfe.SpaceTraders.Service.csproj", "{C812CF72-52ED-4871-B215-926775682662}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Wolfe.SpaceTraders.Service", "src\Wolfe.SpaceTraders.Service\Wolfe.SpaceTraders.Service.csproj", "{C812CF72-52ED-4871-B215-926775682662}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Wolfe.SpaceTraders.Core", "src\Wolfe.SpaceTraders.Core\Wolfe.SpaceTraders.Core.csproj", "{5E2094E3-1EF7-4AF5-BD9D-83478FE3DC99}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Wolfe.SpaceTraders.Core", "src\Wolfe.SpaceTraders.Core\Wolfe.SpaceTraders.Core.csproj", "{5E2094E3-1EF7-4AF5-BD9D-83478FE3DC99}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Wolfe.SpaceTraders.Sdk", "src\Wolfe.SpaceTraders.Sdk\Wolfe.SpaceTraders.Sdk.csproj", "{D5ED0D2A-5BD4-46F4-BB57-83BAE4A44E7D}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -33,6 +35,10 @@ Global
 		{5E2094E3-1EF7-4AF5-BD9D-83478FE3DC99}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{5E2094E3-1EF7-4AF5-BD9D-83478FE3DC99}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{5E2094E3-1EF7-4AF5-BD9D-83478FE3DC99}.Release|Any CPU.Build.0 = Release|Any CPU
+		{D5ED0D2A-5BD4-46F4-BB57-83BAE4A44E7D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D5ED0D2A-5BD4-46F4-BB57-83BAE4A44E7D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D5ED0D2A-5BD4-46F4-BB57-83BAE4A44E7D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D5ED0D2A-5BD4-46F4-BB57-83BAE4A44E7D}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

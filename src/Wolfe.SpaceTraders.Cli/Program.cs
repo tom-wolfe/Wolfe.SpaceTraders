@@ -1,7 +1,10 @@
 ﻿using System.CommandLine.Builder;
+using System.CommandLine.IO;
 using System.CommandLine.Parsing;
 using Wolfe.SpaceTraders.Cli;
 using Wolfe.SpaceTraders.Cli.Commands;
+using Wolfe.SpaceTraders.Cli.Extensions;
+using Wolfe.SpaceTraders.Sdk;
 
 var configuration = Configuration.CreateConfiguration();
 var services = Configuration.CreateServices(configuration);
@@ -11,6 +14,17 @@ var parser = new CommandLineBuilder(rootCommand)
     .UseHelp()
     .UseVersionOption()
     .UseParseErrorReporting()
+    .UseExceptionHandler((ex, ctx) =>
+    {
+        if (ex is SpaceTradersApiException spEx)
+        {
+            ctx.Console.Error.WriteLine($"Error: {spEx.Message} ({spEx.ErrorCode})".Color(ConsoleColors.Error));
+        }
+        else
+        {
+            ctx.Console.Error.WriteLine($"Error: {ex.Message}");
+        }
+    })
     .CancelOnProcessTermination()
     .Build();
 

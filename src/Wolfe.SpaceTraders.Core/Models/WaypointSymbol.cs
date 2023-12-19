@@ -3,7 +3,7 @@
 [StronglyTypedId]
 public partial struct WaypointSymbol
 {
-    public string Sector => Value.Split('-')[0];
-    public string System => Value.Split('-')[1];
-    public SystemSymbol SystemSymbol => new($"{Sector}-{System}");
+    private string SectorString => Value.Split('-')[0];
+    private string SystemString => Value.Split('-')[1];
+    public SystemSymbol System => new($"{SectorString}-{SystemString}");
 }

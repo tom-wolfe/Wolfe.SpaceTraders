@@ -2,7 +2,7 @@
 
 public class ShipFuel
 {
-    public required int Current { get; set; }
-    public required int Capacity { get; set; }
+    public required Fuel Current { get; set; }
+    public required Fuel Capacity { get; set; }
     public ShipFuelConsumed? Consumed { get; set; }
 }

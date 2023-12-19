@@ -2,13 +2,8 @@
 {
     internal class FileTokenService : ITokenReader, ITokenWriter
     {
-        private readonly string _tempFile;
+        private readonly string _tempFile = Path.Combine(Path.GetTempPath(), "spaceTraders.token");
         private string? _token;
-
-        public FileTokenService()
-        {
-            _tempFile = Path.Combine(Path.GetTempPath(), "spaceTraders.token");
-        }
 
         public Task Write(string token, CancellationToken cancellationToken)
         {

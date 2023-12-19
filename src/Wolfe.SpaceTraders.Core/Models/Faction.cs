@@ -6,7 +6,5 @@ public class Faction
     public required string Name { get; set; }
     public required string Description { get; set; }
     public required WaypointSymbol Headquarters { get; set; }
-    // TODO: Faction traits
-    public bool IsRecruiting { get; set; }
 
 }

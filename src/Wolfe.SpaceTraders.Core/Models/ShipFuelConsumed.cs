@@ -2,6 +2,6 @@
 
 public class ShipFuelConsumed
 {
-    public required int Amount { get; set; }
+    public required Fuel Amount { get; set; }
     public required DateTime Timestamp { get; set; }
 }

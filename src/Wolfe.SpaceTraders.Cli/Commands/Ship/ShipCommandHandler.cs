@@ -27,19 +27,10 @@ internal class ShipCommandHandler : CommandHandler
             }
 
             Console.WriteLine($"ID: {ship.Symbol.Value.Color(ConsoleColors.Id)}");
-            Console.WriteLine($"Status: {ship.Nav.Status.Value.Color(ConsoleColors.Code)}");
-            if (ship.Nav.Status == ShipNavStatus.InTransit)
+            Console.WriteLine($"Status: {ship.Navigation.Status.Value.Color(ConsoleColors.Code)}");
+            if (ship.Navigation.Status == NavigationStatus.InTransit)
             {
-                Console.WriteLine($"Arrival: {ship.Nav.Route.Arrival.Humanize().Color(ConsoleColors.Information)}");
-            }
-
-            Console.WriteLine($"Engine: {ship.Engine.Symbol.Value.Color(ConsoleColors.Information)}");
-            Console.WriteLine($"Frame: {ship.Frame.Symbol.Value.Color(ConsoleColors.Information)}");
-
-            Console.WriteLine("Modules".Heading());
-            foreach (var module in ship.Modules)
-            {
-                Console.WriteLine($"- {module.Symbol.Value.Color(ConsoleColors.Information)}");
+                Console.WriteLine($"Arrival: {ship.Navigation.Route.Arrival.Humanize().Color(ConsoleColors.Information)}");
             }
 
             return ExitCodes.Success;
