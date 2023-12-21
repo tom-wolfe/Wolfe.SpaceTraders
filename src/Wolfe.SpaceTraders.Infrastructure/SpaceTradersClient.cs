@@ -1,5 +1,10 @@
 ﻿using System.Net;
 using Wolfe.SpaceTraders.Domain.Models;
+using Wolfe.SpaceTraders.Domain.Models.Agents;
+using Wolfe.SpaceTraders.Domain.Models.Contracts;
+using Wolfe.SpaceTraders.Domain.Models.Ships;
+using Wolfe.SpaceTraders.Domain.Models.Shipyards;
+using Wolfe.SpaceTraders.Domain.Models.Waypoints;
 using Wolfe.SpaceTraders.Infrastructure.Extensions;
 using Wolfe.SpaceTraders.Sdk;
 using Wolfe.SpaceTraders.Sdk.Models;
@@ -94,7 +99,13 @@ namespace Wolfe.SpaceTraders.Infrastructure
         public async Task<ShipRefuelResult> ShipRefuel(ShipSymbol shipId, CancellationToken cancellationToken = default)
         {
             var response = await client.ShipRefuel(shipId.Value, cancellationToken);
-            return response.GetContent().ToDomain();
+            return response.GetContent().Data.ToDomain();
+        }
+
+        public async Task<ShipExtractResult> ShipExtract(ShipSymbol shipId, CancellationToken cancellationToken)
+        {
+            var response = await client.ShipExtract(shipId.Value, cancellationToken);
+            return response.GetContent().Data.ToDomain();
         }
 
         public IAsyncEnumerable<StarSystem> GetSystems(CancellationToken cancellationToken = default)

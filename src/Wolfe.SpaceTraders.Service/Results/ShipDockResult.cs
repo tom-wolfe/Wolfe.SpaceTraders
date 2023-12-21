@@ -1,4 +1,4 @@
-﻿using Wolfe.SpaceTraders.Domain.Models;
+﻿using Wolfe.SpaceTraders.Domain.Models.Navigation;
 
 namespace Wolfe.SpaceTraders.Service.Results;
 

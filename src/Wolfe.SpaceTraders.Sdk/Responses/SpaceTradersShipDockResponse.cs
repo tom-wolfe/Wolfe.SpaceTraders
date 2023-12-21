@@ -1,4 +1,4 @@
-﻿using Wolfe.SpaceTraders.Sdk.Models;
+﻿using Wolfe.SpaceTraders.Sdk.Models.Ships;
 
 namespace Wolfe.SpaceTraders.Sdk.Responses;
 

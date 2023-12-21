@@ -1,5 +1,6 @@
 ﻿using System.CommandLine.Invocation;
 using Wolfe.SpaceTraders.Cli.Extensions;
+using Wolfe.SpaceTraders.Cli.Formatters;
 using Wolfe.SpaceTraders.Service;
 
 namespace Wolfe.SpaceTraders.Cli.Commands.Waypoint;
@@ -15,11 +16,7 @@ internal class WaypointCommandHandler(ISpaceTradersClient client) : CommandHandl
             var waypoint = await client.GetWaypoint(waypointId, context.GetCancellationToken())
                 ?? throw new Exception($"Waypoint '{waypointId}' not found.");
 
-            Console.WriteLine($"ID: {waypoint.Symbol.Value.Color(ConsoleColors.Id)}");
-            Console.WriteLine($"Type: {waypoint.Type.Value.Color(ConsoleColors.Category)}");
-            Console.WriteLine($"Position: {waypoint.Point.ToString().Color(ConsoleColors.Point)}");
-            // TODO: List orbitals and factions
-
+            WaypointFormatter.WriteWaypoint(waypoint);
             return ExitCodes.Success;
         }
         catch (Exception ex)

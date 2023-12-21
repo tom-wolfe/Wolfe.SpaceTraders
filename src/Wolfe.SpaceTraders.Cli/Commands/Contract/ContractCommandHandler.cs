@@ -5,26 +5,16 @@ using Wolfe.SpaceTraders.Service;
 
 namespace Wolfe.SpaceTraders.Cli.Commands.Contract;
 
-internal class ContractCommandHandler : CommandHandler
+internal class ContractCommandHandler(ISpaceTradersClient client) : CommandHandler
 {
-    private readonly ISpaceTradersClient _client;
-
-    public ContractCommandHandler(ISpaceTradersClient client)
-    {
-        _client = client;
-    }
-
     public override async Task<int> InvokeAsync(InvocationContext context)
     {
         var id = context.BindingContext.ParseResult.GetValueForArgument(ContractCommand.ContractIdArgument);
 
         try
         {
-            var contract = await _client.GetContract(id, context.GetCancellationToken());
-            if (contract == null)
-            {
-                throw new Exception($"Contract '{id}' not found.");
-            }
+            var contract = await client.GetContract(id, context.GetCancellationToken())
+                ?? throw new Exception($"Contract '{id}' not found.");
 
             Console.WriteLine($"ID: {contract.Id.Value.Color(ConsoleColors.Id)}");
             Console.WriteLine($"Type: {contract.Type.Value.Color(ConsoleColors.Category)}");

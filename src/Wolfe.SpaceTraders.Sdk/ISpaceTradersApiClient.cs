@@ -118,4 +118,10 @@ public interface ISpaceTradersApiClient
         string shipId,
         CancellationToken cancellationToken = default
     );
+
+    [Post("/my/ships/{shipId}/extract")]
+    Task<IApiResponse<SpaceTradersShipExtractResponse>> ShipExtract(
+        string shipId,
+        CancellationToken cancellationToken = default
+    );
 }

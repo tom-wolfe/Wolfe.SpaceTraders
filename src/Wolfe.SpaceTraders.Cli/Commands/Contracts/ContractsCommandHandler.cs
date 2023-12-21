@@ -5,18 +5,11 @@ using Wolfe.SpaceTraders.Service;
 
 namespace Wolfe.SpaceTraders.Cli.Commands.Contracts;
 
-internal class ContractsCommandHandler : CommandHandler
+internal class ContractsCommandHandler(ISpaceTradersClient client) : CommandHandler
 {
-    private readonly ISpaceTradersClient _client;
-
-    public ContractsCommandHandler(ISpaceTradersClient client)
-    {
-        _client = client;
-    }
-
     public override Task<int> InvokeAsync(InvocationContext context)
     {
-        var contracts = _client
+        var contracts = client
             .GetContracts(context.GetCancellationToken())
             .ToBlockingEnumerable(context.GetCancellationToken())
             .ToList();

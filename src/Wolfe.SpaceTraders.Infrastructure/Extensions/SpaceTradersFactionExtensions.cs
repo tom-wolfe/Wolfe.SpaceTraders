@@ -1,5 +1,5 @@
 ﻿using Wolfe.SpaceTraders.Domain.Models;
-using Wolfe.SpaceTraders.Sdk.Models;
+using Wolfe.SpaceTraders.Sdk.Models.Agents;
 
 namespace Wolfe.SpaceTraders.Infrastructure.Extensions;
 

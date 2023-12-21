@@ -1,4 +1,6 @@
-﻿namespace Wolfe.SpaceTraders.Sdk.Models;
+﻿using Wolfe.SpaceTraders.Sdk.Models.Agents;
+
+namespace Wolfe.SpaceTraders.Sdk.Models;
 
 public class SpaceTradersSystem
 {

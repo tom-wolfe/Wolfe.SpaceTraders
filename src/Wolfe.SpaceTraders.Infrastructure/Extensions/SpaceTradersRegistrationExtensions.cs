@@ -1,4 +1,4 @@
-﻿using Wolfe.SpaceTraders.Sdk.Models;
+﻿using Wolfe.SpaceTraders.Sdk.Models.Agents;
 using Wolfe.SpaceTraders.Service.Results;
 
 namespace Wolfe.SpaceTraders.Infrastructure.Extensions;

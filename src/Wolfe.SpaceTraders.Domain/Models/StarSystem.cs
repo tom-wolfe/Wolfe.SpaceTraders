@@ -1,4 +1,7 @@
-﻿namespace Wolfe.SpaceTraders.Domain.Models;
+﻿using Wolfe.SpaceTraders.Domain.Models.Navigation;
+using Wolfe.SpaceTraders.Domain.Models.Waypoints;
+
+namespace Wolfe.SpaceTraders.Domain.Models;
 
 public class StarSystem
 {

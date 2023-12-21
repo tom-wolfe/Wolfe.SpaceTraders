@@ -1,4 +1,6 @@
-﻿namespace Wolfe.SpaceTraders.Sdk.Models.Contracts;
+﻿using Wolfe.SpaceTraders.Sdk.Models.Agents;
+
+namespace Wolfe.SpaceTraders.Sdk.Models.Contracts;
 
 public class SpaceTradersAcceptedContract
 {

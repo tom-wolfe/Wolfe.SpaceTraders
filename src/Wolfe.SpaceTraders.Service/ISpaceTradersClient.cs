@@ -1,4 +1,9 @@
 ﻿using Wolfe.SpaceTraders.Domain.Models;
+using Wolfe.SpaceTraders.Domain.Models.Agents;
+using Wolfe.SpaceTraders.Domain.Models.Contracts;
+using Wolfe.SpaceTraders.Domain.Models.Ships;
+using Wolfe.SpaceTraders.Domain.Models.Shipyards;
+using Wolfe.SpaceTraders.Domain.Models.Waypoints;
 using Wolfe.SpaceTraders.Service.Commands;
 using Wolfe.SpaceTraders.Service.Results;
 
@@ -23,4 +28,5 @@ public interface ISpaceTradersClient
     public Task<ShipDockResult> ShipDock(ShipSymbol shipId, CancellationToken cancellationToken = default);
     public Task<ShipNavigateResult> ShipNavigate(ShipSymbol shipId, ShipNavigateCommand command, CancellationToken cancellationToken = default);
     public Task<ShipRefuelResult> ShipRefuel(ShipSymbol shipId, CancellationToken cancellationToken);
+    Task<ShipExtractResult> ShipExtract(ShipSymbol shipId, CancellationToken cancellationToken);
 }
