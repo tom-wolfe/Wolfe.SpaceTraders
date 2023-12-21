@@ -36,6 +36,7 @@ public static class ServiceCollectionExtensions
                     }
                 };
             })
+            .AddHttpMessageHandler(() => new RateLimitingHandler(2, TimeSpan.FromSeconds(1)))
             .ConfigureHttpClient((provider, client) =>
             {
                 var options = provider.GetRequiredService<IOptions<SpaceTradersOptions>>().Value;
