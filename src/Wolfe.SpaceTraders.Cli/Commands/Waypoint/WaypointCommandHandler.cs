@@ -27,7 +27,7 @@ internal class WaypointCommandHandler : CommandHandler
 
             Console.WriteLine($"ID: {waypoint.Symbol.Value.Color(ConsoleColors.Id)}");
             Console.WriteLine($"Type: {waypoint.Type.Value.Color(ConsoleColors.Code)}");
-            Console.WriteLine($"Position: {waypoint.X}, {waypoint.Y}");
+            Console.WriteLine($"Position: {waypoint.Location}");
             // TODO: List orbitals and factions
 
             return ExitCodes.Success;

@@ -2,7 +2,6 @@
 using System.CommandLine.Invocation;
 using Wolfe.SpaceTraders.Cli.Extensions;
 using Wolfe.SpaceTraders.Domain.Models;
-using Wolfe.SpaceTraders.Domain.Models;
 using Wolfe.SpaceTraders.Service;
 
 namespace Wolfe.SpaceTraders.Cli.Commands.Ship;

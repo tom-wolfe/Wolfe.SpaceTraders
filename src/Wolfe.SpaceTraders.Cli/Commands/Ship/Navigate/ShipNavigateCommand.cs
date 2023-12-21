@@ -1,6 +1,5 @@
 ﻿using System.CommandLine;
 using Wolfe.SpaceTraders.Domain.Models;
-using Wolfe.SpaceTraders.Domain.Models;
 
 namespace Wolfe.SpaceTraders.Cli.Commands.Ship.Navigate;
 

@@ -1,5 +1,4 @@
 ﻿using Wolfe.SpaceTraders.Domain.Models;
-using Wolfe.SpaceTraders.Domain.Models;
 using Wolfe.SpaceTraders.Sdk.Models.Shipyards;
 
 namespace Wolfe.SpaceTraders.Infrastructure.Extensions;

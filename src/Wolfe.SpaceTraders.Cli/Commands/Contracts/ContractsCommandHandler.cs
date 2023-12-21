@@ -1,5 +1,5 @@
-﻿using System.CommandLine.Invocation;
-using Humanizer;
+﻿using Humanizer;
+using System.CommandLine.Invocation;
 using Wolfe.SpaceTraders.Cli.Extensions;
 using Wolfe.SpaceTraders.Service;
 

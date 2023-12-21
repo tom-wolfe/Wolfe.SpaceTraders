@@ -1,6 +1,5 @@
 ﻿using System.Net;
 using Wolfe.SpaceTraders.Domain.Models;
-using Wolfe.SpaceTraders.Domain.Models;
 using Wolfe.SpaceTraders.Infrastructure.Extensions;
 using Wolfe.SpaceTraders.Sdk;
 using Wolfe.SpaceTraders.Sdk.Models;

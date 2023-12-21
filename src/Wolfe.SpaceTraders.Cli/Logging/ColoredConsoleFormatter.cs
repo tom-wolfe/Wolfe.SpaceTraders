@@ -1,5 +1,5 @@
-﻿using System.Globalization;
-using Microsoft.Extensions.Logging.Console;
+﻿using Microsoft.Extensions.Logging.Console;
+using System.Globalization;
 using Wolfe.SpaceTraders.Cli.Extensions;
 
 namespace Wolfe.SpaceTraders.Cli.Logging;

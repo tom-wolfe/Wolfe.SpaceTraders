@@ -26,7 +26,7 @@ internal class WaypointsCommandHandler : CommandHandler
             Console.WriteLine($"ID: {waypoint.Symbol.Value.Color(ConsoleColors.Id)}");
             Console.WriteLine($"Type: {waypoint.Type.Value.Color(ConsoleColors.Code)}");
 
-            Console.WriteLine($"Position: {waypoint.X}, {waypoint.Y}");
+            Console.WriteLine($"Position: {waypoint.Location}");
 
             // TODO: Restore waypoint traits.
             //Console.WriteLine("Traits:");

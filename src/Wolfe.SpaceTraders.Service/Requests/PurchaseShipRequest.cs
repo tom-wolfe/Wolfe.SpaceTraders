@@ -1,5 +1,4 @@
 ﻿using Wolfe.SpaceTraders.Domain.Models;
-using Wolfe.SpaceTraders.Domain.Models;
 
 namespace Wolfe.SpaceTraders.Service.Requests;
 

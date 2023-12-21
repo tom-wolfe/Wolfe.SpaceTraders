@@ -1,7 +1,6 @@
 ﻿using System.CommandLine.Invocation;
 using Wolfe.SpaceTraders.Cli.Extensions;
 using Wolfe.SpaceTraders.Domain.Models;
-using Wolfe.SpaceTraders.Domain.Models;
 using Wolfe.SpaceTraders.Infrastructure.Token;
 using Wolfe.SpaceTraders.Service;
 using Wolfe.SpaceTraders.Service.Requests;

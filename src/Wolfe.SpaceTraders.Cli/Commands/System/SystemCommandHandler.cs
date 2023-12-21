@@ -27,7 +27,7 @@ internal class SystemCommandHandler : CommandHandler
             Console.WriteLine($"ID: {system.Symbol.Value.Color(ConsoleColors.Id)}");
             Console.WriteLine($"Sector: {system.SectorSymbol.Value.Color(ConsoleColors.Id)}");
             Console.WriteLine($"Type: {system.Type.Value.Color(ConsoleColors.Code)}");
-            Console.WriteLine($"Position: {system.X}, {system.Y}");
+            Console.WriteLine($"Position: {system.Location}");
 
             // TODO: List waypoints and factions
 

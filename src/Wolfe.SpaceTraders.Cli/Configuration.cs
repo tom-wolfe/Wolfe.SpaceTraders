@@ -1,6 +1,6 @@
-﻿using System.CommandLine.Invocation;
+﻿using Microsoft.Extensions.Logging.Console;
+using System.CommandLine.Invocation;
 using System.Reflection;
-using Microsoft.Extensions.Logging.Console;
 using Wolfe.SpaceTraders.Cli.Logging;
 using Wolfe.SpaceTraders.Infrastructure;
 using Wolfe.SpaceTraders.Service;
