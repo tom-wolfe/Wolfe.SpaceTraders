@@ -24,7 +24,7 @@ internal class ContractsCommandHandler : CommandHandler
         foreach (var contract in contracts)
         {
             Console.WriteLine($"ID: {contract.Id.Value.Color(ConsoleColors.Id)}");
-            Console.WriteLine($"Type: {contract.Type.Value.Color(ConsoleColors.Code)}");
+            Console.WriteLine($"Type: {contract.Type.Value.Color(ConsoleColors.Category)}");
             Console.WriteLine($"Accepted?: {contract.Accepted.Humanize()}");
             Console.WriteLine($"Fulfilled?: {contract.Fulfilled.Humanize()}");
             if (!contract.Accepted)

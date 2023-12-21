@@ -16,8 +16,8 @@ internal class WaypointCommandHandler(ISpaceTradersClient client) : CommandHandl
                 ?? throw new Exception($"Waypoint '{waypointId}' not found.");
 
             Console.WriteLine($"ID: {waypoint.Symbol.Value.Color(ConsoleColors.Id)}");
-            Console.WriteLine($"Type: {waypoint.Type.Value.Color(ConsoleColors.Code)}");
-            Console.WriteLine($"Position: {waypoint.Point}");
+            Console.WriteLine($"Type: {waypoint.Type.Value.Color(ConsoleColors.Category)}");
+            Console.WriteLine($"Position: {waypoint.Point.ToString().Color(ConsoleColors.Point)}");
             // TODO: List orbitals and factions
 
             return ExitCodes.Success;

@@ -27,7 +27,7 @@ internal class ContractCommandHandler : CommandHandler
             }
 
             Console.WriteLine($"ID: {contract.Id.Value.Color(ConsoleColors.Id)}");
-            Console.WriteLine($"Type: {contract.Type.Value.Color(ConsoleColors.Code)}");
+            Console.WriteLine($"Type: {contract.Type.Value.Color(ConsoleColors.Category)}");
             Console.WriteLine($"Faction: {contract.FactionSymbol.Value.Color(ConsoleColors.Code)}");
             Console.WriteLine($"Accepted?: {contract.Accepted.Humanize()}");
             Console.WriteLine($"Fulfilled?: {contract.Fulfilled.Humanize()}");
@@ -38,7 +38,8 @@ internal class ContractCommandHandler : CommandHandler
 
             Console.WriteLine($"Terms:");
             Console.WriteLine($" - Deadline: {contract.Terms.Deadline.Humanize()}");
-            Console.WriteLine($" - Payment: {contract.Terms.Payment.OnAccepted}/{contract.Terms.Payment.OnFulfilled} ({(contract.Terms.Payment.OnAccepted + contract.Terms.Payment.OnFulfilled)} total)");
+            var payment = $"{contract.Terms.Payment.OnAccepted}/{contract.Terms.Payment.OnFulfilled} ({(contract.Terms.Payment.OnAccepted + contract.Terms.Payment.OnFulfilled)})".Color(ConsoleColors.Currency);
+            Console.WriteLine($" - Payment: {payment}");
             Console.WriteLine($" - Deliver: ");
             foreach (var deliver in contract.Terms.Deliver)
             {

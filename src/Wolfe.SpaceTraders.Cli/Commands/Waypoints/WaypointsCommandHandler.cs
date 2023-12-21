@@ -27,9 +27,9 @@ internal class WaypointsCommandHandler(ISpaceTradersClient client) : CommandHand
             Console.WriteLine($"ID: {waypoint.Symbol.Value.Color(ConsoleColors.Id)}");
             Console.WriteLine($"Type: {waypoint.Type.Value.Color(ConsoleColors.Code)}");
 
-            var position = $"Position: {waypoint.Point}";
+            var position = $"Position: {waypoint.Point.ToString().Color(ConsoleColors.Point)}";
             var distance = relativeWaypoint?.Point.DistanceTo(waypoint.Point);
-            if (distance != null) { position += $" ({distance.Total.ToString("F").Color(ConsoleColors.Information)})"; }
+            if (distance != null) { position += $" ({distance.Total.ToString("F").Color(ConsoleColors.Information)})".Color(ConsoleColors.Distance); }
             Console.WriteLine(position);
 
             Console.WriteLine("Traits:");

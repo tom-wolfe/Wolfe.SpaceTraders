@@ -10,8 +10,11 @@ internal record ConsoleColors(ConsoleColor? Foreground, ConsoleColor? Background
     public static readonly ConsoleColors Category = new(ConsoleColor.Cyan, ConsoleColor.Black);
 
     public static readonly ConsoleColors Information = new(ConsoleColor.DarkCyan, ConsoleColor.Black);
-    public static readonly ConsoleColors Id = new(ConsoleColor.DarkGreen, ConsoleColor.Black);
+    public static readonly ConsoleColors Id = new(ConsoleColor.DarkBlue, ConsoleColor.Black);
     public static readonly ConsoleColors Code = new(ConsoleColor.Blue, ConsoleColor.Black);
-    public static readonly ConsoleColors Status = new(ConsoleColor.DarkYellow, ConsoleColor.Black);
-    public static readonly ConsoleColors Currency = new(ConsoleColor.Red, ConsoleColor.Black);
+    public static readonly ConsoleColors Status = new(ConsoleColor.Yellow, ConsoleColor.Black);
+    public static readonly ConsoleColors Currency = new(ConsoleColor.DarkRed, ConsoleColor.Black);
+    public static readonly ConsoleColors Distance = new(ConsoleColor.Magenta, ConsoleColor.Black);
+    public static readonly ConsoleColors Fuel = new(ConsoleColor.DarkYellow, ConsoleColor.Black);
+    public static readonly ConsoleColors Point = new(ConsoleColor.DarkGreen, ConsoleColor.Black);
 };
