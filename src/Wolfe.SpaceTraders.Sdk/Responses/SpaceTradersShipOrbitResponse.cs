@@ -1,8 +1,8 @@
-﻿using Wolfe.SpaceTraders.Sdk.Models.Navigation;
+﻿using Wolfe.SpaceTraders.Sdk.Models;
 
 namespace Wolfe.SpaceTraders.Sdk.Responses;
 
 public class SpaceTradersShipOrbitResponse
 {
-    public required SpaceTradersNavigation Nav { get; set; }
+    public required SpaceTradersShipOrbitResult Data { get; set; }
 }

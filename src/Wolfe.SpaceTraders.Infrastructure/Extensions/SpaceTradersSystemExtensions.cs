@@ -12,6 +12,6 @@ internal static class SpaceTradersSystemExtensions
         Factions = system.Factions.Select(f => f.ToDomain()).ToList(),
         SectorSymbol = new SectorSymbol(system.SectorSymbol),
         Waypoints = system.Waypoints.Select(w => w.ToDomain()).ToList(),
-        Location = new Location(system.X, system.Y),
+        Point = new Point(system.X, system.Y),
     };
 }

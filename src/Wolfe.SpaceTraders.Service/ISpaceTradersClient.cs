@@ -1,26 +1,26 @@
 ﻿using Wolfe.SpaceTraders.Domain.Models;
-using Wolfe.SpaceTraders.Service.Requests;
-using Wolfe.SpaceTraders.Service.Responses;
+using Wolfe.SpaceTraders.Service.Commands;
+using Wolfe.SpaceTraders.Service.Results;
 
 namespace Wolfe.SpaceTraders.Service;
 
 public interface ISpaceTradersClient
 {
-    public Task<RegisterResponse> Register(RegisterRequest request, CancellationToken cancellationToken = default);
+    public Task<RegisterResult> Register(RegisterCommand command, CancellationToken cancellationToken = default);
     public Task<Agent> GetAgent(CancellationToken cancellationToken = default);
     public IAsyncEnumerable<Contract> GetContracts(CancellationToken cancellationToken = default);
     public Task<Contract?> GetContract(ContractId contractId, CancellationToken cancellationToken = default);
-    public Task<AcceptContractResponse> AcceptContract(ContractId contractId, CancellationToken cancellationToken = default);
+    public Task<AcceptContractResult> AcceptContract(ContractId contractId, CancellationToken cancellationToken = default);
     public IAsyncEnumerable<StarSystem> GetSystems(CancellationToken cancellationToken = default);
     public Task<StarSystem?> GetSystem(SystemSymbol systemId, CancellationToken cancellationToken = default);
     public IAsyncEnumerable<Waypoint> GetWaypoints(SystemSymbol systemId, WaypointType? type, IEnumerable<WaypointTraitSymbol> traits, CancellationToken cancellationToken = default);
     public Task<Waypoint?> GetWaypoint(WaypointSymbol waypointId, CancellationToken cancellationToken = default);
     public Task<Shipyard?> GetShipyard(WaypointSymbol waypointId, CancellationToken cancellationToken = default);
-    public Task<PurchaseShipResponse> PurchaseShip(PurchaseShipRequest request, CancellationToken cancellationToken = default);
+    public Task<PurchaseShipResult> PurchaseShip(PurchaseShipCommand command, CancellationToken cancellationToken = default);
     public IAsyncEnumerable<Ship> GetShips(CancellationToken cancellationToken = default);
     public Task<Ship?> GetShip(ShipSymbol shipId, CancellationToken cancellationToken = default);
-    public Task<ShipOrbitResponse> ShipOrbit(ShipSymbol shipId, CancellationToken cancellationToken = default);
-    public Task<ShipDockResponse> ShipDock(ShipSymbol shipId, CancellationToken cancellationToken = default);
-    public Task<ShipNavigateResponse> ShipNavigate(ShipSymbol shipId, ShipNavigateRequest request, CancellationToken cancellationToken = default);
-    public Task<ShipRefuelResponse> ShipRefuel(ShipSymbol shipId, CancellationToken cancellationToken);
+    public Task<ShipOrbitResult> ShipOrbit(ShipSymbol shipId, CancellationToken cancellationToken = default);
+    public Task<ShipDockResult> ShipDock(ShipSymbol shipId, CancellationToken cancellationToken = default);
+    public Task<ShipNavigateResult> ShipNavigate(ShipSymbol shipId, ShipNavigateCommand command, CancellationToken cancellationToken = default);
+    public Task<ShipRefuelResult> ShipRefuel(ShipSymbol shipId, CancellationToken cancellationToken);
 }

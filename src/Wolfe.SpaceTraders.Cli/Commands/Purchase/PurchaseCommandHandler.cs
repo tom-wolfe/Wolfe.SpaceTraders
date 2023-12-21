@@ -1,7 +1,7 @@
 ﻿using System.CommandLine.Invocation;
 using Wolfe.SpaceTraders.Cli.Extensions;
 using Wolfe.SpaceTraders.Service;
-using Wolfe.SpaceTraders.Service.Requests;
+using Wolfe.SpaceTraders.Service.Commands;
 
 namespace Wolfe.SpaceTraders.Cli.Commands.Purchase;
 
@@ -21,7 +21,7 @@ internal class PurchaseCommandHandler : CommandHandler
 
         try
         {
-            var request = new PurchaseShipRequest
+            var request = new PurchaseShipCommand
             {
                 ShipType = shipType,
                 WaypointSymbol = waypointId

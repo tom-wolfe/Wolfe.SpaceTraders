@@ -1,12 +1,12 @@
 ﻿using Wolfe.SpaceTraders.Sdk.Requests;
-using Wolfe.SpaceTraders.Service.Requests;
+using Wolfe.SpaceTraders.Service.Commands;
 
 namespace Wolfe.SpaceTraders.Infrastructure.Extensions;
 
 internal static class ShipNavigateRequestExtensions
 {
-    public static SpaceTradersShipNavigateRequest ToApi(this ShipNavigateRequest request) => new()
+    public static SpaceTradersShipNavigateRequest ToApi(this ShipNavigateCommand command) => new()
     {
-        WaypointSymbol = request.WaypointSymbol.Value,
+        WaypointSymbol = command.WaypointSymbol.Value,
     };
 }

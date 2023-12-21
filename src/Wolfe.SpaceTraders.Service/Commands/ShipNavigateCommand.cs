@@ -1,8 +1,8 @@
 ﻿using Wolfe.SpaceTraders.Domain.Models;
 
-namespace Wolfe.SpaceTraders.Service.Requests;
+namespace Wolfe.SpaceTraders.Service.Commands;
 
-public class ShipNavigateRequest
+public class ShipNavigateCommand
 {
     public required WaypointSymbol WaypointSymbol { get; set; }
 }

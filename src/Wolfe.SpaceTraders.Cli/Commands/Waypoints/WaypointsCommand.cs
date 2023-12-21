@@ -31,10 +31,10 @@ internal static class WaypointsCommand
         IsRequired = false
     };
 
-    public static readonly Option<WaypointSymbol?> DistanceOption = new(
-        aliases: ["-d", "--distance"],
+    public static readonly Option<WaypointSymbol?> LocationOption = new(
+        aliases: ["-l", "--location"],
         parseArgument: r => new WaypointSymbol(r.Tokens[0].Value),
-        description: "The distance to show."
+        description: "The location to show distance relative to."
     )
     {
         Arity = ArgumentArity.ZeroOrMore,
@@ -50,7 +50,7 @@ internal static class WaypointsCommand
         command.AddArgument(SystemIdArgument);
         command.AddOption(TypeOption);
         command.AddOption(TraitsOption);
-        command.AddOption(DistanceOption);
+        command.AddOption(LocationOption);
         command.SetHandler(context => services.GetRequiredService<WaypointsCommandHandler>().InvokeAsync(context));
 
         return command;

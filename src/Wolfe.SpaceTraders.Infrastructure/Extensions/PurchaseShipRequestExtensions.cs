@@ -1,13 +1,13 @@
 ﻿using Wolfe.SpaceTraders.Sdk.Requests;
-using Wolfe.SpaceTraders.Service.Requests;
+using Wolfe.SpaceTraders.Service.Commands;
 
 namespace Wolfe.SpaceTraders.Infrastructure.Extensions;
 
 internal static class PurchaseShipRequestExtensions
 {
-    public static SpaceTradersPurchaseShipRequest ToApi(this PurchaseShipRequest request) => new()
+    public static SpaceTradersPurchaseShipRequest ToApi(this PurchaseShipCommand command) => new()
     {
-        WaypointSymbol = request.WaypointSymbol.Value,
-        ShipType = request.ShipType.Value,
+        WaypointSymbol = command.WaypointSymbol.Value,
+        ShipType = command.ShipType.Value,
     };
 }

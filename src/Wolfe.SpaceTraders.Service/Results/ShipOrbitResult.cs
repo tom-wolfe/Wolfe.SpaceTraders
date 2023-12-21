@@ -1,8 +1,8 @@
 ﻿using Wolfe.SpaceTraders.Domain.Models;
 
-namespace Wolfe.SpaceTraders.Service.Responses;
+namespace Wolfe.SpaceTraders.Service.Results;
 
-public class ShipOrbitResponse
+public class ShipOrbitResult
 {
     public required Navigation Navigation { get; set; }
 }

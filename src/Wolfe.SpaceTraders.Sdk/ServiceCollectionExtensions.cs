@@ -15,7 +15,6 @@ public static class ServiceCollectionExtensions
             .Configure(configure)
             .Validate(o => o.ApiKeyProvider != null, $"{nameof(SpaceTradersOptions.ApiKeyProvider)} cannot be null.");
 
-        // TODO: Investigate throttling.
         services
             .AddRefitClient<ISpaceTradersApiClient>(provider =>
             {
@@ -28,7 +27,7 @@ public static class ServiceCollectionExtensions
                         if (response.IsSuccessStatusCode) { return null; }
 
                         var error = await response.Content.ReadFromJsonAsync<SpaceTradersErrorResponse>();
-                        return new SpaceTradersApiException(
+                        throw new SpaceTradersApiException(
                             error!.Error.Message,
                             error.Error.Code,
                             response.StatusCode
@@ -36,7 +35,7 @@ public static class ServiceCollectionExtensions
                     }
                 };
             })
-            .AddHttpMessageHandler(() => new RateLimitingHandler(2, TimeSpan.FromSeconds(1)))
+            //.AddHttpMessageHandler(() => new RateLimitingHandler(2, TimeSpan.FromSeconds(1)))
             .ConfigureHttpClient((provider, client) =>
             {
                 var options = provider.GetRequiredService<IOptions<SpaceTradersOptions>>().Value;

@@ -1,14 +1,14 @@
 ﻿using Wolfe.SpaceTraders.Sdk.Requests;
-using Wolfe.SpaceTraders.Service.Requests;
+using Wolfe.SpaceTraders.Service.Commands;
 
 namespace Wolfe.SpaceTraders.Infrastructure.Extensions;
 
 internal static class RegisterRequestExtensions
 {
-    public static SpaceTradersRegisterRequest ToApi(this RegisterRequest request) => new()
+    public static SpaceTradersRegisterRequest ToApi(this RegisterCommand command) => new()
     {
-        Symbol = request.Symbol.Value,
-        Faction = request.Faction.Value,
-        Email = request.Email
+        Symbol = command.Symbol.Value,
+        Faction = command.Faction.Value,
+        Email = command.Email
     };
 }

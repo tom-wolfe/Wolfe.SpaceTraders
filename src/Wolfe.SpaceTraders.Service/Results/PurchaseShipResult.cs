@@ -1,8 +1,8 @@
 ﻿using Wolfe.SpaceTraders.Domain.Models;
 
-namespace Wolfe.SpaceTraders.Service.Responses;
+namespace Wolfe.SpaceTraders.Service.Results;
 
-public class PurchaseShipResponse
+public class PurchaseShipResult
 {
     public required Agent Agent { get; set; }
     public required Ship Ship { get; set; }

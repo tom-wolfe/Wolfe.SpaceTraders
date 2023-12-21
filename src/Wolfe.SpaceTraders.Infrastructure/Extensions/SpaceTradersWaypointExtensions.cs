@@ -10,6 +10,7 @@ internal static class SpaceTradersWaypointExtensions
         Symbol = new WaypointSymbol(waypoint.Symbol),
         Type = new WaypointType(waypoint.Type),
         SystemSymbol = new SystemSymbol(waypoint.SystemSymbol),
-        Location = new Location(waypoint.X, waypoint.Y),
+        Point = new Point(waypoint.X, waypoint.Y),
+        Traits = waypoint.Traits.Select(t => t.ToDomain()).ToList(),
     };
 }

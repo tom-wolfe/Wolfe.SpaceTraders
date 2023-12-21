@@ -3,7 +3,6 @@ using Wolfe.SpaceTraders.Cli.Extensions;
 using Wolfe.SpaceTraders.Domain.Models;
 using Wolfe.SpaceTraders.Infrastructure.Token;
 using Wolfe.SpaceTraders.Service;
-using Wolfe.SpaceTraders.Service.Requests;
 
 namespace Wolfe.SpaceTraders.Cli.Commands.Register;
 
@@ -24,7 +23,7 @@ internal class RegisterCommandHandler : CommandHandler
         var faction = context.BindingContext.ParseResult.GetValueForOption(RegisterCommand.FactionOption);
         var email = context.BindingContext.ParseResult.GetValueForOption(RegisterCommand.EmailOption);
 
-        var request = new RegisterRequest
+        var request = new Service.Commands.RegisterCommand
         {
             Symbol = symbol,
             Faction = faction ?? FactionSymbol.Cosmic, // Default faction.

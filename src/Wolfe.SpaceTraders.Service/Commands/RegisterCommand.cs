@@ -1,8 +1,8 @@
 ﻿using Wolfe.SpaceTraders.Domain.Models;
 
-namespace Wolfe.SpaceTraders.Service.Requests;
+namespace Wolfe.SpaceTraders.Service.Commands;
 
-public class RegisterRequest
+public class RegisterCommand
 {
     public required FactionSymbol Faction { get; set; }
     public required AgentSymbol Symbol { get; set; }

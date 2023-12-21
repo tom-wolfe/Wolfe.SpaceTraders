@@ -16,6 +16,11 @@ internal static class ApiResponseExtensions
             throw response.Error;
         }
 
+        if (!response.IsSuccessStatusCode)
+        {
+            throw new InvalidOperationException($"Received error status code: {response.StatusCode}.");
+        }
+
         if (response.Content == null)
         {
             throw new InvalidOperationException("Response content is null");

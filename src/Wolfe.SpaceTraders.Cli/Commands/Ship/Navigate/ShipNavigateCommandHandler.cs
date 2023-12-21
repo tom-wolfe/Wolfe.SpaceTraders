@@ -1,7 +1,6 @@
 ﻿using System.CommandLine.Invocation;
 using Wolfe.SpaceTraders.Cli.Extensions;
 using Wolfe.SpaceTraders.Service;
-using Wolfe.SpaceTraders.Service.Requests;
 
 namespace Wolfe.SpaceTraders.Cli.Commands.Ship.Navigate;
 
@@ -18,7 +17,7 @@ internal class ShipNavigateCommandHandler : CommandHandler
     {
         var shipId = context.BindingContext.ParseResult.GetValueForArgument(ShipNavigateCommand.ShipIdArgument);
         var waypointId = context.BindingContext.ParseResult.GetValueForArgument(ShipNavigateCommand.WaypointIdArgument);
-        var request = new ShipNavigateRequest
+        var request = new Service.Commands.ShipNavigateCommand
         {
             WaypointSymbol = waypointId
         };
