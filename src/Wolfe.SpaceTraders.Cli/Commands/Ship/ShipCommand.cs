@@ -3,7 +3,8 @@ using Wolfe.SpaceTraders.Cli.Commands.Ship.Dock;
 using Wolfe.SpaceTraders.Cli.Commands.Ship.Navigate;
 using Wolfe.SpaceTraders.Cli.Commands.Ship.Orbit;
 using Wolfe.SpaceTraders.Cli.Commands.Ship.Refuel;
-using Wolfe.SpaceTraders.Core.Models;
+using Wolfe.SpaceTraders.Domain.Models;
+using Wolfe.SpaceTraders.Domain.Models;
 
 namespace Wolfe.SpaceTraders.Cli.Commands.Ship;
 
