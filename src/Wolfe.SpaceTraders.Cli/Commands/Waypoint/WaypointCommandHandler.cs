@@ -17,6 +17,7 @@ internal class WaypointCommandHandler(ISpaceTradersClient client) : CommandHandl
                 ?? throw new Exception($"Waypoint '{waypointId}' not found.");
 
             WaypointFormatter.WriteWaypoint(waypoint);
+            Console.WriteLine();
             return ExitCodes.Success;
         }
         catch (Exception ex)

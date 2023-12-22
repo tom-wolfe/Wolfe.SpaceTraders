@@ -22,6 +22,8 @@ internal class ShipCommandHandler : CommandHandler
             var ship = await _client.GetShip(shipId, context.GetCancellationToken())
                        ?? throw new Exception($"Ship '{shipId}' not found.");
             ShipFormatter.WriteShip(ship);
+            Console.WriteLine();
+
             return ExitCodes.Success;
         }
         catch (Exception ex)
