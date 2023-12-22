@@ -25,6 +25,7 @@ internal class ShipNavigateCommandHandler(ISpaceTradersClient client) : CommandH
         var response = await client.ShipNavigate(shipId, request, context.GetCancellationToken());
         Console.WriteLine("Your ship is now in transit.".Color(ConsoleColors.Success));
         Console.WriteLine($"Expected to arrive {response.Navigation.Route.Arrival.Humanize()}.");
+        Console.WriteLine();
 
         return ExitCodes.Success;
     }

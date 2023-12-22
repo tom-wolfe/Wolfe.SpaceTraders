@@ -1,4 +1,4 @@
-﻿namespace Wolfe.SpaceTraders.Sdk.Models;
+﻿namespace Wolfe.SpaceTraders.Sdk.Models.Systems;
 
 public class SpaceTradersWaypoint
 {

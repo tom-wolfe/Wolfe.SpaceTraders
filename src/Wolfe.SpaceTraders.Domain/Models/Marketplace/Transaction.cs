@@ -1,6 +1,6 @@
-﻿namespace Wolfe.SpaceTraders.Domain.Models;
+﻿namespace Wolfe.SpaceTraders.Domain.Models.Marketplace;
 
-public class MarketplaceTransaction
+public class Transaction
 {
     public required WaypointSymbol WaypointSymbol { get; set; }
     public required ShipSymbol ShipSymbol { get; set; }

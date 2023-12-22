@@ -1,6 +1,6 @@
 ﻿using Wolfe.SpaceTraders.Sdk.Models.Agents;
 
-namespace Wolfe.SpaceTraders.Sdk.Models;
+namespace Wolfe.SpaceTraders.Sdk.Models.Systems;
 
 public class SpaceTradersSystem
 {

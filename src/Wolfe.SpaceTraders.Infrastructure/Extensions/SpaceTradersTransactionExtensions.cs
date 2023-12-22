@@ -1,11 +1,12 @@
 ﻿using Wolfe.SpaceTraders.Domain.Models;
-using Wolfe.SpaceTraders.Sdk.Models;
+using Wolfe.SpaceTraders.Domain.Models.Marketplace;
+using Wolfe.SpaceTraders.Sdk.Models.Marketplace;
 
 namespace Wolfe.SpaceTraders.Infrastructure.Extensions;
 
 internal static class SpaceTradersTransactionExtensions
 {
-    public static MarketplaceTransaction ToDomain(this SpaceTradersTransaction transaction) => new()
+    public static Transaction ToDomain(this SpaceTradersTransaction transaction) => new()
     {
         ShipSymbol = new ShipSymbol(transaction.ShipSymbol),
         Timestamp = transaction.Timestamp,

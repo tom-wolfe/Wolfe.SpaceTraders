@@ -4,6 +4,7 @@ using Wolfe.SpaceTraders.Cli.Commands.Ship.Extract;
 using Wolfe.SpaceTraders.Cli.Commands.Ship.Navigate;
 using Wolfe.SpaceTraders.Cli.Commands.Ship.Orbit;
 using Wolfe.SpaceTraders.Cli.Commands.Ship.Refuel;
+using Wolfe.SpaceTraders.Cli.Commands.Ship.Sell;
 using Wolfe.SpaceTraders.Domain.Models;
 
 namespace Wolfe.SpaceTraders.Cli.Commands.Ship;
@@ -26,6 +27,7 @@ internal static class ShipCommand
         command.AddCommand(ShipNavigateCommand.CreateCommand(services));
         command.AddCommand(ShipOrbitCommand.CreateCommand(services));
         command.AddCommand(ShipRefuelCommand.CreateCommand(services));
+        command.AddCommand(ShipSellCommand.CreateCommand(services));
 
         return command;
     }

@@ -3,6 +3,7 @@ using Wolfe.SpaceTraders.Domain.Models.Agents;
 using Wolfe.SpaceTraders.Domain.Models.Contracts;
 using Wolfe.SpaceTraders.Domain.Models.Ships;
 using Wolfe.SpaceTraders.Domain.Models.Shipyards;
+using Wolfe.SpaceTraders.Domain.Models.Systems;
 using Wolfe.SpaceTraders.Domain.Models.Waypoints;
 using Wolfe.SpaceTraders.Service.Commands;
 using Wolfe.SpaceTraders.Service.Results;
@@ -30,4 +31,5 @@ public interface ISpaceTradersClient
     public Task<ShipRefuelResult> ShipRefuel(ShipSymbol shipId, CancellationToken cancellationToken);
     public Task<ShipExtractResult> ShipExtract(ShipSymbol shipId, CancellationToken cancellationToken);
     public Task<SetShipSpeedResult> SetShipSpeed(ShipSymbol shipId, FlightSpeed speed, CancellationToken cancellationToken);
+    public Task<ShipSellResult> ShipSell(ShipSymbol shipId, ShipSellCommand request, CancellationToken getCancellationToken);
 }

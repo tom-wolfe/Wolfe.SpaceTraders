@@ -131,4 +131,11 @@ public interface ISpaceTradersApiClient
         string shipId,
         CancellationToken cancellationToken = default
     );
+
+    [Post("/my/ships/{shipId}/sell")]
+    Task<IApiResponse<SpaceTradersShipSellResponse>> ShipSell(
+        string shipId,
+        SpaceTradersShipSellRequest request,
+        CancellationToken cancellationToken = default
+    );
 }
