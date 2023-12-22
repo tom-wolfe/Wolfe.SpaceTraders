@@ -113,6 +113,13 @@ public interface ISpaceTradersApiClient
         CancellationToken cancellationToken = default
     );
 
+    [Patch("/my/ships/{shipId}/nav")]
+    public Task<IApiResponse<SpaceTradersPatchShipNavResponse>> PatchShipNav(
+        string shipId,
+        [Body] SpaceTradersPatchShipNavRequest request,
+        CancellationToken cancellationToken = default
+    );
+
     [Post("/my/ships/{shipId}/refuel")]
     Task<IApiResponse<SpaceTradersShipRefuelResponse>> ShipRefuel(
         string shipId,

@@ -4,25 +4,25 @@ using Wolfe.SpaceTraders.Service;
 
 namespace Wolfe.SpaceTraders.Cli.Commands.Ship.Navigate;
 
-internal class ShipNavigateCommandHandler : CommandHandler
+internal class ShipNavigateCommandHandler(ISpaceTradersClient client) : CommandHandler
 {
-    private readonly ISpaceTradersClient _client;
-
-    public ShipNavigateCommandHandler(ISpaceTradersClient client)
-    {
-        _client = client;
-    }
-
     public override async Task<int> InvokeAsync(InvocationContext context)
     {
         var shipId = context.BindingContext.ParseResult.GetValueForArgument(ShipNavigateCommand.ShipIdArgument);
         var waypointId = context.BindingContext.ParseResult.GetValueForArgument(ShipNavigateCommand.WaypointIdArgument);
+        var speed = context.BindingContext.ParseResult.GetValueForOption(ShipNavigateCommand.SpeedOption);
+        if (speed != null)
+        {
+            await client.SetShipSpeed(shipId, speed.Value, context.GetCancellationToken());
+            Console.WriteLine($"Engine has been set to {speed.Value.Value.Color(ConsoleColors.Status)} speed.");
+        }
+
         var request = new Service.Commands.ShipNavigateCommand
         {
             WaypointSymbol = waypointId
         };
-        await _client.ShipNavigate(shipId, request, context.GetCancellationToken());
-
+        await client.ShipNavigate(shipId, request, context.GetCancellationToken());
+        // TODO: Write journey details.
         Console.WriteLine("Your ship is now in transit.".Color(ConsoleColors.Success));
         return ExitCodes.Success;
     }

@@ -6,17 +6,8 @@ using Wolfe.SpaceTraders.Service;
 
 namespace Wolfe.SpaceTraders.Cli.Commands.Register;
 
-internal class RegisterCommandHandler : CommandHandler
+internal class RegisterCommandHandler(ISpaceTradersClient client, ITokenService token) : CommandHandler
 {
-    private readonly ISpaceTradersClient _client;
-    private readonly ITokenWriter _token;
-
-    public RegisterCommandHandler(ISpaceTradersClient client, ITokenWriter token)
-    {
-        _client = client;
-        _token = token;
-    }
-
     public override async Task<int> InvokeAsync(InvocationContext context)
     {
         var symbol = context.BindingContext.ParseResult.GetValueForArgument(RegisterCommand.SymbolArgument);
@@ -29,8 +20,8 @@ internal class RegisterCommandHandler : CommandHandler
             Faction = faction ?? FactionSymbol.Cosmic, // Default faction.
             Email = email
         };
-        var response = await _client.Register(request, context.GetCancellationToken());
-        await _token.Write(response.Token, context.GetCancellationToken());
+        var response = await client.Register(request, context.GetCancellationToken());
+        await token.Write(response.Token, context.GetCancellationToken());
 
         Console.WriteLine($"Welcome, {response.Agent.Symbol}!".Color(ConsoleColors.Success));
 

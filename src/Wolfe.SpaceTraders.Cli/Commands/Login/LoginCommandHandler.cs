@@ -5,23 +5,14 @@ using Wolfe.SpaceTraders.Service;
 
 namespace Wolfe.SpaceTraders.Cli.Commands.Login;
 
-internal class LoginCommandHandler : CommandHandler
+internal class LoginCommandHandler(ITokenService token, ISpaceTradersClient client) : CommandHandler
 {
-    private readonly ITokenWriter _token;
-    private readonly ISpaceTradersClient _client;
-
-    public LoginCommandHandler(ITokenWriter token, ISpaceTradersClient client)
-    {
-        _token = token;
-        _client = client;
-    }
-
     public override async Task<int> InvokeAsync(InvocationContext context)
     {
-        var token = context.BindingContext.ParseResult.GetValueForArgument(LoginCommand.TokenArgument);
-        await _token.Write(token, context.GetCancellationToken());
+        var token1 = context.BindingContext.ParseResult.GetValueForArgument(LoginCommand.TokenArgument);
+        await token.Write(token1, context.GetCancellationToken());
 
-        var agent = await _client.GetAgent(context.GetCancellationToken());
+        var agent = await client.GetAgent(context.GetCancellationToken());
         Console.WriteLine($"Welcome, {agent.Symbol}!".Color(ConsoleColors.Success));
 
         return ExitCodes.Success;

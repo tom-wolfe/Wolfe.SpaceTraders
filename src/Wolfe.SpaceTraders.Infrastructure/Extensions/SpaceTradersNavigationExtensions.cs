@@ -11,7 +11,7 @@ internal static class SpaceTradersNavigationExtensions
         SystemSymbol = new SystemSymbol(navigation.SystemSymbol),
         WaypointSymbol = new WaypointSymbol(navigation.WaypointSymbol),
         Status = new NavigationStatus(navigation.Status),
-        FlightMode = new FlightMode(navigation.FlightMode),
+        Speed = new FlightSpeed(navigation.FlightMode),
         Route = navigation.Route.ToDomain()
     };
 }

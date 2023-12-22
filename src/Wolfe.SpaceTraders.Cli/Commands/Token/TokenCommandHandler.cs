@@ -6,18 +6,18 @@ namespace Wolfe.SpaceTraders.Cli.Commands.Token;
 
 internal class TokenCommandHandler : CommandHandler
 {
-    private readonly ITokenReader _tokenReader;
+    private readonly ITokenService _tokenService;
 
-    public TokenCommandHandler(ITokenReader tokenReader)
+    public TokenCommandHandler(ITokenService tokenService)
     {
-        _tokenReader = tokenReader;
+        _tokenService = tokenService;
     }
 
     public override async Task<int> InvokeAsync(InvocationContext context)
     {
         try
         {
-            var token = await _tokenReader.Read(context.GetCancellationToken());
+            var token = await _tokenService.Read(context.GetCancellationToken());
             if (token == null)
             {
                 Console.WriteLine("You are not current logged in.".Color(ConsoleColors.Warning));

@@ -10,6 +10,7 @@ using Wolfe.SpaceTraders.Sdk;
 using Wolfe.SpaceTraders.Sdk.Models;
 using Wolfe.SpaceTraders.Sdk.Models.Contracts;
 using Wolfe.SpaceTraders.Sdk.Models.Ships;
+using Wolfe.SpaceTraders.Sdk.Requests;
 using Wolfe.SpaceTraders.Sdk.Responses;
 using Wolfe.SpaceTraders.Service;
 using Wolfe.SpaceTraders.Service.Commands;
@@ -75,6 +76,13 @@ namespace Wolfe.SpaceTraders.Infrastructure
         {
             var response = await client.GetShip(shipId.Value, cancellationToken);
             if (response.StatusCode == HttpStatusCode.NotFound) { return null; }
+            return response.GetContent().Data.ToDomain();
+        }
+
+        public async Task<SetShipSpeedResult> SetShipSpeed(ShipSymbol shipId, FlightSpeed speed, CancellationToken cancellationToken = default)
+        {
+            var request = new SpaceTradersPatchShipNavRequest { FlightMode = speed.Value };
+            var response = await client.PatchShipNav(shipId.Value, request, cancellationToken);
             return response.GetContent().Data.ToDomain();
         }
 

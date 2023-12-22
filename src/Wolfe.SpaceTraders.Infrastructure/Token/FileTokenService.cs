@@ -1,6 +1,6 @@
 ﻿namespace Wolfe.SpaceTraders.Infrastructure.Token
 {
-    internal class FileTokenService : ITokenReader, ITokenWriter
+    internal class FileTokenService : ITokenService
     {
         private readonly string _tempFile = Path.Combine(Path.GetTempPath(), "spaceTraders.token");
         private string? _token;

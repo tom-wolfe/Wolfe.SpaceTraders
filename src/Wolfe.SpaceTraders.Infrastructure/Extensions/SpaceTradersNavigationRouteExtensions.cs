@@ -8,7 +8,7 @@ internal static class SpaceTradersNavigationRouteExtensions
     public static NavigationRoute ToDomain(this SpaceTradersNavigationRoute route) => new()
     {
         Arrival = route.Arrival,
-        Departure = route.Departure.ToDomain(),
+        Origin = route.Origin.ToDomain(),
         Destination = route.Destination.ToDomain(),
         DepartureTime = route.DepartureTime,
     };

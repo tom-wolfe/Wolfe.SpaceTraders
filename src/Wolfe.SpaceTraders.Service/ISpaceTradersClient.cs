@@ -28,5 +28,6 @@ public interface ISpaceTradersClient
     public Task<ShipDockResult> ShipDock(ShipSymbol shipId, CancellationToken cancellationToken = default);
     public Task<ShipNavigateResult> ShipNavigate(ShipSymbol shipId, ShipNavigateCommand command, CancellationToken cancellationToken = default);
     public Task<ShipRefuelResult> ShipRefuel(ShipSymbol shipId, CancellationToken cancellationToken);
-    Task<ShipExtractResult> ShipExtract(ShipSymbol shipId, CancellationToken cancellationToken);
+    public Task<ShipExtractResult> ShipExtract(ShipSymbol shipId, CancellationToken cancellationToken);
+    public Task<SetShipSpeedResult> SetShipSpeed(ShipSymbol shipId, FlightSpeed speed, CancellationToken cancellationToken);
 }

@@ -2,7 +2,7 @@
 
 namespace Wolfe.SpaceTraders.Sdk.Responses;
 
-public class SpaceTradersShipNavigateResponse
+public class SpaceTradersPatchShipNavResponse
 {
-    public required SpaceTradersShipNavigateResult Data { get; set; }
+    public required SpaceTradersPatchShipNavResult Data { get; set; }
 }
