@@ -1,4 +1,5 @@
-﻿using System.CommandLine.Invocation;
+﻿using Humanizer;
+using System.CommandLine.Invocation;
 using Wolfe.SpaceTraders.Cli.Extensions;
 using Wolfe.SpaceTraders.Service;
 
@@ -21,9 +22,10 @@ internal class ShipNavigateCommandHandler(ISpaceTradersClient client) : CommandH
         {
             WaypointSymbol = waypointId
         };
-        await client.ShipNavigate(shipId, request, context.GetCancellationToken());
-        // TODO: Write journey details.
+        var response = await client.ShipNavigate(shipId, request, context.GetCancellationToken());
         Console.WriteLine("Your ship is now in transit.".Color(ConsoleColors.Success));
+        Console.WriteLine($"Expected to arrive {response.Navigation.Route.Arrival.Humanize()}.");
+
         return ExitCodes.Success;
     }
 }

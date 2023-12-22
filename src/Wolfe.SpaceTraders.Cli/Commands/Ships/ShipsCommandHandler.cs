@@ -12,6 +12,7 @@ internal class ShipsCommandHandler(ISpaceTradersClient client) : CommandHandler
         await foreach (var ship in ships)
         {
             ShipFormatter.WriteShip(ship);
+            Console.WriteLine();
         }
         return ExitCodes.Success;
     }

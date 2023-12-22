@@ -7,6 +7,6 @@ public class ShipFuel
     public ShipFuelConsumed? Consumed { get; set; }
 
     public bool IsEmpty => Current == Fuel.Zero;
-    public decimal PercentRemaining => Current / Capacity * 100m;
+    public decimal PercentRemaining => Capacity == Fuel.Zero ? 0 : Current / Capacity * 100m;
 
 }

@@ -31,8 +31,8 @@ internal static class WaypointsCommand
         IsRequired = false
     };
 
-    public static readonly Option<WaypointSymbol?> LocationOption = new(
-        aliases: ["-l", "--location"],
+    public static readonly Option<WaypointSymbol?> NearestToOption = new(
+        aliases: ["-n", "--nearest-to"],
         parseArgument: r => new WaypointSymbol(r.Tokens[0].Value),
         description: "The location to show distance relative to."
     )
@@ -50,7 +50,7 @@ internal static class WaypointsCommand
         command.AddArgument(SystemIdArgument);
         command.AddOption(TypeOption);
         command.AddOption(TraitsOption);
-        command.AddOption(LocationOption);
+        command.AddOption(NearestToOption);
         command.SetHandler(context => services.GetRequiredService<WaypointsCommandHandler>().InvokeAsync(context));
 
         return command;

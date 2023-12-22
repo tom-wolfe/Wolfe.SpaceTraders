@@ -42,7 +42,6 @@ do
     if (!string.IsNullOrEmpty(commandLine))
     {
         lastResult = await parser.InvokeAsync(commandLine);
-        Console.WriteLine();
     }
 } while (!string.IsNullOrWhiteSpace(commandLine));
 return lastResult;
