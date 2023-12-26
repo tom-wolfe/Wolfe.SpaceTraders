@@ -1,6 +1,5 @@
 ﻿using System.CommandLine;
-using Wolfe.SpaceTraders.Domain.Models;
-using Wolfe.SpaceTraders.Domain.Models.Systems;
+using Wolfe.SpaceTraders.Domain.Systems;
 
 namespace Wolfe.SpaceTraders.Cli.Commands.System;
 

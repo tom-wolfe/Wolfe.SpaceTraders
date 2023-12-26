@@ -1,6 +1,5 @@
-﻿using Wolfe.SpaceTraders.Domain.Models;
-using Wolfe.SpaceTraders.Domain.Models.Marketplace;
-using Wolfe.SpaceTraders.Domain.Models.Ships;
+﻿using Wolfe.SpaceTraders.Domain.Marketplace;
+using Wolfe.SpaceTraders.Domain.Ships;
 using Wolfe.SpaceTraders.Sdk.Models.Ships;
 
 namespace Wolfe.SpaceTraders.Infrastructure.Extensions;

@@ -1,8 +1,8 @@
-﻿using Wolfe.SpaceTraders.Domain.Models;
-using Wolfe.SpaceTraders.Domain.Models.Agents;
-using Wolfe.SpaceTraders.Domain.Models.Ships;
-using Wolfe.SpaceTraders.Domain.Models.Shipyards;
-using Wolfe.SpaceTraders.Domain.Models.Waypoints;
+﻿using Wolfe.SpaceTraders.Domain;
+using Wolfe.SpaceTraders.Domain.Agents;
+using Wolfe.SpaceTraders.Domain.Ships;
+using Wolfe.SpaceTraders.Domain.Shipyards;
+using Wolfe.SpaceTraders.Domain.Waypoints;
 using Wolfe.SpaceTraders.Sdk.Models.Shipyards;
 
 namespace Wolfe.SpaceTraders.Infrastructure.Extensions;

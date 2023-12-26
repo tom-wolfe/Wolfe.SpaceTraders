@@ -1,6 +1,5 @@
 ﻿using System.CommandLine;
-using Wolfe.SpaceTraders.Domain.Models;
-using Wolfe.SpaceTraders.Domain.Models.Ships;
+using Wolfe.SpaceTraders.Domain.Ships;
 
 namespace Wolfe.SpaceTraders.Cli.Commands.Ship.Extract;
 

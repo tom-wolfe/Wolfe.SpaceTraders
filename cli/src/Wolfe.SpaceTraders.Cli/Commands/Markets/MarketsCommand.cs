@@ -1,7 +1,7 @@
 ﻿using System.CommandLine;
-using Wolfe.SpaceTraders.Domain.Models.Marketplace;
-using Wolfe.SpaceTraders.Domain.Models.Systems;
-using Wolfe.SpaceTraders.Domain.Models.Waypoints;
+using Wolfe.SpaceTraders.Domain.Marketplace;
+using Wolfe.SpaceTraders.Domain.Systems;
+using Wolfe.SpaceTraders.Domain.Waypoints;
 
 namespace Wolfe.SpaceTraders.Cli.Commands.Markets;
 

@@ -1,4 +1,4 @@
-﻿using Wolfe.SpaceTraders.Domain.Models.Contracts;
+﻿using Wolfe.SpaceTraders.Domain.Contracts;
 using Wolfe.SpaceTraders.Sdk.Models.Contracts;
 
 namespace Wolfe.SpaceTraders.Infrastructure.Extensions;

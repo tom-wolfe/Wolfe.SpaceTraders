@@ -16,8 +16,8 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\Wolfe.SpaceTraders.Domain\Wolfe.SpaceTraders.Domain.csproj" />
-    <ProjectReference Include="..\Wolfe.SpaceTraders.Sdk\Wolfe.SpaceTraders.Sdk.csproj" />
+    <ProjectReference Include="..\..\..\domain\src\Wolfe.SpaceTraders.Domain\Wolfe.SpaceTraders.Domain.csproj" />
+    <ProjectReference Include="..\..\..\sdk\src\Wolfe.SpaceTraders.Sdk\Wolfe.SpaceTraders.Sdk.csproj" />
     <ProjectReference Include="..\Wolfe.SpaceTraders.Service\Wolfe.SpaceTraders.Service.csproj" />
   </ItemGroup>
 

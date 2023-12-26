@@ -1,6 +1,5 @@
-﻿using Wolfe.SpaceTraders.Domain.Models;
-using Wolfe.SpaceTraders.Domain.Models.Extraction;
-using Wolfe.SpaceTraders.Domain.Models.Marketplace;
+﻿using Wolfe.SpaceTraders.Domain.Extraction;
+using Wolfe.SpaceTraders.Domain.Marketplace;
 using Wolfe.SpaceTraders.Sdk.Models.Extraction;
 
 namespace Wolfe.SpaceTraders.Infrastructure.Extensions;

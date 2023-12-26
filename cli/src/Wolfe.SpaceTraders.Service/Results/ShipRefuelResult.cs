@@ -1,6 +1,6 @@
-﻿using Wolfe.SpaceTraders.Domain.Models.Agents;
-using Wolfe.SpaceTraders.Domain.Models.Marketplace;
-using Wolfe.SpaceTraders.Domain.Models.Ships;
+﻿using Wolfe.SpaceTraders.Domain.Agents;
+using Wolfe.SpaceTraders.Domain.Marketplace;
+using Wolfe.SpaceTraders.Domain.Ships;
 
 namespace Wolfe.SpaceTraders.Service.Results;
 

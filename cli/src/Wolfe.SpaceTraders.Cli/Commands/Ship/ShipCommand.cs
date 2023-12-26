@@ -5,8 +5,7 @@ using Wolfe.SpaceTraders.Cli.Commands.Ship.Navigate;
 using Wolfe.SpaceTraders.Cli.Commands.Ship.Orbit;
 using Wolfe.SpaceTraders.Cli.Commands.Ship.Refuel;
 using Wolfe.SpaceTraders.Cli.Commands.Ship.Sell;
-using Wolfe.SpaceTraders.Domain.Models;
-using Wolfe.SpaceTraders.Domain.Models.Ships;
+using Wolfe.SpaceTraders.Domain.Ships;
 
 namespace Wolfe.SpaceTraders.Cli.Commands.Ship;
 

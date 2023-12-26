@@ -1,6 +1,6 @@
 ﻿using System.CommandLine.Invocation;
 using Wolfe.SpaceTraders.Cli.Formatters;
-using Wolfe.SpaceTraders.Domain.Models.Waypoints;
+using Wolfe.SpaceTraders.Domain.Waypoints;
 using Wolfe.SpaceTraders.Service;
 
 namespace Wolfe.SpaceTraders.Cli.Commands.Markets;
@@ -15,7 +15,7 @@ internal class MarketsCommandHandler(ISpaceTradersClient client) : CommandHandle
         var waypoints = client.GetWaypoints(systemId, null, [WaypointTraitSymbol.Marketplace], context.GetCancellationToken());
 
         var location = context.BindingContext.ParseResult.GetValueForOption(MarketsCommand.NearestToOption);
-        Domain.Models.Waypoints.Waypoint? relativeWaypoint = null;
+        Domain.Waypoints.Waypoint? relativeWaypoint = null;
         if (location != null)
         {
             relativeWaypoint = await client.GetWaypoint(location.Value, context.GetCancellationToken())

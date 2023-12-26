@@ -1,6 +1,5 @@
 ﻿using System.CommandLine;
-using Wolfe.SpaceTraders.Domain.Models;
-using Wolfe.SpaceTraders.Domain.Models.Waypoints;
+using Wolfe.SpaceTraders.Domain.Waypoints;
 
 namespace Wolfe.SpaceTraders.Cli.Commands.Shipyard;
 

@@ -1,11 +1,11 @@
-﻿using Wolfe.SpaceTraders.Domain.Models.Agents;
-using Wolfe.SpaceTraders.Domain.Models.Contracts;
-using Wolfe.SpaceTraders.Domain.Models.Marketplace;
-using Wolfe.SpaceTraders.Domain.Models.Navigation;
-using Wolfe.SpaceTraders.Domain.Models.Ships;
-using Wolfe.SpaceTraders.Domain.Models.Shipyards;
-using Wolfe.SpaceTraders.Domain.Models.Systems;
-using Wolfe.SpaceTraders.Domain.Models.Waypoints;
+﻿using Wolfe.SpaceTraders.Domain.Agents;
+using Wolfe.SpaceTraders.Domain.Contracts;
+using Wolfe.SpaceTraders.Domain.Marketplace;
+using Wolfe.SpaceTraders.Domain.Navigation;
+using Wolfe.SpaceTraders.Domain.Ships;
+using Wolfe.SpaceTraders.Domain.Shipyards;
+using Wolfe.SpaceTraders.Domain.Systems;
+using Wolfe.SpaceTraders.Domain.Waypoints;
 using Wolfe.SpaceTraders.Service.Commands;
 using Wolfe.SpaceTraders.Service.Results;
 

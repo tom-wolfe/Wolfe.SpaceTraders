@@ -14,7 +14,7 @@ internal class WaypointsCommandHandler(ISpaceTradersClient client) : CommandHand
         var waypoints = client.GetWaypoints(systemId, type, traits, context.GetCancellationToken());
 
         var location = context.BindingContext.ParseResult.GetValueForOption(WaypointsCommand.NearestToOption);
-        Domain.Models.Waypoints.Waypoint? relativeWaypoint = null;
+        Domain.Waypoints.Waypoint? relativeWaypoint = null;
         if (location != null)
         {
             relativeWaypoint = await client.GetWaypoint(location.Value, context.GetCancellationToken())

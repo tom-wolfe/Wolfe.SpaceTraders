@@ -16,6 +16,7 @@ public static class ServiceCollectionExtensions
             .Validate(o => o.ApiKeyProvider != null, $"{nameof(SpaceTradersOptions.ApiKeyProvider)} cannot be null.");
 
         services
+            .AddSingleton<RateLimitingHandler>()
             .AddRefitClient<ISpaceTradersApiClient>(provider =>
             {
                 var options = provider.GetRequiredService<IOptions<SpaceTradersOptions>>().Value;
@@ -35,7 +36,7 @@ public static class ServiceCollectionExtensions
                     }
                 };
             })
-            //.AddHttpMessageHandler(() => new RateLimitingHandler(2, TimeSpan.FromSeconds(1)))
+            .AddHttpMessageHandler<RateLimitingHandler>()
             .ConfigureHttpClient((provider, client) =>
             {
                 var options = provider.GetRequiredService<IOptions<SpaceTradersOptions>>().Value;

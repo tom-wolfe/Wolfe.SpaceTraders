@@ -1,4 +1,4 @@
-﻿using Wolfe.SpaceTraders.Domain.Models.Marketplace;
+﻿using Wolfe.SpaceTraders.Domain.Marketplace;
 using Wolfe.SpaceTraders.Sdk.Models.Marketplace;
 
 namespace Wolfe.SpaceTraders.Infrastructure.Extensions;

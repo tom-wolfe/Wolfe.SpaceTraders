@@ -1,8 +1,7 @@
 ﻿using System.CommandLine;
 using Wolfe.SpaceTraders.Cli.Extensions;
-using Wolfe.SpaceTraders.Domain.Models;
-using Wolfe.SpaceTraders.Domain.Models.Marketplace;
-using Wolfe.SpaceTraders.Domain.Models.Ships;
+using Wolfe.SpaceTraders.Domain.Marketplace;
+using Wolfe.SpaceTraders.Domain.Ships;
 
 namespace Wolfe.SpaceTraders.Cli.Commands.Ship.Sell;
 

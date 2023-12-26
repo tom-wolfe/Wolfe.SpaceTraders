@@ -1,5 +1,4 @@
-﻿using Wolfe.SpaceTraders.Domain.Models;
-using Wolfe.SpaceTraders.Domain.Models.Marketplace;
+﻿using Wolfe.SpaceTraders.Domain.Marketplace;
 
 namespace Wolfe.SpaceTraders.Service.Commands;
 

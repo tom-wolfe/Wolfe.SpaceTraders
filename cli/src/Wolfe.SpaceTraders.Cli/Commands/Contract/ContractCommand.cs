@@ -1,7 +1,6 @@
 ﻿using System.CommandLine;
 using Wolfe.SpaceTraders.Cli.Commands.Contract.Accept;
-using Wolfe.SpaceTraders.Domain.Models;
-using Wolfe.SpaceTraders.Domain.Models.Contracts;
+using Wolfe.SpaceTraders.Domain.Contracts;
 
 namespace Wolfe.SpaceTraders.Cli.Commands.Contract;
 

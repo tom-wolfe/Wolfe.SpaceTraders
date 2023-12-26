@@ -1,5 +1,5 @@
-﻿using Wolfe.SpaceTraders.Domain.Models.Agents;
-using Wolfe.SpaceTraders.Domain.Models.Contracts;
+﻿using Wolfe.SpaceTraders.Domain.Agents;
+using Wolfe.SpaceTraders.Domain.Contracts;
 
 namespace Wolfe.SpaceTraders.Service.Results;
 

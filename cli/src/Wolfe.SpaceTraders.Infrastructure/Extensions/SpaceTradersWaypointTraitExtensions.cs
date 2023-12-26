@@ -1,5 +1,4 @@
-﻿using Wolfe.SpaceTraders.Domain.Models;
-using Wolfe.SpaceTraders.Domain.Models.Waypoints;
+﻿using Wolfe.SpaceTraders.Domain.Waypoints;
 using Wolfe.SpaceTraders.Sdk.Models.Systems;
 
 namespace Wolfe.SpaceTraders.Infrastructure.Extensions;

@@ -1,7 +1,6 @@
 ﻿using System.CommandLine;
-using Wolfe.SpaceTraders.Domain.Models;
-using Wolfe.SpaceTraders.Domain.Models.Ships;
-using Wolfe.SpaceTraders.Domain.Models.Waypoints;
+using Wolfe.SpaceTraders.Domain.Ships;
+using Wolfe.SpaceTraders.Domain.Waypoints;
 
 namespace Wolfe.SpaceTraders.Cli.Commands.Purchase;
 

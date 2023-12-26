@@ -1,8 +1,7 @@
 ﻿using Humanizer;
 using Wolfe.SpaceTraders.Cli.Extensions;
-using Wolfe.SpaceTraders.Domain.Models;
-using Wolfe.SpaceTraders.Domain.Models.Navigation;
-using Wolfe.SpaceTraders.Domain.Models.Ships;
+using Wolfe.SpaceTraders.Domain.Navigation;
+using Wolfe.SpaceTraders.Domain.Ships;
 
 namespace Wolfe.SpaceTraders.Cli.Formatters;
 

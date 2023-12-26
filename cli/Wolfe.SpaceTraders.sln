@@ -9,7 +9,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Wolfe.SpaceTraders.Infrastr
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Wolfe.SpaceTraders.Service", "src\Wolfe.SpaceTraders.Service\Wolfe.SpaceTraders.Service.csproj", "{C812CF72-52ED-4871-B215-926775682662}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Wolfe.SpaceTraders.Domain", "src\Wolfe.SpaceTraders.Domain\Wolfe.SpaceTraders.Domain.csproj", "{5E2094E3-1EF7-4AF5-BD9D-83478FE3DC99}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Wolfe.SpaceTraders.Domain", "..\domain\src\Wolfe.SpaceTraders.Domain\Wolfe.SpaceTraders.Domain.csproj", "{5E2094E3-1EF7-4AF5-BD9D-83478FE3DC99}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Wolfe.SpaceTraders.Sdk", "..\sdk\src\Wolfe.SpaceTraders.Sdk\Wolfe.SpaceTraders.Sdk.csproj", "{D5ED0D2A-5BD4-46F4-BB57-83BAE4A44E7D}"
 EndProject

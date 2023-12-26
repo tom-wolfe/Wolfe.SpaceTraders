@@ -1,5 +1,5 @@
-﻿using Wolfe.SpaceTraders.Domain.Models.Extraction;
-using Wolfe.SpaceTraders.Domain.Models.Ships;
+﻿using Wolfe.SpaceTraders.Domain.Extraction;
+using Wolfe.SpaceTraders.Domain.Ships;
 
 namespace Wolfe.SpaceTraders.Service.Results;
 
