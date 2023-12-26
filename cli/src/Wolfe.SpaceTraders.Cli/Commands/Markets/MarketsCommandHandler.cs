@@ -39,7 +39,7 @@ internal class MarketsCommandHandler(ISpaceTradersClient client) : CommandHandle
                 continue;
             }
 
-            Marketplace.WriteMarket(market, waypoint, relativeWaypoint?.Location);
+            MarketplaceFormatter.WriteMarketplace(market, waypoint, relativeWaypoint?.Location);
             Console.WriteLine();
         }
         return ExitCodes.Success;
