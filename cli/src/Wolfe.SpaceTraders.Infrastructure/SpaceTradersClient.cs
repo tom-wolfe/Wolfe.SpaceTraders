@@ -131,11 +131,11 @@ internal class SpaceTradersClient(
         return response.GetContent().Data.ToDomain();
     }
 
-    public async Task<Market?> GetMarket(WaypointSymbol waypointId, CancellationToken cancellationToken = default)
+    public async Task<Marketplace?> GetMarket(WaypointSymbol waypointId, CancellationToken cancellationToken = default)
     {
         var waypoint = await GetWaypoint(waypointId, cancellationToken);
         if (waypoint == null) { return null; }
-        var response = await apiClient.GetMarket(waypointId.System.Value, waypointId.Value, cancellationToken);
+        var response = await apiClient.GetMarketplace(waypointId.System.Value, waypointId.Value, cancellationToken);
         if (response.StatusCode == HttpStatusCode.NotFound) { return null; }
         return response.GetContent().Data.ToDomain(waypoint);
     }

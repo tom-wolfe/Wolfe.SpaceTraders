@@ -5,7 +5,7 @@ namespace Wolfe.SpaceTraders.Infrastructure.Api.Extensions;
 
 internal static class SpaceTradersMarketItemExtensions
 {
-    public static MarketItem ToDomain(this SpaceTradersMarketItem item) => new()
+    public static MarketplaceItem ToDomain(this SpaceTradersMarketplaceItem item) => new()
     {
         Symbol = new TradeSymbol(item.Symbol),
         Name = item.Name,

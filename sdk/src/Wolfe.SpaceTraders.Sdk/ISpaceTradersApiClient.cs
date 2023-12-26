@@ -76,7 +76,7 @@ public interface ISpaceTradersApiClient
     );
 
     [Get("/systems/{systemId}/waypoints/{waypointId}/market")]
-    public Task<IApiResponse<SpaceTradersGetMarketResponse>> GetMarket(
+    public Task<IApiResponse<SpaceTradersGetMarketplaceResponse>> GetMarketplace(
         string systemId,
         string waypointId,
         CancellationToken cancellationToken = default
