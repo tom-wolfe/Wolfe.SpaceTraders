@@ -6,9 +6,9 @@ namespace Wolfe.SpaceTraders.Domain.Shipyards;
 
 public class ShipyardTransaction
 {
-    public required WaypointSymbol WaypointSymbol { get; set; }
-    public required ShipSymbol ShipSymbol { get; set; }
-    public required Credits Price { get; set; }
-    public required AgentSymbol AgentSymbol { get; set; }
-    public required DateTimeOffset Timestamp { get; set; }
+    public required WaypointSymbol WaypointSymbol { get; init; }
+    public required ShipSymbol ShipSymbol { get; init; }
+    public required Credits Price { get; init; }
+    public required AgentSymbol AgentSymbol { get; init; }
+    public required DateTimeOffset Timestamp { get; init; }
 }

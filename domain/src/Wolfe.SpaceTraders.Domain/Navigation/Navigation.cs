@@ -5,9 +5,9 @@ namespace Wolfe.SpaceTraders.Domain.Navigation;
 
 public class Navigation
 {
-    public required SystemSymbol SystemSymbol { get; set; }
-    public required WaypointSymbol WaypointSymbol { get; set; }
-    public required NavigationRoute Route { get; set; }
-    public required NavigationStatus Status { get; set; }
-    public required FlightSpeed Speed { get; set; }
+    public required SystemSymbol SystemSymbol { get; init; }
+    public required WaypointSymbol WaypointSymbol { get; init; }
+    public required NavigationRoute Route { get; init; }
+    public required NavigationStatus Status { get; init; }
+    public required FlightSpeed Speed { get; init; }
 }

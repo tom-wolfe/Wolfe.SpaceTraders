@@ -2,9 +2,9 @@
 
 public class NavigationRoute
 {
-    public required WaypointLocation Destination { get; set; }
-    public required WaypointLocation Origin { get; set; }
-    public required DateTimeOffset DepartureTime { get; set; }
-    public required DateTimeOffset Arrival { get; set; }
+    public required WaypointLocation Destination { get; init; }
+    public required WaypointLocation Origin { get; init; }
+    public required DateTimeOffset DepartureTime { get; init; }
+    public required DateTimeOffset Arrival { get; init; }
     public TimeSpan ArrivesIn => Arrival - DateTimeOffset.UtcNow;
 }

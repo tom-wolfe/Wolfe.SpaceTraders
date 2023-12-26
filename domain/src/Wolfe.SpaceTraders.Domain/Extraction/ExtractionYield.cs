@@ -4,6 +4,6 @@ namespace Wolfe.SpaceTraders.Domain.Extraction;
 
 public class ExtractionYield
 {
-    public TradeSymbol Symbol { get; set; }
-    public int Units { get; set; }
+    public TradeSymbol Symbol { get; init; }
+    public int Units { get; init; }
 }

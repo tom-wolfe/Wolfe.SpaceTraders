@@ -2,7 +2,7 @@
 
 public class ShipRequirements
 {
-    public int Power { get; set; }
-    public required int Crew { get; set; }
-    public int Slots { get; set; }
+    public int Power { get; init; }
+    public required int Crew { get; init; }
+    public int Slots { get; init; }
 }

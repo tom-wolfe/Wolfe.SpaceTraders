@@ -2,10 +2,9 @@
 
 namespace Wolfe.SpaceTraders.Domain.Marketplace;
 
-public class Market
+public class Market : Waypoint
 {
-    public required WaypointSymbol Symbol { get; set; }
-    public required List<MarketItem> Imports { get; set; } = [];
-    public required List<MarketItem> Exports { get; set; } = [];
-    public required List<MarketItem> Exchange { get; set; } = [];
+    public required List<MarketItem> Imports { get; init; } = [];
+    public required List<MarketItem> Exports { get; init; } = [];
+    public required List<MarketItem> Exchange { get; init; } = [];
 }

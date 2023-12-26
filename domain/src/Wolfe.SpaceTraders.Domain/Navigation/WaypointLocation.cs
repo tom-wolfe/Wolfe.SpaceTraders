@@ -5,8 +5,8 @@ namespace Wolfe.SpaceTraders.Domain.Navigation;
 
 public class WaypointLocation
 {
-    public required WaypointSymbol Symbol { get; set; }
-    public required WaypointType Type { get; set; }
-    public required SystemSymbol SystemSymbol { get; set; }
-    public required Point Point { get; set; }
+    public required WaypointSymbol Symbol { get; init; }
+    public required WaypointType Type { get; init; }
+    public required SystemSymbol SystemSymbol { get; init; }
+    public required Point Point { get; init; }
 }

@@ -2,10 +2,9 @@
 
 namespace Wolfe.SpaceTraders.Domain.Shipyards;
 
-public class Shipyard
+public class Shipyard : Waypoint
 {
-    public required WaypointSymbol Symbol { get; set; }
-    public required List<ShipyardShipType> ShipTypes { get; set; } = [];
-    public List<ShipyardTransaction> Transactions { get; set; } = [];
-    public List<ShipyardShip> Ships { get; set; } = [];
+    public required List<ShipyardShipType> ShipTypes { get; init; } = [];
+    public List<ShipyardTransaction> Transactions { get; init; } = [];
+    public List<ShipyardShip> Ships { get; init; } = [];
 }

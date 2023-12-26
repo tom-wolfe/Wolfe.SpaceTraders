@@ -2,11 +2,11 @@
 
 public class Contract
 {
-    public required ContractId Id { get; set; }
-    public required FactionSymbol FactionSymbol { get; set; }
-    public required ContractType Type { get; set; }
-    public required ContractTerms Terms { get; set; }
-    public bool Fulfilled { get; set; }
-    public bool Accepted { get; set; }
-    public DateTimeOffset DeadlineToAccept { get; set; }
+    public required ContractId Id { get; init; }
+    public required FactionSymbol FactionSymbol { get; init; }
+    public required ContractType Type { get; init; }
+    public required ContractTerms Terms { get; init; }
+    public bool Fulfilled { get; init; }
+    public bool Accepted { get; init; }
+    public DateTimeOffset DeadlineToAccept { get; init; }
 }

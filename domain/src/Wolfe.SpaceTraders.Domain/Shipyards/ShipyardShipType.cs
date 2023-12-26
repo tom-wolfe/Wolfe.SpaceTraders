@@ -4,5 +4,5 @@ namespace Wolfe.SpaceTraders.Domain.Shipyards;
 
 public class ShipyardShipType
 {
-    public required ShipType Type { get; set; }
+    public required ShipType Type { get; init; }
 }

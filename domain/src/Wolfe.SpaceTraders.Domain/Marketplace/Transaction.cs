@@ -5,12 +5,12 @@ namespace Wolfe.SpaceTraders.Domain.Marketplace;
 
 public class Transaction
 {
-    public required WaypointSymbol WaypointSymbol { get; set; }
-    public required ShipSymbol ShipSymbol { get; set; }
-    public required TradeSymbol TradeSymbol { get; set; }
-    public required TransactionType Type { get; set; }
-    public required int Units { get; set; }
-    public required Credits PricePerUnit { get; set; }
-    public required Credits TotalPrice { get; set; }
-    public required DateTimeOffset Timestamp { get; set; }
+    public required WaypointSymbol WaypointSymbol { get; init; }
+    public required ShipSymbol ShipSymbol { get; init; }
+    public required TradeSymbol TradeSymbol { get; init; }
+    public required TransactionType Type { get; init; }
+    public required int Units { get; init; }
+    public required Credits PricePerUnit { get; init; }
+    public required Credits TotalPrice { get; init; }
+    public required DateTimeOffset Timestamp { get; init; }
 }
