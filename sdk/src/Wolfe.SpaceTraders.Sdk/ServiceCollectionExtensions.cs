@@ -22,7 +22,7 @@ public static class ServiceCollectionExtensions
                 var options = provider.GetRequiredService<IOptions<SpaceTradersOptions>>().Value;
                 return new RefitSettings
                 {
-                    AuthorizationHeaderValueGetter = (_, ct) => options.ApiKeyProvider!(provider, ct),
+                    AuthorizationHeaderValueGetter = (_, ct) => options.ApiKeyProvider!(provider, ct).AsTask(),
                     ExceptionFactory = async response =>
                     {
                         if (response.IsSuccessStatusCode) { return null; }

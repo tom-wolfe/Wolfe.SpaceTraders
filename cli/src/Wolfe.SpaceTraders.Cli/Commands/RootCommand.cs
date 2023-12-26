@@ -2,8 +2,6 @@
 using Wolfe.SpaceTraders.Cli.Commands.Clear;
 using Wolfe.SpaceTraders.Cli.Commands.Contract;
 using Wolfe.SpaceTraders.Cli.Commands.Contracts;
-using Wolfe.SpaceTraders.Cli.Commands.Login;
-using Wolfe.SpaceTraders.Cli.Commands.Logout;
 using Wolfe.SpaceTraders.Cli.Commands.Markets;
 using Wolfe.SpaceTraders.Cli.Commands.Me;
 using Wolfe.SpaceTraders.Cli.Commands.Purchase;
@@ -13,7 +11,6 @@ using Wolfe.SpaceTraders.Cli.Commands.Ships;
 using Wolfe.SpaceTraders.Cli.Commands.Shipyard;
 using Wolfe.SpaceTraders.Cli.Commands.System;
 using Wolfe.SpaceTraders.Cli.Commands.Systems;
-using Wolfe.SpaceTraders.Cli.Commands.Token;
 using Wolfe.SpaceTraders.Cli.Commands.Waypoint;
 using Wolfe.SpaceTraders.Cli.Commands.Waypoints;
 
@@ -29,8 +26,6 @@ internal static class RootCommand
             Description = "Provides command-line access to the Space Traders API."
         };
         command.AddCommand(ClearCommand.CreateCommand(services));
-        command.AddCommand(LoginCommand.CreateCommand(services));
-        command.AddCommand(LogoutCommand.CreateCommand(services));
         command.AddCommand(MeCommand.CreateCommand(services));
         command.AddCommand(ContractCommand.CreateCommand(services));
         command.AddCommand(ContractsCommand.CreateCommand(services));
@@ -42,7 +37,6 @@ internal static class RootCommand
         command.AddCommand(ShipyardCommand.CreateCommand(services));
         command.AddCommand(SystemCommand.CreateCommand(services));
         command.AddCommand(SystemsCommand.CreateCommand(services));
-        command.AddCommand(TokenCommand.CreateCommand(services));
         command.AddCommand(WaypointCommand.CreateCommand(services));
         command.AddCommand(WaypointsCommand.CreateCommand(services));
 
