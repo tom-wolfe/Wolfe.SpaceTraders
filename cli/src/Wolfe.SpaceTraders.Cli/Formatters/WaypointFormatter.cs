@@ -10,10 +10,10 @@ internal static class WaypointFormatter
     {
         Console.WriteLine($"~ {waypoint.Symbol.Value.Color(ConsoleColors.Id)} ({waypoint.Type.Value.Color(ConsoleColors.Category)})");
 
-        var position = $"  Position: {waypoint.Point.ToString().Color(ConsoleColors.Point)}";
-        var distance = relativeTo?.DistanceTo(waypoint.Point);
-        if (distance != null) { position += $" ({distance.Total.ToString("F").Color(ConsoleColors.Distance)})"; }
-        Console.WriteLine(position);
+        var location = $"  Location: {waypoint.Location.ToString().Color(ConsoleColors.Point)}";
+        var distance = relativeTo?.DistanceTo(waypoint.Location);
+        if (distance != null) { location += $" ({distance.Total.ToString("F").Color(ConsoleColors.Distance)})"; }
+        Console.WriteLine(location);
 
         Console.WriteLine("  Traits:");
         foreach (var trait in waypoint.Traits)

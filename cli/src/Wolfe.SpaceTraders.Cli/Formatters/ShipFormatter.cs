@@ -10,7 +10,7 @@ internal static class ShipFormatter
     public static void WriteShip(Ship ship)
     {
         Console.WriteLine($"~ {ship.Symbol.Value.Color(ConsoleColors.Id)} ({ship.Registration.Role.Value.Color(ConsoleColors.Category)}) [{ship.Navigation.Status.Value.Color(ConsoleColors.Status)}]");
-        Console.WriteLine($"  Point: {ship.Navigation.WaypointSymbol.Value.Color(ConsoleColors.Code)}");
+        Console.WriteLine($"  Location: {ship.Navigation.WaypointSymbol.Value.Color(ConsoleColors.Code)}");
 
         if (ship.Navigation.Status == NavigationStatus.InTransit)
         {

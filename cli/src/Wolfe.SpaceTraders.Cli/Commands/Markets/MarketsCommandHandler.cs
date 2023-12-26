@@ -12,7 +12,8 @@ internal class MarketsCommandHandler(ISpaceTradersClient client) : CommandHandle
         var systemId = context.BindingContext.ParseResult.GetValueForArgument(MarketsCommand.SystemIdArgument);
         var selling = context.BindingContext.ParseResult.GetValueForOption(MarketsCommand.SellingOption);
         var buying = context.BindingContext.ParseResult.GetValueForOption(MarketsCommand.BuyingOption);
-        var waypoints = client.GetWaypoints(systemId, null, [WaypointTraitSymbol.Marketplace], context.GetCancellationToken());
+        var waypoints = client.GetWaypoints(systemId, context.GetCancellationToken())
+            .WhereAwait(w => ValueTask.FromResult(w.HasTrait(WaypointTraitSymbol.Marketplace)));
 
         var location = context.BindingContext.ParseResult.GetValueForOption(MarketsCommand.NearestToOption);
         Domain.Waypoints.Waypoint? relativeWaypoint = null;
@@ -20,7 +21,7 @@ internal class MarketsCommandHandler(ISpaceTradersClient client) : CommandHandle
         {
             relativeWaypoint = await client.GetWaypoint(location.Value, context.GetCancellationToken())
                 ?? throw new Exception("Unable to find relative waypoint.");
-            waypoints = waypoints.OrderBy(w => w.Point.DistanceTo(relativeWaypoint.Point).Total);
+            waypoints = waypoints.OrderBy(w => w.Location.DistanceTo(relativeWaypoint.Location).Total);
         }
 
         await foreach (var waypoint in waypoints)
@@ -38,7 +39,7 @@ internal class MarketsCommandHandler(ISpaceTradersClient client) : CommandHandle
                 continue;
             }
 
-            MarketFormatter.WriteMarket(market, waypoint, relativeWaypoint?.Point);
+            MarketFormatter.WriteMarket(market, waypoint, relativeWaypoint?.Location);
             Console.WriteLine();
         }
         return ExitCodes.Success;

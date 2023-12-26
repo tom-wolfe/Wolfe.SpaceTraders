@@ -11,10 +11,10 @@ internal static class MarketFormatter
     {
         Console.WriteLine($"~ {market.Symbol.Value.Color(ConsoleColors.Id)}");
 
-        var position = $"  Position: {waypoint.Point.ToString().Color(ConsoleColors.Point)}";
-        var distance = relativeTo?.DistanceTo(waypoint.Point);
-        if (distance != null) { position += $" ({distance.Total.ToString("F").Color(ConsoleColors.Distance)})"; }
-        Console.WriteLine(position);
+        var location = $"  Location: {waypoint.Location.ToString().Color(ConsoleColors.Point)}";
+        var distance = relativeTo?.DistanceTo(waypoint.Location);
+        if (distance != null) { location += $" ({distance.Total.ToString("F").Color(ConsoleColors.Distance)})"; }
+        Console.WriteLine(location);
 
         Console.WriteLine("  Imports:");
         foreach (var item in market.Imports)

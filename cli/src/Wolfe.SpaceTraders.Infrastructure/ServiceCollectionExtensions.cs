@@ -1,4 +1,5 @@
-﻿using Wolfe.SpaceTraders.Infrastructure.Token;
+﻿using Wolfe.SpaceTraders.Infrastructure.Data;
+using Wolfe.SpaceTraders.Infrastructure.Token;
 using Wolfe.SpaceTraders.Sdk;
 using Wolfe.SpaceTraders.Service;
 
@@ -8,6 +9,10 @@ public static class ServiceCollectionExtensions
 {
     public static IServiceCollection AddInfrastructureLayer(this IServiceCollection services, IConfiguration configuration)
     {
+        services
+            .AddOptions<SpaceTradersDataOptions>()
+            .Configure(configuration.GetSection("Database").Bind);
+
         return services
             .AddSpaceTradersApi(o =>
             {
@@ -20,6 +25,7 @@ public static class ServiceCollectionExtensions
                 };
             })
             .AddSingleton<ISpaceTradersClient, SpaceTradersClient>()
+            .AddSingleton<ISpaceTradersDataClient, SpaceTradersFileSystemDataClient>()
             .AddSingleton<ITokenService, FileTokenService>();
     }
 }

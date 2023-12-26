@@ -20,7 +20,7 @@ public interface ISpaceTradersClient
     public Task<AcceptContractResult> AcceptContract(ContractId contractId, CancellationToken cancellationToken = default);
     public IAsyncEnumerable<StarSystem> GetSystems(CancellationToken cancellationToken = default);
     public Task<StarSystem?> GetSystem(SystemSymbol systemId, CancellationToken cancellationToken = default);
-    public IAsyncEnumerable<Waypoint> GetWaypoints(SystemSymbol systemId, WaypointType? type, IEnumerable<WaypointTraitSymbol> traits, CancellationToken cancellationToken = default);
+    public IAsyncEnumerable<Waypoint> GetWaypoints(SystemSymbol systemId, CancellationToken cancellationToken = default);
     public Task<Waypoint?> GetWaypoint(WaypointSymbol waypointId, CancellationToken cancellationToken = default);
     public Task<Shipyard?> GetShipyard(WaypointSymbol waypointId, CancellationToken cancellationToken = default);
     public Task<PurchaseShipResult> PurchaseShip(PurchaseShipCommand command, CancellationToken cancellationToken = default);
