@@ -26,7 +26,7 @@ internal class MarketsCommandHandler(ISpaceTradersClient client) : CommandHandle
 
         await foreach (var waypoint in waypoints)
         {
-            var market = await client.GetMarket(waypoint.Symbol, context.GetCancellationToken())
+            var market = await client.GetMarketplace(waypoint.Symbol, context.GetCancellationToken())
                 ?? throw new Exception("Unable to find market.");
 
             if (selling != null && !market.Exports.Any(e => e.Symbol == selling.Value))

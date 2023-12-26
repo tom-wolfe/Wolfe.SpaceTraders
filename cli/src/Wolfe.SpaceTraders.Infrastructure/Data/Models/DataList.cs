@@ -1,7 +1,7 @@
 ﻿namespace Wolfe.SpaceTraders.Infrastructure.Data.Models;
 
-internal class DataSystemWaypoints
+internal class DataList<T>
 {
     public DateTimeOffset RetrievedAt { get; init; }
-    public required IReadOnlyCollection<DataWaypoint> Waypoints { get; init; }
+    public required IReadOnlyCollection<T> Items { get; init; }
 }

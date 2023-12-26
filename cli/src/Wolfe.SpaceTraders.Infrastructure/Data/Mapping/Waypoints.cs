@@ -24,14 +24,14 @@ internal static class Waypoints
         Traits = waypoint.Traits.Select(t => t.ToDomain()).ToList()
     };
 
-    private static DataWaypointTrait ToData(this WaypointTrait trait) => new()
+    public static DataWaypointTrait ToData(this WaypointTrait trait) => new()
     {
         Symbol = trait.Symbol.Value,
         Name = trait.Name,
         Description = trait.Description
     };
 
-    private static WaypointTrait ToDomain(this DataWaypointTrait trait) => new()
+    public static WaypointTrait ToDomain(this DataWaypointTrait trait) => new()
     {
         Symbol = new WaypointTraitSymbol(trait.Symbol),
         Name = trait.Name,

@@ -10,7 +10,7 @@ using Wolfe.SpaceTraders.Domain.Systems;
 using Wolfe.SpaceTraders.Domain.Waypoints;
 using Wolfe.SpaceTraders.Infrastructure.Api.Extensions;
 using Wolfe.SpaceTraders.Infrastructure.Data;
-using Wolfe.SpaceTraders.Infrastructure.Data.Responses;
+using Wolfe.SpaceTraders.Infrastructure.Data.Mapping;
 using Wolfe.SpaceTraders.Sdk;
 using Wolfe.SpaceTraders.Sdk.Models.Contracts;
 using Wolfe.SpaceTraders.Sdk.Models.Ships;
@@ -131,13 +131,22 @@ internal class SpaceTradersClient(
         return response.GetContent().Data.ToDomain();
     }
 
-    public async Task<Marketplace?> GetMarket(WaypointSymbol waypointId, CancellationToken cancellationToken = default)
+    public async Task<Marketplace?> GetMarketplace(WaypointSymbol waypointId, CancellationToken cancellationToken = default)
     {
+        var cached = await dataClient.GetMarketplace(waypointId, cancellationToken);
+        if (cached.IsValid())
+        {
+            return cached.Item;
+        }
+
         var waypoint = await GetWaypoint(waypointId, cancellationToken);
         if (waypoint == null) { return null; }
         var response = await apiClient.GetMarketplace(waypointId.System.Value, waypointId.Value, cancellationToken);
         if (response.StatusCode == HttpStatusCode.NotFound) { return null; }
-        return response.GetContent().Data.ToDomain(waypoint);
+        var market = response.GetContent().Data.ToDomain(waypoint);
+
+        await dataClient.AddMarketplace(market, cancellationToken);
+        return market;
     }
 
     public async Task<ShipExtractResult> ShipExtract(ShipSymbol shipId, CancellationToken cancellationToken)
@@ -163,12 +172,13 @@ internal class SpaceTradersClient(
     public async IAsyncEnumerable<Waypoint> GetWaypoints(SystemSymbol systemId, [EnumeratorCancellation] CancellationToken cancellationToken = default)
     {
         var cached = await dataClient.GetWaypoints(systemId, cancellationToken);
-        if (cached != GetWaypointsResponse.None)
+        if (cached.IsValid())
         {
-            foreach (var waypoint in cached.Waypoints)
+            foreach (var waypoint in cached.Items)
             {
                 yield return waypoint;
             }
+            yield break;
         }
 
         var waypoints = await AsyncEnumerate<SpaceTradersWaypoint>(
