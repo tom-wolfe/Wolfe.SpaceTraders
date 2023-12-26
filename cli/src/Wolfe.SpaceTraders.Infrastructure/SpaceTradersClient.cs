@@ -28,15 +28,22 @@ internal class SpaceTradersClient(
     ISpaceTradersDataClient dataClient
 ) : ISpaceTradersClient
 {
-    public async Task<RegisterResult> Register(RegisterCommand command, CancellationToken cancellationToken = default)
+    public async Task<AcceptContractResult> AcceptContract(ContractId contractId, CancellationToken cancellationToken = default)
     {
-        var response = await apiClient.Register(command.ToApi(), cancellationToken);
+        var response = await apiClient.AcceptContract(contractId.Value, cancellationToken);
         return response.GetContent().Data.ToDomain();
     }
 
     public async Task<Agent> GetAgent(CancellationToken cancellationToken = default)
     {
         var response = await apiClient.GetAgent(cancellationToken);
+        return response.GetContent().Data.ToDomain();
+    }
+
+    public async Task<Contract?> GetContract(ContractId contractId, CancellationToken cancellationToken = default)
+    {
+        var response = await apiClient.GetContract(contractId.Value, cancellationToken);
+        if (response.StatusCode == HttpStatusCode.NotFound) { return null; }
         return response.GetContent().Data.ToDomain();
     }
 
@@ -47,17 +54,11 @@ internal class SpaceTradersClient(
         ).SelectAwait(c => ValueTask.FromResult(c.ToDomain()));
     }
 
-    public async Task<Contract?> GetContract(ContractId contractId, CancellationToken cancellationToken = default)
+    public IAsyncEnumerable<Ship> GetShips(CancellationToken cancellationToken = default)
     {
-        var response = await apiClient.GetContract(contractId.Value, cancellationToken);
-        if (response.StatusCode == HttpStatusCode.NotFound) { return null; }
-        return response.GetContent().Data.ToDomain();
-    }
-
-    public async Task<AcceptContractResult> AcceptContract(ContractId contractId, CancellationToken cancellationToken = default)
-    {
-        var response = await apiClient.AcceptContract(contractId.Value, cancellationToken);
-        return response.GetContent().Data.ToDomain();
+        return AsyncEnumerate<SpaceTradersShip>(
+            async p => (await apiClient.GetShips(20, p, cancellationToken)).GetContent()
+        ).SelectAwait(s => ValueTask.FromResult(s.ToDomain()));
     }
 
     public async Task<Shipyard?> GetShipyard(WaypointSymbol waypointId, CancellationToken cancellationToken = default)
@@ -67,68 +68,6 @@ internal class SpaceTradersClient(
         var response = await apiClient.GetShipyard(waypointId.System.Value, waypointId.Value, cancellationToken);
         if (response.StatusCode == HttpStatusCode.NotFound) { return null; }
         return response.GetContent().Data.ToDomain(waypoint);
-    }
-
-    public async Task<PurchaseShipResult> PurchaseShip(PurchaseShipCommand command, CancellationToken cancellationToken = default)
-    {
-        var response = await apiClient.PurchaseShip(command.ToApi(), cancellationToken);
-        return response.GetContent().ToDomain();
-    }
-
-    public IAsyncEnumerable<Ship> GetShips(CancellationToken cancellationToken = default)
-    {
-        return AsyncEnumerate<SpaceTradersShip>(
-            async p => (await apiClient.GetShips(20, p, cancellationToken)).GetContent()
-        ).SelectAwait(s => ValueTask.FromResult(s.ToDomain()));
-    }
-
-    public async Task<Ship?> GetShip(ShipSymbol shipId, CancellationToken cancellationToken = default)
-    {
-        var response = await apiClient.GetShip(shipId.Value, cancellationToken);
-        if (response.StatusCode == HttpStatusCode.NotFound) { return null; }
-        return response.GetContent().Data.ToDomain();
-    }
-
-    public async Task<SetShipSpeedResult> SetShipSpeed(ShipSymbol shipId, FlightSpeed speed, CancellationToken cancellationToken = default)
-    {
-        var request = new SpaceTradersPatchShipNavRequest { FlightMode = speed.Value };
-        var response = await apiClient.PatchShipNav(shipId.Value, request, cancellationToken);
-        return response.GetContent().Data.ToDomain();
-    }
-
-    public async Task<ShipOrbitResult> ShipOrbit(ShipSymbol shipId, CancellationToken cancellationToken = default)
-    {
-        var response = await apiClient.ShipOrbit(shipId.Value, cancellationToken);
-        return response.GetContent().Data.ToDomain();
-    }
-
-    public async Task<ShipDockResult> ShipDock(ShipSymbol shipId, CancellationToken cancellationToken = default)
-    {
-        var response = await apiClient.ShipDock(shipId.Value, cancellationToken);
-        return response.GetContent().Data.ToDomain();
-    }
-
-    public async Task<ShipNavigateResult> ShipNavigate(ShipSymbol shipId, ShipNavigateCommand command, CancellationToken cancellationToken = default)
-    {
-        var response = await apiClient.ShipNavigate(shipId.Value, command.ToApi(), cancellationToken);
-        return response.GetContent().Data.ToDomain();
-    }
-
-    public async Task<ShipRefuelResult> ShipRefuel(ShipSymbol shipId, CancellationToken cancellationToken = default)
-    {
-        var response = await apiClient.ShipRefuel(shipId.Value, cancellationToken);
-        return response.GetContent().Data.ToDomain();
-    }
-
-    public async Task<ShipSellResult> ShipSell(ShipSymbol shipId, ShipSellCommand command, CancellationToken cancellationToken = default)
-    {
-        var request = new SpaceTradersShipSellRequest
-        {
-            Symbol = command.ItemId.Value,
-            Units = command.Quantity
-        };
-        var response = await apiClient.ShipSell(shipId.Value, request, cancellationToken);
-        return response.GetContent().Data.ToDomain();
     }
 
     public async Task<Marketplace?> GetMarketplace(WaypointSymbol waypointId, CancellationToken cancellationToken = default)
@@ -149,9 +88,28 @@ internal class SpaceTradersClient(
         return market;
     }
 
-    public async Task<ShipExtractResult> ShipExtract(ShipSymbol shipId, CancellationToken cancellationToken)
+    public async IAsyncEnumerable<Marketplace> GetMarketplaces(SystemSymbol systemId, [EnumeratorCancellation] CancellationToken cancellationToken = default)
     {
-        var response = await apiClient.ShipExtract(shipId.Value, cancellationToken);
+        var waypoints = GetWaypoints(systemId, cancellationToken)
+            .WhereAwait(m => ValueTask.FromResult(m.HasTrait(WaypointTraitSymbol.Marketplace)));
+        await foreach (var waypoint in waypoints)
+        {
+            yield return await GetMarketplace(waypoint.Symbol, cancellationToken)
+                ?? throw new Exception("Unable to find marketplace.");
+        }
+    }
+
+    public async Task<Ship?> GetShip(ShipSymbol shipId, CancellationToken cancellationToken = default)
+    {
+        var response = await apiClient.GetShip(shipId.Value, cancellationToken);
+        if (response.StatusCode == HttpStatusCode.NotFound) { return null; }
+        return response.GetContent().Data.ToDomain();
+    }
+
+    public async Task<StarSystem?> GetSystem(SystemSymbol systemId, CancellationToken cancellationToken = default)
+    {
+        var response = await apiClient.GetSystem(systemId.Value, cancellationToken);
+        if (response.StatusCode == HttpStatusCode.NotFound) { return null; }
         return response.GetContent().Data.ToDomain();
     }
 
@@ -162,9 +120,9 @@ internal class SpaceTradersClient(
         ).SelectAwait(s => ValueTask.FromResult(s.ToDomain()));
     }
 
-    public async Task<StarSystem?> GetSystem(SystemSymbol systemId, CancellationToken cancellationToken = default)
+    public async Task<Waypoint?> GetWaypoint(WaypointSymbol waypointId, CancellationToken cancellationToken = default)
     {
-        var response = await apiClient.GetSystem(systemId.Value, cancellationToken);
+        var response = await apiClient.GetWaypoint(waypointId.System.Value, waypointId.Value, cancellationToken);
         if (response.StatusCode == HttpStatusCode.NotFound) { return null; }
         return response.GetContent().Data.ToDomain();
     }
@@ -194,10 +152,63 @@ internal class SpaceTradersClient(
         }
     }
 
-    public async Task<Waypoint?> GetWaypoint(WaypointSymbol waypointId, CancellationToken cancellationToken = default)
+    public async Task<PurchaseShipResult> PurchaseShip(PurchaseShipCommand command, CancellationToken cancellationToken = default)
     {
-        var response = await apiClient.GetWaypoint(waypointId.System.Value, waypointId.Value, cancellationToken);
-        if (response.StatusCode == HttpStatusCode.NotFound) { return null; }
+        var response = await apiClient.PurchaseShip(command.ToApi(), cancellationToken);
+        return response.GetContent().ToDomain();
+    }
+
+    public async Task<RegisterResult> Register(RegisterCommand command, CancellationToken cancellationToken = default)
+    {
+        var response = await apiClient.Register(command.ToApi(), cancellationToken);
+        return response.GetContent().Data.ToDomain();
+    }
+
+    public async Task<SetShipSpeedResult> SetShipSpeed(ShipSymbol shipId, FlightSpeed speed, CancellationToken cancellationToken = default)
+    {
+        var request = new SpaceTradersPatchShipNavRequest { FlightMode = speed.Value };
+        var response = await apiClient.PatchShipNav(shipId.Value, request, cancellationToken);
+        return response.GetContent().Data.ToDomain();
+    }
+
+    public async Task<ShipDockResult> ShipDock(ShipSymbol shipId, CancellationToken cancellationToken = default)
+    {
+        var response = await apiClient.ShipDock(shipId.Value, cancellationToken);
+        return response.GetContent().Data.ToDomain();
+    }
+
+    public async Task<ShipExtractResult> ShipExtract(ShipSymbol shipId, CancellationToken cancellationToken)
+    {
+        var response = await apiClient.ShipExtract(shipId.Value, cancellationToken);
+        return response.GetContent().Data.ToDomain();
+    }
+
+    public async Task<ShipNavigateResult> ShipNavigate(ShipSymbol shipId, ShipNavigateCommand command, CancellationToken cancellationToken = default)
+    {
+        var response = await apiClient.ShipNavigate(shipId.Value, command.ToApi(), cancellationToken);
+        return response.GetContent().Data.ToDomain();
+    }
+
+    public async Task<ShipOrbitResult> ShipOrbit(ShipSymbol shipId, CancellationToken cancellationToken = default)
+    {
+        var response = await apiClient.ShipOrbit(shipId.Value, cancellationToken);
+        return response.GetContent().Data.ToDomain();
+    }
+
+    public async Task<ShipRefuelResult> ShipRefuel(ShipSymbol shipId, CancellationToken cancellationToken = default)
+    {
+        var response = await apiClient.ShipRefuel(shipId.Value, cancellationToken);
+        return response.GetContent().Data.ToDomain();
+    }
+
+    public async Task<ShipSellResult> ShipSell(ShipSymbol shipId, ShipSellCommand command, CancellationToken cancellationToken = default)
+    {
+        var request = new SpaceTradersShipSellRequest
+        {
+            Symbol = command.ItemId.Value,
+            Units = command.Quantity
+        };
+        var response = await apiClient.ShipSell(shipId.Value, request, cancellationToken);
         return response.GetContent().Data.ToDomain();
     }
 

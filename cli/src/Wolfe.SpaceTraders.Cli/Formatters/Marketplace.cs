@@ -1,18 +1,17 @@
 ﻿using Wolfe.SpaceTraders.Cli.Extensions;
 using Wolfe.SpaceTraders.Domain.Marketplace;
 using Wolfe.SpaceTraders.Domain.Navigation;
-using Wolfe.SpaceTraders.Domain.Waypoints;
 
 namespace Wolfe.SpaceTraders.Cli.Formatters;
 
 internal static class MarketplaceFormatter
 {
-    public static void WriteMarketplace(Marketplace marketplace, Waypoint waypoint, Point? relativeTo = null)
+    public static void WriteMarketplace(Marketplace marketplace, Point? relativeTo = null)
     {
         Console.WriteLine($"~ {marketplace.Symbol.Value.Color(ConsoleColors.Id)}");
 
-        var location = $"  Location: {waypoint.Location.ToString().Color(ConsoleColors.Point)}";
-        var distance = relativeTo?.DistanceTo(waypoint.Location);
+        var location = $"  Location: {marketplace.Location.ToString().Color(ConsoleColors.Point)}";
+        var distance = relativeTo?.DistanceTo(marketplace.Location);
         if (distance != null) { location += $" ({distance.Total.ToString("F").Color(ConsoleColors.Distance)})"; }
         Console.WriteLine(location);
 

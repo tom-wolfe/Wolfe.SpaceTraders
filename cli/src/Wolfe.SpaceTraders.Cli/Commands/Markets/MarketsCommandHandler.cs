@@ -1,6 +1,5 @@
 ﻿using System.CommandLine.Invocation;
 using Wolfe.SpaceTraders.Cli.Formatters;
-using Wolfe.SpaceTraders.Domain.Waypoints;
 using Wolfe.SpaceTraders.Service;
 
 namespace Wolfe.SpaceTraders.Cli.Commands.Markets;
@@ -12,8 +11,7 @@ internal class MarketsCommandHandler(ISpaceTradersClient client) : CommandHandle
         var systemId = context.BindingContext.ParseResult.GetValueForArgument(MarketsCommand.SystemIdArgument);
         var selling = context.BindingContext.ParseResult.GetValueForOption(MarketsCommand.SellingOption);
         var buying = context.BindingContext.ParseResult.GetValueForOption(MarketsCommand.BuyingOption);
-        var waypoints = client.GetWaypoints(systemId, context.GetCancellationToken())
-            .WhereAwait(w => ValueTask.FromResult(w.HasTrait(WaypointTraitSymbol.Marketplace)));
+        var marketplaces = client.GetMarketplaces(systemId, context.GetCancellationToken());
 
         var location = context.BindingContext.ParseResult.GetValueForOption(MarketsCommand.NearestToOption);
         Domain.Waypoints.Waypoint? relativeWaypoint = null;
@@ -21,14 +19,11 @@ internal class MarketsCommandHandler(ISpaceTradersClient client) : CommandHandle
         {
             relativeWaypoint = await client.GetWaypoint(location.Value, context.GetCancellationToken())
                 ?? throw new Exception("Unable to find relative waypoint.");
-            waypoints = waypoints.OrderBy(w => w.Location.DistanceTo(relativeWaypoint.Location).Total);
+            marketplaces = marketplaces.OrderBy(w => w.Location.DistanceTo(relativeWaypoint.Location).Total);
         }
 
-        await foreach (var waypoint in waypoints)
+        await foreach (var market in marketplaces)
         {
-            var market = await client.GetMarketplace(waypoint.Symbol, context.GetCancellationToken())
-                ?? throw new Exception("Unable to find market.");
-
             if (selling != null && !market.Exports.Any(e => e.Symbol == selling.Value))
             {
                 continue;
@@ -39,7 +34,7 @@ internal class MarketsCommandHandler(ISpaceTradersClient client) : CommandHandle
                 continue;
             }
 
-            MarketplaceFormatter.WriteMarketplace(market, waypoint, relativeWaypoint?.Location);
+            MarketplaceFormatter.WriteMarketplace(market, relativeWaypoint?.Location);
             Console.WriteLine();
         }
         return ExitCodes.Success;
