@@ -13,6 +13,16 @@ internal class MarketsCommandHandler(ISpaceTradersClient client) : CommandHandle
         var buying = context.BindingContext.ParseResult.GetValueForOption(MarketsCommand.BuyingOption);
         var marketplaces = client.GetMarketplaces(systemId, context.GetCancellationToken());
 
+        if (selling != null)
+        {
+            marketplaces = marketplaces.Where(m => m.IsSelling(selling.Value));
+        }
+
+        if (buying != null)
+        {
+            marketplaces = marketplaces.Where(m => m.IsBuying(buying.Value));
+        }
+
         var location = context.BindingContext.ParseResult.GetValueForOption(MarketsCommand.NearestToOption);
         Domain.Waypoints.Waypoint? relativeWaypoint = null;
         if (location != null)
@@ -24,16 +34,6 @@ internal class MarketsCommandHandler(ISpaceTradersClient client) : CommandHandle
 
         await foreach (var market in marketplaces)
         {
-            if (selling != null && !market.Exports.Any(e => e.Symbol == selling.Value))
-            {
-                continue;
-            }
-
-            if (buying != null && !market.Imports.Any(i => i.Symbol == buying.Value))
-            {
-                continue;
-            }
-
             MarketplaceFormatter.WriteMarketplace(market, relativeWaypoint?.Location);
             Console.WriteLine();
         }

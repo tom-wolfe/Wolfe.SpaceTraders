@@ -73,7 +73,7 @@ internal class SpaceTradersClient(
     public async Task<Marketplace?> GetMarketplace(WaypointSymbol waypointId, CancellationToken cancellationToken = default)
     {
         var cached = await dataClient.GetMarketplace(waypointId, cancellationToken);
-        if (cached.IsValid())
+        if (cached != null)
         {
             return cached.Item;
         }
@@ -90,12 +90,29 @@ internal class SpaceTradersClient(
 
     public async IAsyncEnumerable<Marketplace> GetMarketplaces(SystemSymbol systemId, [EnumeratorCancellation] CancellationToken cancellationToken = default)
     {
-        var waypoints = GetWaypoints(systemId, cancellationToken)
-            .WhereAwait(m => ValueTask.FromResult(m.HasTrait(WaypointTraitSymbol.Marketplace)));
+        var cached = dataClient.GetMarketplaces(systemId, cancellationToken);
+        if (cached != null)
+        {
+            await foreach (var marketplace in cached)
+            {
+                yield return marketplace.Item;
+            }
+            yield break;
+        }
+
+        var waypoints = GetWaypoints(systemId, cancellationToken);
         await foreach (var waypoint in waypoints)
         {
-            yield return await GetMarketplace(waypoint.Symbol, cancellationToken)
-                ?? throw new Exception("Unable to find marketplace.");
+            if (!waypoint.HasTrait(WaypointTraitSymbol.Marketplace))
+            {
+                continue;
+            }
+
+            var market = await GetMarketplace(waypoint.Symbol, cancellationToken);
+            if (market == null) { continue; }
+
+            await dataClient.AddMarketplace(market, cancellationToken);
+            yield return market;
         }
     }
 
@@ -122,19 +139,28 @@ internal class SpaceTradersClient(
 
     public async Task<Waypoint?> GetWaypoint(WaypointSymbol waypointId, CancellationToken cancellationToken = default)
     {
+        var cached = await dataClient.GetWaypoint(waypointId, cancellationToken);
+        if (cached != null)
+        {
+            return cached.Item;
+        }
+
         var response = await apiClient.GetWaypoint(waypointId.System.Value, waypointId.Value, cancellationToken);
         if (response.StatusCode == HttpStatusCode.NotFound) { return null; }
-        return response.GetContent().Data.ToDomain();
+        var waypoint = response.GetContent().Data.ToDomain();
+
+        await dataClient.AddWaypoint(waypoint, cancellationToken);
+        return waypoint;
     }
 
     public async IAsyncEnumerable<Waypoint> GetWaypoints(SystemSymbol systemId, [EnumeratorCancellation] CancellationToken cancellationToken = default)
     {
-        var cached = await dataClient.GetWaypoints(systemId, cancellationToken);
-        if (cached.IsValid())
+        var cached = dataClient.GetWaypoints(systemId, cancellationToken);
+        if (cached != null)
         {
-            foreach (var waypoint in cached.Items)
+            await foreach (var waypoint in cached)
             {
-                yield return waypoint;
+                yield return waypoint.Item;
             }
             yield break;
         }
@@ -144,10 +170,9 @@ internal class SpaceTradersClient(
         ).SelectAwait(s => ValueTask.FromResult(s.ToDomain()))
         .ToListAsync(cancellationToken);
 
-        await dataClient.AddWaypoints(systemId, waypoints, cancellationToken);
-
         foreach (var waypoint in waypoints)
         {
+            await dataClient.AddWaypoint(waypoint, cancellationToken);
             yield return waypoint;
         }
     }
