@@ -1,18 +1,18 @@
 ﻿using System.CommandLine.Invocation;
 using Wolfe.SpaceTraders.Cli.Extensions;
 using Wolfe.SpaceTraders.Cli.Formatters;
-using Wolfe.SpaceTraders.Service;
+using Wolfe.SpaceTraders.Domain.Ships;
 
 namespace Wolfe.SpaceTraders.Cli.Commands.Ship;
 
-internal class ShipCommandHandler(ISpaceTradersClient client) : CommandHandler
+internal class ShipCommandHandler(IShipClient shipClient) : CommandHandler
 {
     public override async Task<int> InvokeAsync(InvocationContext context)
     {
         var shipId = context.BindingContext.ParseResult.GetValueForArgument(ShipCommand.ShipIdArgument);
         try
         {
-            var ship = await client.GetShip(shipId, context.GetCancellationToken())
+            var ship = await shipClient.GetShip(shipId, context.GetCancellationToken())
                        ?? throw new Exception($"Ship '{shipId}' not found.");
             ShipFormatter.WriteShip(ship);
             Console.WriteLine();

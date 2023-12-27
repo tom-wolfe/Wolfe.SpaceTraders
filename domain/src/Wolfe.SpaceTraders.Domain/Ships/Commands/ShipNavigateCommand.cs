@@ -1,6 +1,6 @@
 ﻿using Wolfe.SpaceTraders.Domain.Waypoints;
 
-namespace Wolfe.SpaceTraders.Service.Commands;
+namespace Wolfe.SpaceTraders.Domain.Ships.Commands;
 
 public class ShipNavigateCommand
 {

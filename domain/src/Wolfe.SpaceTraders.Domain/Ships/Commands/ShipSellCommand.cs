@@ -1,6 +1,6 @@
 ﻿using Wolfe.SpaceTraders.Domain.Marketplace;
 
-namespace Wolfe.SpaceTraders.Service.Commands;
+namespace Wolfe.SpaceTraders.Domain.Ships.Commands;
 
 public class ShipSellCommand
 {

@@ -33,10 +33,10 @@ internal class ProcurementContractMission(Ship ship, Contract contract)
             .ExceptBy(contractGoods, y => y.Id);
 
         // TODO: Sell what we can, and dump the rest.
-        //foreach (var item in itemsToRemove)
-        //{
-        //    await ship.Cargo.Jettison(item.Id, item.Quantity);
-        //}
+        foreach (var item in itemsToRemove)
+        {
+            await ship.Cargo.Jettison(item.Id, item.Quantity);
+        }
     }
 
     private async Task AcquireContractGoods()

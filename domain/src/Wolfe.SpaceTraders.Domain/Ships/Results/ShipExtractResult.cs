@@ -1,7 +1,6 @@
 ﻿using Wolfe.SpaceTraders.Domain.Extraction;
-using Wolfe.SpaceTraders.Domain.Ships;
 
-namespace Wolfe.SpaceTraders.Service.Results;
+namespace Wolfe.SpaceTraders.Domain.Ships.Results;
 
 public class ShipExtractResult
 {

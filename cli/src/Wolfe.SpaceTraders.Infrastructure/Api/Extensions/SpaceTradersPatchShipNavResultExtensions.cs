@@ -1,4 +1,5 @@
 ﻿using Wolfe.SpaceTraders.Domain.Navigation;
+using Wolfe.SpaceTraders.Domain.Ships.Results;
 using Wolfe.SpaceTraders.Domain.Systems;
 using Wolfe.SpaceTraders.Domain.Waypoints;
 using Wolfe.SpaceTraders.Sdk.Models.Ships;

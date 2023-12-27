@@ -1,11 +1,11 @@
 ﻿using Humanizer;
 using System.CommandLine.Invocation;
 using Wolfe.SpaceTraders.Cli.Extensions;
-using Wolfe.SpaceTraders.Service;
+using Wolfe.SpaceTraders.Domain.Ships;
 
 namespace Wolfe.SpaceTraders.Cli.Commands.Ship.Navigate;
 
-internal class ShipNavigateCommandHandler(ISpaceTradersClient client) : CommandHandler
+internal class ShipNavigateCommandHandler(IShipClient shipClient) : CommandHandler
 {
     public override async Task<int> InvokeAsync(InvocationContext context)
     {
@@ -14,15 +14,15 @@ internal class ShipNavigateCommandHandler(ISpaceTradersClient client) : CommandH
         var speed = context.BindingContext.ParseResult.GetValueForOption(ShipNavigateCommand.SpeedOption);
         if (speed != null)
         {
-            await client.SetShipSpeed(shipId, speed.Value, context.GetCancellationToken());
+            await shipClient.SetSpeed(shipId, speed.Value, context.GetCancellationToken());
             Console.WriteLine($"Engine has been set to {speed.Value.Value.Color(ConsoleColors.Status)} speed.");
         }
 
-        var request = new Service.Commands.ShipNavigateCommand
+        var request = new Domain.Ships.Commands.ShipNavigateCommand
         {
             WaypointId = waypointId
         };
-        var response = await client.ShipNavigate(shipId, request, context.GetCancellationToken());
+        var response = await shipClient.Navigate(shipId, request, context.GetCancellationToken());
         Console.WriteLine("Your ship is now in transit.".Color(ConsoleColors.Success));
         Console.WriteLine($"Expected to arrive {response.Navigation.Route.Arrival.Humanize()}.");
         Console.WriteLine();

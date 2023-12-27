@@ -1,15 +1,15 @@
 ﻿using System.CommandLine.Invocation;
 using Wolfe.SpaceTraders.Cli.Extensions;
-using Wolfe.SpaceTraders.Service;
+using Wolfe.SpaceTraders.Domain.Ships;
 
 namespace Wolfe.SpaceTraders.Cli.Commands.Ship.Orbit;
 
-internal class ShipOrbitCommandHandler(ISpaceTradersClient client) : CommandHandler
+internal class ShipOrbitCommandHandler(IShipClient shipClient) : CommandHandler
 {
     public override async Task<int> InvokeAsync(InvocationContext context)
     {
         var shipId = context.BindingContext.ParseResult.GetValueForArgument(ShipOrbitCommand.ShipIdArgument);
-        await client.ShipOrbit(shipId, context.GetCancellationToken());
+        await shipClient.Orbit(shipId, context.GetCancellationToken());
 
         Console.WriteLine("Your ship is now in orbit.".Color(ConsoleColors.Success));
         Console.WriteLine();

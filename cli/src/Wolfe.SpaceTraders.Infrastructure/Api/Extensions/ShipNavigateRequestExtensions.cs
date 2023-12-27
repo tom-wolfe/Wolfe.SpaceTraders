@@ -1,5 +1,5 @@
-﻿using Wolfe.SpaceTraders.Sdk.Requests;
-using Wolfe.SpaceTraders.Service.Commands;
+﻿using Wolfe.SpaceTraders.Domain.Ships.Commands;
+using Wolfe.SpaceTraders.Sdk.Requests;
 
 namespace Wolfe.SpaceTraders.Infrastructure.Api.Extensions;
 

@@ -2,7 +2,7 @@
 using Wolfe.SpaceTraders.Domain.Systems;
 using Wolfe.SpaceTraders.Domain.Waypoints;
 
-namespace Wolfe.SpaceTraders.Service.Results;
+namespace Wolfe.SpaceTraders.Domain.Ships.Results;
 
 public class SetShipSpeedResult
 {
