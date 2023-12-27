@@ -1,5 +1,4 @@
-﻿using System.Net;
-using Wolfe.SpaceTraders.Domain.Navigation;
+﻿using Wolfe.SpaceTraders.Domain.Navigation;
 using Wolfe.SpaceTraders.Domain.Ships;
 using Wolfe.SpaceTraders.Domain.Ships.Commands;
 using Wolfe.SpaceTraders.Domain.Ships.Results;
@@ -11,18 +10,14 @@ namespace Wolfe.SpaceTraders.Infrastructure;
 
 internal class SpaceTradersShipClient(ISpaceTradersApiClient apiClient) : IShipClient
 {
-    public async Task<Ship?> GetShip(ShipId shipId, CancellationToken cancellationToken = default)
-    {
-        var response = await apiClient.GetShip(shipId.Value, cancellationToken);
-        if (response.StatusCode == HttpStatusCode.NotFound) { return null; }
-        return response.GetContent().Data.ToDomain(this);
-    }
-
     public async Task<SetShipSpeedResult> SetSpeed(ShipId shipId, FlightSpeed speed, CancellationToken cancellationToken = default)
     {
         var request = new SpaceTradersPatchShipNavRequest { FlightMode = speed.Value };
         var response = await apiClient.PatchShipNav(shipId.Value, request, cancellationToken);
-        return response.GetContent().Data.ToDomain();
+        return new SetShipSpeedResult
+        {
+            Navigation = response.GetContent().Data.ToDomain()
+        };
     }
 
     public async Task<ShipDockResult> Dock(ShipId shipId, CancellationToken cancellationToken = default)
@@ -34,7 +29,7 @@ internal class SpaceTradersShipClient(ISpaceTradersApiClient apiClient) : IShipC
     public async Task<ShipExtractResult> Extract(ShipId shipId, CancellationToken cancellationToken)
     {
         var response = await apiClient.ShipExtract(shipId.Value, cancellationToken);
-        return response.GetContent().Data.ToDomain(this);
+        return response.GetContent().Data.ToDomain();
     }
 
     public async Task<ShipNavigateResult> Navigate(ShipId shipId, ShipNavigateCommand command, CancellationToken cancellationToken = default)
@@ -63,6 +58,6 @@ internal class SpaceTradersShipClient(ISpaceTradersApiClient apiClient) : IShipC
             Quantity = command.Quantity
         };
         var response = await apiClient.ShipSell(shipId.Value, request, cancellationToken);
-        return response.GetContent().Data.ToDomain(this);
+        return response.GetContent().Data.ToDomain();
     }
 }

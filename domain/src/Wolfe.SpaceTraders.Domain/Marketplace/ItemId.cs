@@ -4,7 +4,7 @@ namespace Wolfe.SpaceTraders.Domain.Marketplace;
 
 [StronglyTypedId]
 [DebuggerDisplay("{Value}")]
-public partial struct TradeId
+public partial struct ItemId
 {
 
 }

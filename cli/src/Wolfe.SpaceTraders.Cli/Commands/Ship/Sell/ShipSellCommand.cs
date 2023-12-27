@@ -13,9 +13,9 @@ internal static class ShipSellCommand
         description: "The ID of the ship to sell cargo from."
     );
 
-    public static readonly Argument<TradeId> ItemIdArgument = new(
+    public static readonly Argument<ItemId> ItemIdArgument = new(
         name: "item",
-        parse: r => new TradeId(r.Tokens[0].Value),
+        parse: r => new ItemId(r.Tokens[0].Value),
         description: "The item to sell."
     );
 

@@ -2,5 +2,5 @@
 
 public class ShipDockResult
 {
-    public required Navigation.Navigation Navigation { get; set; }
+    public required Navigation.Navigation Navigation { get; init; }
 }

@@ -10,8 +10,8 @@ public class Contract
     public bool Accepted { get; init; }
     public DateTimeOffset DeadlineToAccept { get; init; }
 
-    public IEnumerable<ContractGood> GetOutstandingItems() =>
-        Terms.Deliver.Where(d => d.QuantityRemaining > 0);
+    public IEnumerable<ContractItem> GetOutstandingItems() =>
+        Terms.Items.Where(d => d.QuantityRemaining > 0);
 
     public bool IsComplete() => Accepted && !GetOutstandingItems().Any();
 }

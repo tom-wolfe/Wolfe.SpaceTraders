@@ -5,7 +5,7 @@ namespace Wolfe.SpaceTraders.Domain.Ships.Results;
 
 public class ShipRefuelResult
 {
-    public required Agent Agent { get; set; }
-    public required ShipFuel Fuel { get; set; }
-    public required Transaction Transaction { get; set; }
+    public required Agent Agent { get; init; }
+    public required ShipFuel Fuel { get; init; }
+    public required Transaction Transaction { get; init; }
 }

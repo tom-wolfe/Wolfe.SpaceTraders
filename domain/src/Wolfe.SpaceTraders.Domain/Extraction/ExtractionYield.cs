@@ -4,6 +4,6 @@ namespace Wolfe.SpaceTraders.Domain.Extraction;
 
 public class ExtractionYield
 {
-    public TradeId TradeId { get; init; }
+    public ItemId ItemId { get; init; }
     public int Quantity { get; init; }
 }

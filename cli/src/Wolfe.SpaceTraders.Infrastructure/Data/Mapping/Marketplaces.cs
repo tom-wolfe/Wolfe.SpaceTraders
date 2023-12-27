@@ -33,14 +33,14 @@ internal static class Marketplaces
 
     private static DataMarketplaceItem ToData(this MarketplaceItem item) => new()
     {
-        Id = item.TradeId.Value,
+        Id = item.ItemId.Value,
         Name = item.Name,
         Description = item.Description,
     };
 
     private static MarketplaceItem ToDomain(this DataMarketplaceItem item) => new()
     {
-        TradeId = new TradeId(item.Id),
+        ItemId = new ItemId(item.Id),
         Name = item.Name,
         Description = item.Description,
     };

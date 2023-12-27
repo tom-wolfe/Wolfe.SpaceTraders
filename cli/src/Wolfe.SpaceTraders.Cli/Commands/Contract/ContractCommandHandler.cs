@@ -31,12 +31,12 @@ internal class ContractCommandHandler(ISpaceTradersClient client) : CommandHandl
             var payment = $"{contract.Terms.Payment.OnAccepted}/{contract.Terms.Payment.OnFulfilled} ({(contract.Terms.Payment.OnAccepted + contract.Terms.Payment.OnFulfilled)})".Color(ConsoleColors.Currency);
             Console.WriteLine($" - Payment: {payment}");
             Console.WriteLine($" - Deliver: ");
-            foreach (var deliver in contract.Terms.Deliver)
+            foreach (var deliver in contract.Terms.Items)
             {
-                Console.WriteLine($"   - Trade: {deliver.TradeId.Value.Color(ConsoleColors.Code)}");
+                Console.WriteLine($"   - Trade: {deliver.ItemId.Value.Color(ConsoleColors.Code)}");
                 Console.WriteLine($"   - Destination: {deliver.DestinationId.Value.Color(ConsoleColors.Code)}");
                 Console.WriteLine($"   - QuantityRemaining: {deliver.QuantityFulfilled}/{deliver.QuantityRequired}");
-                if (deliver != contract.Terms.Deliver.Last()) { Console.WriteLine(); }
+                if (deliver != contract.Terms.Items.Last()) { Console.WriteLine(); }
             }
 
             return ExitCodes.Success;

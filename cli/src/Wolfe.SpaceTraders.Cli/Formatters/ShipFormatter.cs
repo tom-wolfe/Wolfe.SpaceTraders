@@ -9,7 +9,7 @@ internal static class ShipFormatter
 {
     public static void WriteShip(Ship ship)
     {
-        Console.WriteLine($"~ {ship.Id.Value.Color(ConsoleColors.Id)} ({ship.Registration.Role.Value.Color(ConsoleColors.Category)}) [{ship.Navigation.Status.Value.Color(ConsoleColors.Status)}]");
+        Console.WriteLine($"~ {ship.Id.Value.Color(ConsoleColors.Id)} ({ship.Role.Value.Color(ConsoleColors.Category)}) [{ship.Navigation.Status.Value.Color(ConsoleColors.Status)}]");
         Console.WriteLine($"  Location: {ship.Navigation.WaypointId.Value.Color(ConsoleColors.Code)}");
 
         if (ship.Navigation.Status == NavigationStatus.InTransit)
@@ -26,7 +26,7 @@ internal static class ShipFormatter
         if (ship.Cargo.Capacity > 0)
         {
             Console.WriteLine($"  Cargo: {ship.Cargo.Quantity}/{ship.Cargo.Capacity} ({ship.Cargo.PercentRemaining}%)");
-            foreach (var item in ship.Cargo.Inventory)
+            foreach (var item in ship.Cargo.Items)
             {
                 Console.WriteLine($"  - {item.Quantity} {item.Name.Color(ConsoleColors.Information)} ({item.Id.Value.Color(ConsoleColors.Code)})");
             }

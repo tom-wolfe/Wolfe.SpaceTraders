@@ -2,5 +2,5 @@
 
 public class ShipOrbitResult
 {
-    public required Navigation.Navigation Navigation { get; set; }
+    public required Navigation.Navigation Navigation { get; init; }
 }

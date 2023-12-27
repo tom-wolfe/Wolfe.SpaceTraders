@@ -6,7 +6,6 @@ namespace Wolfe.SpaceTraders.Domain.Ships;
 
 public interface IShipClient
 {
-    public Task<Ship?> GetShip(ShipId shipId, CancellationToken cancellationToken = default);
     public Task<ShipDockResult> Dock(ShipId shipId, CancellationToken cancellationToken = default);
     public Task<ShipExtractResult> Extract(ShipId shipId, CancellationToken cancellationToken = default);
     public Task<ShipNavigateResult> Navigate(ShipId shipId, ShipNavigateCommand command, CancellationToken cancellationToken = default);

@@ -13,18 +13,18 @@ internal static class MarketsCommand
         description: "The ID of the system to list markets for."
     );
 
-    public static readonly Option<TradeId?> BuyingOption = new(
+    public static readonly Option<ItemId?> BuyingOption = new(
         aliases: ["-b", "--buying"],
-        parseArgument: r => new TradeId(r.Tokens[0].Value),
+        parseArgument: r => new ItemId(r.Tokens[0].Value),
         description: "The items that the markets must buy."
     )
     {
         IsRequired = false
     };
 
-    public static readonly Option<TradeId?> SellingOption = new(
+    public static readonly Option<ItemId?> SellingOption = new(
         aliases: ["-s", "--selling"],
-        parseArgument: r => new TradeId(r.Tokens[0].Value),
+        parseArgument: r => new ItemId(r.Tokens[0].Value),
         description: "The items that the market must sell."
     )
     {

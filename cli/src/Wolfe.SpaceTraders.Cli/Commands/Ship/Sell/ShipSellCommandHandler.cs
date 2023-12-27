@@ -1,10 +1,10 @@
 ﻿using System.CommandLine.Invocation;
 using Wolfe.SpaceTraders.Cli.Extensions;
-using Wolfe.SpaceTraders.Domain.Ships;
+using Wolfe.SpaceTraders.Domain.Fleet;
 
 namespace Wolfe.SpaceTraders.Cli.Commands.Ship.Sell;
 
-internal class ShipSellCommandHandler(IShipClient shipClient) : CommandHandler
+internal class ShipSellCommandHandler(IFleetClient fleetClient) : CommandHandler
 {
     public override async Task<int> InvokeAsync(InvocationContext context)
     {
@@ -12,14 +12,12 @@ internal class ShipSellCommandHandler(IShipClient shipClient) : CommandHandler
         var itemId = context.BindingContext.ParseResult.GetValueForArgument(ShipSellCommand.ItemIdArgument);
         var quantity = context.BindingContext.ParseResult.GetValueForArgument(ShipSellCommand.QuantityArgument);
 
-        var request = new Domain.Ships.Commands.ShipSellCommand
-        {
-            ItemId = itemId,
-            Quantity = quantity,
-        };
-        var result = await shipClient.Sell(shipId, request, context.GetCancellationToken());
-        var t = result.Transaction;
-        Console.WriteLine($"Sold {t.Quantity} {t.TradeId.ToString().Color(ConsoleColors.Code)} for {t.TotalPrice.ToString().Color(ConsoleColors.Currency)}");
+        var ship = await fleetClient.GetShip(shipId, context.GetCancellationToken())
+                   ?? throw new Exception($"Ship {shipId} could not be found.");
+
+        var transaction = await ship.Sell(itemId, quantity, context.GetCancellationToken());
+
+        Console.WriteLine($"Sold {transaction.Quantity} {transaction.ItemId.ToString().Color(ConsoleColors.Code)} for {transaction.TotalPrice.ToString().Color(ConsoleColors.Currency)}");
         Console.WriteLine("Sale concluded successfully.".Color(ConsoleColors.Success));
 
         Console.WriteLine();

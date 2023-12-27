@@ -1,10 +1,10 @@
 ﻿using System.CommandLine.Invocation;
 using Wolfe.SpaceTraders.Cli.Formatters;
-using Wolfe.SpaceTraders.Service;
+using Wolfe.SpaceTraders.Domain.Fleet;
 
 namespace Wolfe.SpaceTraders.Cli.Commands.Ships;
 
-internal class ShipsCommandHandler(ISpaceTradersClient client) : CommandHandler
+internal class ShipsCommandHandler(IFleetClient client) : CommandHandler
 {
     public override async Task<int> InvokeAsync(InvocationContext context)
     {

@@ -4,6 +4,6 @@ namespace Wolfe.SpaceTraders.Domain.Ships.Commands;
 
 public class ShipSellCommand
 {
-    public required TradeId ItemId { get; set; }
-    public required int Quantity { get; set; }
+    public required ItemId ItemId { get; init; }
+    public required int Quantity { get; init; }
 }

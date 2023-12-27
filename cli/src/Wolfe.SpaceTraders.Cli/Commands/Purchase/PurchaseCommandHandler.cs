@@ -1,15 +1,15 @@
 ﻿using System.CommandLine.Invocation;
 using Wolfe.SpaceTraders.Cli.Extensions;
-using Wolfe.SpaceTraders.Service;
+using Wolfe.SpaceTraders.Domain.Fleet;
 using Wolfe.SpaceTraders.Service.Commands;
 
 namespace Wolfe.SpaceTraders.Cli.Commands.Purchase;
 
 internal class PurchaseCommandHandler : CommandHandler
 {
-    private readonly ISpaceTradersClient _client;
+    private readonly IFleetClient _client;
 
-    public PurchaseCommandHandler(ISpaceTradersClient client)
+    public PurchaseCommandHandler(IFleetClient client)
     {
         _client = client;
     }
@@ -26,7 +26,7 @@ internal class PurchaseCommandHandler : CommandHandler
                 ShipType = shipType,
                 WaypointId = waypointId
             };
-            var response = await _client.PurchaseShip(request, context.GetCancellationToken());
+            await _client.PurchaseShip(request, context.GetCancellationToken());
 
             Console.WriteLine("Purchased ship successfully".Color(ConsoleColors.Success));
 

@@ -7,7 +7,7 @@ internal static class SpaceTradersMarketItemExtensions
 {
     public static MarketplaceItem ToDomain(this SpaceTradersMarketplaceItem item) => new()
     {
-        TradeId = new TradeId(item.Symbol),
+        ItemId = new ItemId(item.Symbol),
         Name = item.Name,
         Description = item.Description
     };

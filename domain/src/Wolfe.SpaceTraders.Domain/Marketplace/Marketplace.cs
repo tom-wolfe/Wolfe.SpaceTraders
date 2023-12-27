@@ -8,6 +8,6 @@ public class Marketplace : Waypoint
     public required List<MarketplaceItem> Exports { get; init; } = [];
     public required List<MarketplaceItem> Exchange { get; init; } = [];
 
-    public bool IsBuying(TradeId tradeId) => Imports.Any(e => e.TradeId == tradeId);
-    public bool IsSelling(TradeId tradeId) => Exports.Any(e => e.TradeId == tradeId);
+    public bool IsBuying(ItemId itemId) => Imports.Any(e => e.ItemId == itemId);
+    public bool IsSelling(ItemId itemId) => Exports.Any(e => e.ItemId == itemId);
 }

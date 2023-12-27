@@ -18,19 +18,19 @@ internal static class MarketplaceFormatter
         Console.WriteLine("  Imports:");
         foreach (var item in marketplace.Imports)
         {
-            Console.WriteLine($"  - {item.Name.Color(ConsoleColors.Information)} ({item.TradeId.Value.Color(ConsoleColors.Code)})");
+            Console.WriteLine($"  - {item.Name.Color(ConsoleColors.Information)} ({item.ItemId.Value.Color(ConsoleColors.Code)})");
         }
 
         Console.WriteLine("  Exports:");
         foreach (var item in marketplace.Exports)
         {
-            Console.WriteLine($"  - {item.Name.Color(ConsoleColors.Information)} ({item.TradeId.Value.Color(ConsoleColors.Code)})");
+            Console.WriteLine($"  - {item.Name.Color(ConsoleColors.Information)} ({item.ItemId.Value.Color(ConsoleColors.Code)})");
         }
 
         Console.WriteLine("  Exchange:");
         foreach (var item in marketplace.Exchange)
         {
-            Console.WriteLine($"  - {item.Name.Color(ConsoleColors.Information)} ({item.TradeId.Value.Color(ConsoleColors.Code)})");
+            Console.WriteLine($"  - {item.Name.Color(ConsoleColors.Information)} ({item.ItemId.Value.Color(ConsoleColors.Code)})");
         }
     }
 }

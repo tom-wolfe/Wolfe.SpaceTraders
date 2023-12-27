@@ -5,6 +5,6 @@ namespace Wolfe.SpaceTraders.Service.Results;
 
 public class AcceptContractResult
 {
-    public required Agent Agent { get; set; }
-    public required Contract Contract { get; set; }
+    public required Agent Agent { get; init; }
+    public required Contract Contract { get; init; }
 }

@@ -5,6 +5,6 @@ namespace Wolfe.SpaceTraders.Service.Commands;
 
 public class PurchaseShipCommand
 {
-    public required ShipType ShipType { get; set; }
-    public required WaypointId WaypointId { get; set; }
+    public required ShipType ShipType { get; init; }
+    public required WaypointId WaypointId { get; init; }
 }

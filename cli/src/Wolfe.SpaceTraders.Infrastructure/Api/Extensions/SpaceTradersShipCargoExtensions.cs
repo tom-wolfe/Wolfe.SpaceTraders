@@ -5,10 +5,10 @@ namespace Wolfe.SpaceTraders.Infrastructure.Api.Extensions;
 
 internal static class SpaceTradersShipCargoExtensions
 {
-    public static ShipCargo ToDomain(this SpaceTradersShipCargo cargo, IShipClient client) => new(client)
+    public static ShipCargo ToDomain(this SpaceTradersShipCargo cargo) => new()
     {
         Quantity = cargo.Units,
         Capacity = cargo.Capacity,
-        Inventory = cargo.Inventory.Select(i => i.ToDomain()).ToList()
+        Items = cargo.Inventory.Select(i => i.ToDomain()).ToList()
     };
 }

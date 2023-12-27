@@ -1,4 +1,5 @@
-﻿using Wolfe.SpaceTraders.Domain.Ships;
+﻿using Wolfe.SpaceTraders.Domain.Fleet;
+using Wolfe.SpaceTraders.Domain.Ships;
 using Wolfe.SpaceTraders.Infrastructure.Data;
 using Wolfe.SpaceTraders.Infrastructure.Token;
 using Wolfe.SpaceTraders.Sdk;
@@ -26,6 +27,7 @@ public static class ServiceCollectionExtensions
                 };
             })
             .AddSingleton<ISpaceTradersClient, SpaceTradersClient>()
+            .AddSingleton<IFleetClient, SpaceTradersFleetClient>()
             .AddSingleton<IShipClient, SpaceTradersShipClient>()
             .AddSingleton<ISpaceTradersDataClient, SpaceTradersFileSystemDataClient>()
             .AddSingleton<ITokenService, FileTokenService>();

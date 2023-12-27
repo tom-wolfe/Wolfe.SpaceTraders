@@ -7,10 +7,10 @@ namespace Wolfe.SpaceTraders.Infrastructure.Api.Extensions;
 
 internal static class SpaceTradersContractDeliverGoodExtensions
 {
-    public static ContractGood ToDomain(this SpaceTradersContractGood good) => new()
+    public static ContractItem ToDomain(this SpaceTradersContractGood good) => new()
     {
         DestinationId = new WaypointId(good.DestinationSymbol),
-        TradeId = new TradeId(good.TradeSymbol),
+        ItemId = new ItemId(good.TradeSymbol),
         QuantityFulfilled = good.UnitsFulfilled,
         QuantityRequired = good.UnitsRequired,
     };

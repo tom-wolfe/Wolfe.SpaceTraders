@@ -15,8 +15,7 @@ internal static class SpaceTradersTransactionExtensions
         WaypointId = new WaypointId(transaction.WaypointSymbol),
         Type = new TransactionType(transaction.Type),
         PricePerUnit = new Credits(transaction.PricePerUnit),
-        TotalPrice = new Credits(transaction.TotalPrice),
-        TradeId = new TradeId(transaction.TradeSymbol),
+        ItemId = new ItemId(transaction.TradeSymbol),
         Quantity = transaction.Units,
     };
 }

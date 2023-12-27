@@ -11,4 +11,5 @@ public record Credits(long Value)
 
     public static Credits operator +(Credits left, Credits right) => new(left.Value + right.Value);
     public static Credits operator -(Credits left, Credits right) => new(left.Value - right.Value);
+    public static Credits operator *(Credits left, int right) => new(left.Value * right);
 }
