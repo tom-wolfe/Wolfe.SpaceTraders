@@ -1,35 +1,21 @@
-﻿using Humanizer;
-using System.CommandLine.Invocation;
-using Wolfe.SpaceTraders.Cli.Extensions;
+﻿using System.CommandLine.Invocation;
+using Wolfe.SpaceTraders.Cli.Formatters;
 using Wolfe.SpaceTraders.Service;
 
 namespace Wolfe.SpaceTraders.Cli.Commands.Contracts;
 
 internal class ContractsCommandHandler(IContractService service) : CommandHandler
 {
-    public override Task<int> InvokeAsync(InvocationContext context)
+    public override async Task<int> InvokeAsync(InvocationContext context)
     {
         var contracts = service
-            .GetContracts(context.GetCancellationToken())
-            .ToBlockingEnumerable(context.GetCancellationToken())
-            .ToList();
+            .GetContracts(context.GetCancellationToken());
 
-        foreach (var contract in contracts)
+        await foreach (var contract in contracts)
         {
-            Console.WriteLine($"ID: {contract.Id.Value.Color(ConsoleColors.Id)}");
-            Console.WriteLine($"Type: {contract.Type.Value.Color(ConsoleColors.Category)}");
-            Console.WriteLine($"Accepted?: {contract.Accepted.Humanize()}");
-            Console.WriteLine($"Fulfilled?: {contract.Fulfilled.Humanize()}");
-            if (!contract.Accepted)
-            {
-                Console.WriteLine($"Accept Deadline: {contract.DeadlineToAccept.Humanize()}");
-            }
-
-            if (contract != contracts.Last())
-            {
-                Console.WriteLine();
-            }
+            ContractFormatter.WriteContract(contract);
+            Console.WriteLine();
         }
-        return Task.FromResult(ExitCodes.Success);
+        return ExitCodes.Success;
     }
 }

@@ -1,6 +1,6 @@
-﻿using Humanizer;
-using System.CommandLine.Invocation;
+﻿using System.CommandLine.Invocation;
 using Wolfe.SpaceTraders.Cli.Extensions;
+using Wolfe.SpaceTraders.Cli.Formatters;
 using Wolfe.SpaceTraders.Service;
 
 namespace Wolfe.SpaceTraders.Cli.Commands.Contract;
@@ -16,28 +16,7 @@ internal class ContractCommandHandler(IContractService service) : CommandHandler
             var contract = await service.GetContract(id, context.GetCancellationToken())
                 ?? throw new Exception($"Contract '{id}' not found.");
 
-            Console.WriteLine($"ID: {contract.Id.Value.Color(ConsoleColors.Id)}");
-            Console.WriteLine($"Type: {contract.Type.Value.Color(ConsoleColors.Category)}");
-            Console.WriteLine($"Faction: {contract.FactionId.Value.Color(ConsoleColors.Code)}");
-            Console.WriteLine($"Accepted?: {contract.Accepted.Humanize()}");
-            Console.WriteLine($"Fulfilled?: {contract.Fulfilled.Humanize()}");
-            if (!contract.Accepted)
-            {
-                Console.WriteLine($"Accept Deadline: {contract.DeadlineToAccept.Humanize()}");
-            }
-
-            Console.WriteLine($"Terms:");
-            Console.WriteLine($" - Deadline: {contract.Terms.Deadline.Humanize()}");
-            var payment = $"{contract.Terms.Payment.OnAccepted}/{contract.Terms.Payment.OnFulfilled} ({(contract.Terms.Payment.OnAccepted + contract.Terms.Payment.OnFulfilled)})".Color(ConsoleColors.Currency);
-            Console.WriteLine($" - Payment: {payment}");
-            Console.WriteLine($" - Deliver: ");
-            foreach (var deliver in contract.Terms.Items)
-            {
-                Console.WriteLine($"   - Trade: {deliver.ItemId.Value.Color(ConsoleColors.Code)}");
-                Console.WriteLine($"   - Destination: {deliver.DestinationId.Value.Color(ConsoleColors.Code)}");
-                Console.WriteLine($"   - QuantityRemaining: {deliver.QuantityFulfilled}/{deliver.QuantityRequired}");
-                if (deliver != contract.Terms.Items.Last()) { Console.WriteLine(); }
-            }
+            ContractFormatter.WriteContract(contract);
 
             return ExitCodes.Success;
         }
