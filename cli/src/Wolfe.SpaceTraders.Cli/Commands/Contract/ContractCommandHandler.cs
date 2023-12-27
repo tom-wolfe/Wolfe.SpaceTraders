@@ -1,11 +1,11 @@
 ﻿using Humanizer;
 using System.CommandLine.Invocation;
 using Wolfe.SpaceTraders.Cli.Extensions;
-using Wolfe.SpaceTraders.Service;
+using Wolfe.SpaceTraders.Domain.Contracts;
 
 namespace Wolfe.SpaceTraders.Cli.Commands.Contract;
 
-internal class ContractCommandHandler(ISpaceTradersClient client) : CommandHandler
+internal class ContractCommandHandler(IContractService service) : CommandHandler
 {
     public override async Task<int> InvokeAsync(InvocationContext context)
     {
@@ -13,7 +13,7 @@ internal class ContractCommandHandler(ISpaceTradersClient client) : CommandHandl
 
         try
         {
-            var contract = await client.GetContract(id, context.GetCancellationToken())
+            var contract = await service.GetContract(id, context.GetCancellationToken())
                 ?? throw new Exception($"Contract '{id}' not found.");
 
             Console.WriteLine($"ID: {contract.Id.Value.Color(ConsoleColors.Id)}");

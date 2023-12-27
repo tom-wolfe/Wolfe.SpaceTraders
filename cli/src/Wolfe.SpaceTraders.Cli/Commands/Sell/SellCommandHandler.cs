@@ -4,7 +4,7 @@ using Wolfe.SpaceTraders.Domain.Fleet;
 
 namespace Wolfe.SpaceTraders.Cli.Commands.Sell;
 
-internal class SellCommandHandler(IFleetClient fleetClient) : CommandHandler
+internal class SellCommandHandler(IShipService shipService) : CommandHandler
 {
     public override async Task<int> InvokeAsync(InvocationContext context)
     {
@@ -12,7 +12,7 @@ internal class SellCommandHandler(IFleetClient fleetClient) : CommandHandler
         var itemId = context.BindingContext.ParseResult.GetValueForArgument(SellCommand.ItemIdArgument);
         var quantity = context.BindingContext.ParseResult.GetValueForArgument(SellCommand.QuantityArgument);
 
-        var ship = await fleetClient.GetShip(shipId, context.GetCancellationToken())
+        var ship = await shipService.GetShip(shipId, context.GetCancellationToken())
                    ?? throw new Exception($"Ship {shipId} could not be found.");
 
         var transaction = await ship.Sell(itemId, quantity, context.GetCancellationToken());

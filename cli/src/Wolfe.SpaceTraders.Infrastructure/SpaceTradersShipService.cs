@@ -10,10 +10,10 @@ using Wolfe.SpaceTraders.Service.Results;
 
 namespace Wolfe.SpaceTraders.Infrastructure;
 
-internal class SpaceTradersFleetClient(
+internal class SpaceTradersShipService(
     ISpaceTradersApiClient apiClient,
     IShipClient shipClient
-) : IFleetClient
+) : IShipService
 {
     public async Task<Ship?> GetShip(ShipId shipId, CancellationToken cancellationToken = default)
     {

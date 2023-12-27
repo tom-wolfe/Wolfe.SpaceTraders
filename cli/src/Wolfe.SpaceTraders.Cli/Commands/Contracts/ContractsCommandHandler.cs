@@ -1,15 +1,15 @@
 ﻿using Humanizer;
 using System.CommandLine.Invocation;
 using Wolfe.SpaceTraders.Cli.Extensions;
-using Wolfe.SpaceTraders.Service;
+using Wolfe.SpaceTraders.Domain.Contracts;
 
 namespace Wolfe.SpaceTraders.Cli.Commands.Contracts;
 
-internal class ContractsCommandHandler(ISpaceTradersClient client) : CommandHandler
+internal class ContractsCommandHandler(IContractService service) : CommandHandler
 {
     public override Task<int> InvokeAsync(InvocationContext context)
     {
-        var contracts = client
+        var contracts = service
             .GetContracts(context.GetCancellationToken())
             .ToBlockingEnumerable(context.GetCancellationToken())
             .ToList();

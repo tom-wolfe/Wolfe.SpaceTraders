@@ -7,9 +7,9 @@ namespace Wolfe.SpaceTraders.Cli.Commands.Purchase;
 
 internal class PurchaseCommandHandler : CommandHandler
 {
-    private readonly IFleetClient _client;
+    private readonly IShipService _client;
 
-    public PurchaseCommandHandler(IFleetClient client)
+    public PurchaseCommandHandler(IShipService client)
     {
         _client = client;
     }

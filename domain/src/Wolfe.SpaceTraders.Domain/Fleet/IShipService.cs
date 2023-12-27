@@ -4,7 +4,7 @@ using Wolfe.SpaceTraders.Service.Results;
 
 namespace Wolfe.SpaceTraders.Domain.Fleet;
 
-public interface IFleetClient
+public interface IShipService
 {
     public Task<Ship?> GetShip(ShipId shipId, CancellationToken cancellationToken = default);
     public IAsyncEnumerable<Ship> GetShips(CancellationToken cancellationToken = default);

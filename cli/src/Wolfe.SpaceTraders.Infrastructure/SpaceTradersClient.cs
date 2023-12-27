@@ -11,7 +11,6 @@ using Wolfe.SpaceTraders.Infrastructure.Api;
 using Wolfe.SpaceTraders.Infrastructure.Api.Extensions;
 using Wolfe.SpaceTraders.Infrastructure.Data;
 using Wolfe.SpaceTraders.Sdk;
-using Wolfe.SpaceTraders.Sdk.Models.Contracts;
 using Wolfe.SpaceTraders.Sdk.Models.Systems;
 using Wolfe.SpaceTraders.Service;
 using Wolfe.SpaceTraders.Service.Commands;
@@ -22,33 +21,14 @@ namespace Wolfe.SpaceTraders.Infrastructure;
 internal class SpaceTradersClient(
     ISpaceTradersApiClient apiClient,
     ISpaceTradersDataClient dataClient,
-    IShipClient shipClient
+    IShipClient shipClient,
+    IContractClient contractClient
 ) : ISpaceTradersClient
 {
-    public async Task<AcceptContractResult> AcceptContract(ContractId contractId, CancellationToken cancellationToken = default)
-    {
-        var response = await apiClient.AcceptContract(contractId.Value, cancellationToken);
-        return response.GetContent().Data.ToDomain();
-    }
-
     public async Task<Agent> GetAgent(CancellationToken cancellationToken = default)
     {
         var response = await apiClient.GetAgent(cancellationToken);
         return response.GetContent().Data.ToDomain();
-    }
-
-    public async Task<Contract?> GetContract(ContractId contractId, CancellationToken cancellationToken = default)
-    {
-        var response = await apiClient.GetContract(contractId.Value, cancellationToken);
-        if (response.StatusCode == HttpStatusCode.NotFound) { return null; }
-        return response.GetContent().Data.ToDomain();
-    }
-
-    public IAsyncEnumerable<Contract> GetContracts(CancellationToken cancellationToken = default)
-    {
-        return PaginationHelpers.ToAsyncEnumerable<SpaceTradersContract>(
-            async p => (await apiClient.GetContracts(20, p, cancellationToken)).GetContent()
-        ).SelectAwait(c => ValueTask.FromResult(c.ToDomain()));
     }
 
     public async Task<Shipyard?> GetShipyard(WaypointId waypointId, CancellationToken cancellationToken = default)
@@ -163,6 +143,6 @@ internal class SpaceTradersClient(
     public async Task<RegisterResult> Register(RegisterCommand command, CancellationToken cancellationToken = default)
     {
         var response = await apiClient.Register(command.ToApi(), cancellationToken);
-        return response.GetContent().Data.ToDomain(shipClient);
+        return response.GetContent().Data.ToDomain(shipClient, contractClient);
     }
 }

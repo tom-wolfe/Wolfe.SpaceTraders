@@ -1,11 +1,14 @@
 ﻿using System.CommandLine.Invocation;
 using Wolfe.SpaceTraders.Cli.Extensions;
+using Wolfe.SpaceTraders.Domain.Contracts;
 using Wolfe.SpaceTraders.Domain.Fleet;
-using Wolfe.SpaceTraders.Service;
 
 namespace Wolfe.SpaceTraders.Cli.Commands.Mission;
 
-internal class MissionCommandHandler(ISpaceTradersClient client, IFleetClient fleetClient) : CommandHandler
+internal class MissionCommandHandler(
+    IContractService contractService,
+    IShipService shipService
+) : CommandHandler
 {
     public override async Task<int> InvokeAsync(InvocationContext context)
     {
@@ -14,10 +17,10 @@ internal class MissionCommandHandler(ISpaceTradersClient client, IFleetClient fl
 
         try
         {
-            var ship = await fleetClient.GetShip(shipId, context.GetCancellationToken())
+            var ship = await shipService.GetShip(shipId, context.GetCancellationToken())
                 ?? throw new Exception($"Ship '{shipId}' not found.");
 
-            var contract = await client.GetContract(contractId, context.GetCancellationToken())
+            var contract = await contractService.GetContract(contractId, context.GetCancellationToken())
                 ?? throw new Exception($"Contract '{contractId}' not found.");
 
             var mission = new ProcurementContractMission(ship, contract);

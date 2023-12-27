@@ -4,13 +4,13 @@ using Wolfe.SpaceTraders.Domain.Fleet;
 
 namespace Wolfe.SpaceTraders.Cli.Commands.Orbit;
 
-internal class OrbitCommandHandler(IFleetClient fleetClient) : CommandHandler
+internal class OrbitCommandHandler(IShipService shipService) : CommandHandler
 {
     public override async Task<int> InvokeAsync(InvocationContext context)
     {
         var shipId = context.BindingContext.ParseResult.GetValueForArgument(OrbitCommand.ShipIdArgument);
 
-        var ship = await fleetClient.GetShip(shipId, context.GetCancellationToken())
+        var ship = await shipService.GetShip(shipId, context.GetCancellationToken())
             ?? throw new Exception($"Ship {shipId} could not be found.");
 
         await ship.Orbit(context.GetCancellationToken());
