@@ -1,15 +1,38 @@
 ﻿using System.CommandLine.Builder;
+using System.CommandLine.Invocation;
 using System.CommandLine.IO;
 using System.CommandLine.Parsing;
-using Wolfe.SpaceTraders.Cli;
+using System.Reflection;
 using Wolfe.SpaceTraders.Cli.Commands;
 using Wolfe.SpaceTraders.Cli.Extensions;
+using Wolfe.SpaceTraders.Infrastructure;
 using Wolfe.SpaceTraders.Sdk;
+using Wolfe.SpaceTraders.Service;
 
-var configuration = Configuration.CreateConfiguration();
-var services = Configuration.CreateServices(configuration);
+var configuration = new ConfigurationBuilder()
+    .AddJsonFile("appsettings.json")
+    .Build();
 
-var rootCommand = RootCommand.CreateCommand(services);
+var services = new ServiceCollection()
+    .AddLogging(builder => builder
+        .AddConfiguration(configuration.GetSection("Logging"))
+        .AddJsonFile()
+    )
+    .AddInfrastructureLayer(configuration)
+    .AddServiceLayer(configuration);
+
+var handlers = Assembly
+    .GetExecutingAssembly()
+    .GetTypes()
+    .Where(t => t.IsAssignableTo(typeof(ICommandHandler)) && !t.IsAbstract).ToList();
+foreach (var handler in handlers)
+{
+    services.AddTransient(handler, handler);
+}
+
+var provider = services.BuildServiceProvider();
+
+var rootCommand = RootCommand.CreateCommand(provider);
 var parser = new CommandLineBuilder(rootCommand)
     .UseHelp()
     .UseVersionOption()
