@@ -1,19 +1,12 @@
 ﻿using System.CommandLine.Invocation;
 using Wolfe.SpaceTraders.Cli.Extensions;
 using Wolfe.SpaceTraders.Domain.Fleet;
-using Wolfe.SpaceTraders.Service.Commands;
+using Wolfe.SpaceTraders.Domain.Fleet.Commands;
 
 namespace Wolfe.SpaceTraders.Cli.Commands.Purchase;
 
-internal class PurchaseCommandHandler : CommandHandler
+internal class PurchaseCommandHandler(IFleetService fleetService) : CommandHandler
 {
-    private readonly IShipService _client;
-
-    public PurchaseCommandHandler(IShipService client)
-    {
-        _client = client;
-    }
-
     public override async Task<int> InvokeAsync(InvocationContext context)
     {
         var waypointId = context.BindingContext.ParseResult.GetValueForArgument(PurchaseCommand.ShipyardIdArgument);
@@ -26,7 +19,7 @@ internal class PurchaseCommandHandler : CommandHandler
                 ShipType = shipType,
                 WaypointId = waypointId
             };
-            await _client.PurchaseShip(request, context.GetCancellationToken());
+            await fleetService.PurchaseShip(request, context.GetCancellationToken());
 
             Console.WriteLine("Purchased ship successfully".Color(ConsoleColors.Success));
 

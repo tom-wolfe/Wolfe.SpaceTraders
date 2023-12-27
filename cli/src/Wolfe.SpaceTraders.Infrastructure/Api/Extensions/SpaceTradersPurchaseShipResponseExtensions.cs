@@ -1,6 +1,6 @@
-﻿using Wolfe.SpaceTraders.Domain.Ships;
+﻿using Wolfe.SpaceTraders.Domain.Fleet.Results;
+using Wolfe.SpaceTraders.Domain.Ships;
 using Wolfe.SpaceTraders.Sdk.Responses;
-using Wolfe.SpaceTraders.Service.Results;
 
 namespace Wolfe.SpaceTraders.Infrastructure.Api.Extensions;
 

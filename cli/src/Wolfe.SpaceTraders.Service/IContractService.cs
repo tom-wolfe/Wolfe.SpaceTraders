@@ -1,4 +1,6 @@
-﻿namespace Wolfe.SpaceTraders.Domain.Contracts;
+﻿using Wolfe.SpaceTraders.Domain.Contracts;
+
+namespace Wolfe.SpaceTraders.Service;
 
 public interface IContractService
 {

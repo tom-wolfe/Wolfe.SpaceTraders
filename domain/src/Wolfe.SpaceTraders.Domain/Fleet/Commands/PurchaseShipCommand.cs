@@ -1,7 +1,7 @@
 ﻿using Wolfe.SpaceTraders.Domain.Ships;
 using Wolfe.SpaceTraders.Domain.Waypoints;
 
-namespace Wolfe.SpaceTraders.Service.Commands;
+namespace Wolfe.SpaceTraders.Domain.Fleet.Commands;
 
 public class PurchaseShipCommand
 {

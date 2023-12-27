@@ -31,6 +31,7 @@ public static class ServiceCollectionExtensions
             .AddSingleton<ISpaceTradersDataClient, SpaceTradersFileSystemDataClient>()
             .AddSingleton<IContractClient, SpaceTradersContractClient>()
             .AddSingleton<IContractService, SpaceTradersContractService>()
+            .AddSingleton<IFleetService, SpaceTradersFleetService>()
             .AddSingleton<IShipClient, SpaceTradersShipClient>()
             .AddSingleton<IShipService, SpaceTradersShipService>()
             .AddSingleton<ITokenService, FileTokenService>();

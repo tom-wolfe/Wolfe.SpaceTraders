@@ -1,6 +1,6 @@
 ﻿using Wolfe.SpaceTraders.Domain.Contracts;
+using Wolfe.SpaceTraders.Domain.Contracts.Results;
 using Wolfe.SpaceTraders.Sdk.Models.Contracts;
-using Wolfe.SpaceTraders.Service.Results;
 
 namespace Wolfe.SpaceTraders.Infrastructure.Api.Extensions;
 

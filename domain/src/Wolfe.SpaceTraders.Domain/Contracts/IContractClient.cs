@@ -1,4 +1,4 @@
-﻿using Wolfe.SpaceTraders.Service.Results;
+﻿using Wolfe.SpaceTraders.Domain.Contracts.Results;
 
 namespace Wolfe.SpaceTraders.Domain.Contracts;
 

@@ -1,7 +1,6 @@
 ﻿using Wolfe.SpaceTraders.Domain.Agents;
-using Wolfe.SpaceTraders.Domain.Contracts;
 
-namespace Wolfe.SpaceTraders.Service.Results;
+namespace Wolfe.SpaceTraders.Domain.Contracts.Results;
 
 public class AcceptContractResult
 {

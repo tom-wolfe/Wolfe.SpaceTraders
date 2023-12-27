@@ -2,7 +2,7 @@
 using Wolfe.SpaceTraders.Domain.Ships;
 using Wolfe.SpaceTraders.Domain.Shipyards;
 
-namespace Wolfe.SpaceTraders.Service.Results;
+namespace Wolfe.SpaceTraders.Domain.Fleet.Results;
 
 public class PurchaseShipResult
 {

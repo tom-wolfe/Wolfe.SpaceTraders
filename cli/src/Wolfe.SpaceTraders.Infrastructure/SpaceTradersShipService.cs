@@ -1,12 +1,12 @@
 ﻿using System.Net;
-using Wolfe.SpaceTraders.Domain.Fleet;
+using Wolfe.SpaceTraders.Domain.Fleet.Commands;
+using Wolfe.SpaceTraders.Domain.Fleet.Results;
 using Wolfe.SpaceTraders.Domain.Ships;
 using Wolfe.SpaceTraders.Infrastructure.Api;
 using Wolfe.SpaceTraders.Infrastructure.Api.Extensions;
 using Wolfe.SpaceTraders.Sdk;
 using Wolfe.SpaceTraders.Sdk.Models.Ships;
-using Wolfe.SpaceTraders.Service.Commands;
-using Wolfe.SpaceTraders.Service.Results;
+using Wolfe.SpaceTraders.Service;
 
 namespace Wolfe.SpaceTraders.Infrastructure;
 
