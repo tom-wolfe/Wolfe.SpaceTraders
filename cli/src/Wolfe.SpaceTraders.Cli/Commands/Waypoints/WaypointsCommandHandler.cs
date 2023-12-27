@@ -4,7 +4,7 @@ using Wolfe.SpaceTraders.Service;
 
 namespace Wolfe.SpaceTraders.Cli.Commands.Waypoints;
 
-internal class WaypointsCommandHandler(ISpaceTradersClient client) : CommandHandler
+internal class WaypointsCommandHandler(IExplorationService client) : CommandHandler
 {
     public override async Task<int> InvokeAsync(InvocationContext context)
     {

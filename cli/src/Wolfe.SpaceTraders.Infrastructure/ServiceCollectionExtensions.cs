@@ -27,8 +27,9 @@ public static class ServiceCollectionExtensions
                     return token ?? throw new InvalidOperationException("Missing API token.");
                 };
             })
-            .AddSingleton<ISpaceTradersClient, SpaceTradersClient>()
             .AddSingleton<ISpaceTradersDataClient, SpaceTradersFileSystemDataClient>()
+            .AddSingleton<IAgentService, SpaceTradersAgentService>()
+            .AddSingleton<IExplorationService, SpaceTradersExplorationService>()
             .AddSingleton<IContractClient, SpaceTradersContractClient>()
             .AddSingleton<IContractService, SpaceTradersContractService>()
             .AddSingleton<IFleetService, SpaceTradersFleetService>()

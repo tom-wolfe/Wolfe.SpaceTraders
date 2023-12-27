@@ -6,9 +6,9 @@ namespace Wolfe.SpaceTraders.Cli.Commands.Systems;
 
 internal class SystemsCommandHandler : CommandHandler
 {
-    private readonly ISpaceTradersClient _client;
+    private readonly IExplorationService _client;
 
-    public SystemsCommandHandler(ISpaceTradersClient client)
+    public SystemsCommandHandler(IExplorationService client)
     {
         _client = client;
     }

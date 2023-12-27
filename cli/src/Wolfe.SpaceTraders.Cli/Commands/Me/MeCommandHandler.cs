@@ -4,11 +4,11 @@ using Wolfe.SpaceTraders.Service;
 
 namespace Wolfe.SpaceTraders.Cli.Commands.Me;
 
-internal class MeCommandHandler(ISpaceTradersClient client) : CommandHandler
+internal class MeCommandHandler(IAgentService agentService) : CommandHandler
 {
     public override async Task<int> InvokeAsync(InvocationContext context)
     {
-        var agent = await client.GetAgent(context.GetCancellationToken());
+        var agent = await agentService.GetAgent(context.GetCancellationToken());
 
         Console.WriteLine($"~ {agent.Id.Value.Color(ConsoleColors.Code)}");
         Console.WriteLine($"  Account Id: {agent.AccountId.Value.Color(ConsoleColors.Id)}");

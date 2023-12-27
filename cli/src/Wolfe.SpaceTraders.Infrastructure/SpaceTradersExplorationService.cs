@@ -1,9 +1,6 @@
 ﻿using System.Net;
 using System.Runtime.CompilerServices;
-using Wolfe.SpaceTraders.Domain.Agents;
-using Wolfe.SpaceTraders.Domain.Contracts;
 using Wolfe.SpaceTraders.Domain.Marketplace;
-using Wolfe.SpaceTraders.Domain.Ships;
 using Wolfe.SpaceTraders.Domain.Shipyards;
 using Wolfe.SpaceTraders.Domain.Systems;
 using Wolfe.SpaceTraders.Domain.Waypoints;
@@ -13,24 +10,14 @@ using Wolfe.SpaceTraders.Infrastructure.Data;
 using Wolfe.SpaceTraders.Sdk;
 using Wolfe.SpaceTraders.Sdk.Models.Systems;
 using Wolfe.SpaceTraders.Service;
-using Wolfe.SpaceTraders.Service.Commands;
-using Wolfe.SpaceTraders.Service.Results;
 
 namespace Wolfe.SpaceTraders.Infrastructure;
 
-internal class SpaceTradersClient(
+internal class SpaceTradersExplorationService(
     ISpaceTradersApiClient apiClient,
-    ISpaceTradersDataClient dataClient,
-    IShipClient shipClient,
-    IContractClient contractClient
-) : ISpaceTradersClient
+    ISpaceTradersDataClient dataClient
+) : IExplorationService
 {
-    public async Task<Agent> GetAgent(CancellationToken cancellationToken = default)
-    {
-        var response = await apiClient.GetAgent(cancellationToken);
-        return response.GetContent().Data.ToDomain();
-    }
-
     public async Task<Shipyard?> GetShipyard(WaypointId waypointId, CancellationToken cancellationToken = default)
     {
         var waypoint = await GetWaypoint(waypointId, cancellationToken);
@@ -138,11 +125,5 @@ internal class SpaceTradersClient(
             await dataClient.AddWaypoint(waypoint, cancellationToken);
             yield return waypoint;
         }
-    }
-
-    public async Task<RegisterResult> Register(RegisterCommand command, CancellationToken cancellationToken = default)
-    {
-        var response = await apiClient.Register(command.ToApi(), cancellationToken);
-        return response.GetContent().Data.ToDomain(shipClient, contractClient);
     }
 }
