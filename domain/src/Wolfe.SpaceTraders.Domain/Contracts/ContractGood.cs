@@ -5,8 +5,9 @@ namespace Wolfe.SpaceTraders.Domain.Contracts;
 
 public class ContractGood
 {
-    public required TradeSymbol TradeSymbol { get; init; }
-    public required WaypointSymbol DestinationSymbol { get; init; }
-    public int UnitsRequired { get; init; }
-    public int UnitsFulfilled { get; init; }
+    public required TradeId TradeId { get; init; }
+    public required WaypointId DestinationId { get; init; }
+    public int QuantityRequired { get; init; }
+    public int QuantityFulfilled { get; init; }
+    public int QuantityRemaining => QuantityRequired - QuantityFulfilled;
 }

@@ -10,20 +10,20 @@ internal class RegisterCommandHandler(ISpaceTradersClient client, ITokenService 
 {
     public override async Task<int> InvokeAsync(InvocationContext context)
     {
-        var symbol = context.BindingContext.ParseResult.GetValueForArgument(RegisterCommand.SymbolArgument);
+        var agentId = context.BindingContext.ParseResult.GetValueForArgument(RegisterCommand.AgentIdArgument);
         var faction = context.BindingContext.ParseResult.GetValueForOption(RegisterCommand.FactionOption);
         var email = context.BindingContext.ParseResult.GetValueForOption(RegisterCommand.EmailOption);
 
         var request = new Service.Commands.RegisterCommand
         {
-            Symbol = symbol,
-            Faction = faction ?? FactionSymbol.Cosmic, // Default faction.
+            Agent = agentId,
+            Faction = faction ?? FactionId.Cosmic, // Default faction.
             Email = email
         };
         var response = await client.Register(request, context.GetCancellationToken());
         await token.Write(response.Token, context.GetCancellationToken());
 
-        Console.WriteLine($"Welcome, {response.Agent.Symbol}!".Color(ConsoleColors.Success));
+        Console.WriteLine($"Welcome, {response.Agent.Id}!".Color(ConsoleColors.Success));
 
         return ExitCodes.Success;
     }

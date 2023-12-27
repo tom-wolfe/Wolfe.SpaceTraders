@@ -7,7 +7,7 @@ internal static class SpaceTradersWaypointTraitExtensions
 {
     public static WaypointTrait ToDomain(this SpaceTradersWaypointTrait trait) => new()
     {
-        Symbol = new WaypointTraitSymbol(trait.Symbol),
+        Id = new WaypointTraitId(trait.Symbol),
         Name = trait.Name,
         Description = trait.Description,
     };

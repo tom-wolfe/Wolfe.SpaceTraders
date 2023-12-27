@@ -11,10 +11,10 @@ internal static class SpaceTradersShipyardTransactionExtensions
 {
     public static ShipyardTransaction ToDomain(this SpaceTradersShipyardTransaction transaction) => new()
     {
-        AgentSymbol = new AgentSymbol(transaction.AgentSymbol),
+        AgentId = new AgentId(transaction.AgentSymbol),
         Price = new Credits(transaction.Price),
-        ShipSymbol = new ShipSymbol(transaction.ShipSymbol),
+        ShipId = new ShipId(transaction.ShipSymbol),
         Timestamp = transaction.Timestamp,
-        WaypointSymbol = new WaypointSymbol(transaction.WaypointSymbol),
+        WaypointId = new WaypointId(transaction.WaypointSymbol),
     };
 }

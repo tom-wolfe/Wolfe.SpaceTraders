@@ -1,6 +1,4 @@
 ﻿namespace Wolfe.SpaceTraders.Domain.Systems;
 
 [StronglyTypedId]
-public partial struct SectorSymbol
-{
-}
+public partial struct SystemId;

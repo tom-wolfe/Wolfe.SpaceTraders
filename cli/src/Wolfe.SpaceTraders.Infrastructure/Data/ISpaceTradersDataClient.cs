@@ -8,8 +8,8 @@ internal interface ISpaceTradersDataClient
 {
     public Task AddMarketplace(Marketplace marketplace, CancellationToken cancellationToken = default);
     public Task AddWaypoint(Waypoint waypoint, CancellationToken cancellationToken = default);
-    public Task<DataItemResponse<Marketplace>?> GetMarketplace(WaypointSymbol marketplaceId, CancellationToken cancellationToken = default);
-    public IAsyncEnumerable<DataItemResponse<Marketplace>>? GetMarketplaces(SystemSymbol systemId, CancellationToken cancellationToken = default);
-    public Task<DataItemResponse<Waypoint>?> GetWaypoint(WaypointSymbol waypointId, CancellationToken cancellationToken = default);
-    public IAsyncEnumerable<DataItemResponse<Waypoint>>? GetWaypoints(SystemSymbol systemId, CancellationToken cancellationToken = default);
+    public Task<DataItemResponse<Marketplace>?> GetMarketplace(WaypointId marketplaceId, CancellationToken cancellationToken = default);
+    public IAsyncEnumerable<DataItemResponse<Marketplace>>? GetMarketplaces(SystemId systemId, CancellationToken cancellationToken = default);
+    public Task<DataItemResponse<Waypoint>?> GetWaypoint(WaypointId waypointId, CancellationToken cancellationToken = default);
+    public IAsyncEnumerable<DataItemResponse<Waypoint>>? GetWaypoints(SystemId systemId, CancellationToken cancellationToken = default);
 }

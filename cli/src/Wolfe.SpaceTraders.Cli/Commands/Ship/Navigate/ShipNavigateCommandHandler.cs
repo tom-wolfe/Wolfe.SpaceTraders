@@ -20,7 +20,7 @@ internal class ShipNavigateCommandHandler(ISpaceTradersClient client) : CommandH
 
         var request = new Service.Commands.ShipNavigateCommand
         {
-            WaypointSymbol = waypointId
+            WaypointId = waypointId
         };
         var response = await client.ShipNavigate(shipId, request, context.GetCancellationToken());
         Console.WriteLine("Your ship is now in transit.".Color(ConsoleColors.Success));

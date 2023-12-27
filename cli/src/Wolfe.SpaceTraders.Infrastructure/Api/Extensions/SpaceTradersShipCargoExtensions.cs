@@ -7,7 +7,7 @@ internal static class SpaceTradersShipCargoExtensions
 {
     public static ShipCargo ToDomain(this SpaceTradersShipCargo cargo) => new()
     {
-        Units = cargo.Units,
+        Quantity = cargo.Units,
         Capacity = cargo.Capacity,
         Inventory = cargo.Inventory.Select(i => i.ToDomain()).ToList()
     };

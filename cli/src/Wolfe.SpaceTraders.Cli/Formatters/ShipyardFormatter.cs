@@ -7,7 +7,7 @@ internal static class ShipyardFormatter
 {
     public static void WriteShipyard(Shipyard shipyard)
     {
-        Console.WriteLine($"~ {shipyard.Symbol.Value.Color(ConsoleColors.Id)}");
+        Console.WriteLine($"~ {shipyard.Id.Value.Color(ConsoleColors.Id)}");
 
         Console.WriteLine("  Ships:");
         foreach (var ship in shipyard.Ships)

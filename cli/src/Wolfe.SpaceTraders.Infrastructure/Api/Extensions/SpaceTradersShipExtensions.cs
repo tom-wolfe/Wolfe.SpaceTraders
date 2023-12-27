@@ -7,7 +7,7 @@ internal static class SpaceTradersShipExtensions
 {
     public static Ship ToDomain(this SpaceTradersShip ship) => new()
     {
-        Symbol = new ShipSymbol(ship.Symbol),
+        Id = new ShipId(ship.Symbol),
         Navigation = ship.Nav.ToDomain(),
         Registration = ship.Registration.ToDomain(),
         Fuel = ship.Fuel.ToDomain(),

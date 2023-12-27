@@ -2,10 +2,10 @@
 
 namespace Wolfe.SpaceTraders.Domain.Marketplace;
 
-[DebuggerDisplay("{Name} ({Symbol})")]
+[DebuggerDisplay("{Name} ({TradeId})")]
 public class MarketplaceItem
 {
-    public required TradeSymbol Symbol { get; init; }
+    public required TradeId TradeId { get; init; }
     public required string Name { get; init; }
     public required string Description { get; init; }
 }

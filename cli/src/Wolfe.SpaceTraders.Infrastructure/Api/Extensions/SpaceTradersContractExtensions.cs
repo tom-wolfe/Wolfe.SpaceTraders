@@ -9,7 +9,7 @@ internal static class SpaceTradersContractExtensions
     public static Contract ToDomain(this SpaceTradersContract contract) => new()
     {
         Id = new ContractId(contract.Id),
-        FactionSymbol = new FactionSymbol(contract.FactionSymbol),
+        FactionId = new FactionId(contract.FactionSymbol),
         Type = new ContractType(contract.Type),
         Terms = contract.Terms.ToDomain(),
         Fulfilled = contract.Fulfilled,

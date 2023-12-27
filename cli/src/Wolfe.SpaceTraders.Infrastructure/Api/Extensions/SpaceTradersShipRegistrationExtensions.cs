@@ -8,7 +8,7 @@ internal static class SpaceTradersShipRegistrationExtensions
 {
     public static ShipRegistration ToDomain(this SpaceTradersShipRegistration registration) => new()
     {
-        FactionSymbol = new FactionSymbol(registration.FactionSymbol),
+        FactionId = new FactionId(registration.FactionSymbol),
         Name = registration.Name,
         Role = new ShipRole(registration.Role),
     };

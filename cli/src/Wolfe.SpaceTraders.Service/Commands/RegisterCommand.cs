@@ -5,7 +5,7 @@ namespace Wolfe.SpaceTraders.Service.Commands;
 
 public class RegisterCommand
 {
-    public required FactionSymbol Faction { get; set; }
-    public required AgentSymbol Symbol { get; set; }
+    public required FactionId Faction { get; set; }
+    public required AgentId Agent { get; set; }
     public string? Email { get; set; }
 }

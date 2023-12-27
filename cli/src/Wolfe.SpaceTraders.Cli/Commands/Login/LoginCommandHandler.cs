@@ -13,7 +13,7 @@ internal class LoginCommandHandler(ITokenService token, ISpaceTradersClient clie
         await token.Write(token1, context.GetCancellationToken());
 
         var agent = await client.GetAgent(context.GetCancellationToken());
-        Console.WriteLine($"Welcome, {agent.Symbol}!".Color(ConsoleColors.Success));
+        Console.WriteLine($"Welcome, {agent.Id}!".Color(ConsoleColors.Success));
 
         return ExitCodes.Success;
     }

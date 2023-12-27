@@ -2,7 +2,7 @@
 
 public class Ship
 {
-    public required ShipSymbol Symbol { get; init; }
+    public required ShipId Id { get; init; }
     public required ShipRegistration Registration { get; init; }
     public required Navigation.Navigation Navigation { get; init; }
     public required ShipFuel Fuel { get; init; }

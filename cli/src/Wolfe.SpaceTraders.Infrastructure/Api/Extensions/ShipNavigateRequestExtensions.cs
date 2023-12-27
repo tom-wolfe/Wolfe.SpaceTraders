@@ -7,6 +7,6 @@ internal static class ShipNavigateRequestExtensions
 {
     public static SpaceTradersShipNavigateRequest ToApi(this ShipNavigateCommand command) => new()
     {
-        WaypointSymbol = command.WaypointSymbol.Value,
+        WaypointSymbol = command.WaypointId.Value,
     };
 }

@@ -7,7 +7,7 @@ internal static class RegisterRequestExtensions
 {
     public static SpaceTradersRegisterRequest ToApi(this RegisterCommand command) => new()
     {
-        Symbol = command.Symbol.Value,
+        Symbol = command.Agent.Value,
         Faction = command.Faction.Value,
         Email = command.Email
     };

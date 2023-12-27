@@ -1,6 +1,6 @@
 ﻿namespace Wolfe.SpaceTraders.Domain.Ships;
 
 [StronglyTypedId]
-public partial struct ShipSymbol
+public partial struct ShipId
 {
 }

@@ -20,38 +20,38 @@ internal class SpaceTradersFileSystemDataClient(IOptions<SpaceTradersDataOptions
 
     public Task AddMarketplace(Marketplace marketplace, CancellationToken cancellationToken = default)
     {
-        var file = Path.Combine(_options.MarketplacesDirectoryPath, $"{marketplace.SystemSymbol.Value}/{marketplace.Symbol.Value}.json");
+        var file = Path.Combine(_options.MarketplacesDirectoryPath, $"{marketplace.SystemId.Value}/{marketplace.Id.Value}.json");
         return AddItem(file, marketplace, m => m.ToData(), cancellationToken);
     }
 
     public Task AddWaypoint(Waypoint waypoint, CancellationToken cancellationToken = default)
     {
-        var file = Path.Combine(_options.WaypointsDirectoryPath, $"{waypoint.SystemSymbol.Value}/{waypoint.Symbol.Value}.json");
+        var file = Path.Combine(_options.WaypointsDirectoryPath, $"{waypoint.SystemId.Value}/{waypoint.Id.Value}.json");
         return AddItem(file, waypoint, m => m.ToData(), cancellationToken);
     }
 
-    public Task<DataItemResponse<Marketplace>?> GetMarketplace(WaypointSymbol marketplaceId, CancellationToken cancellationToken = default)
+    public Task<DataItemResponse<Marketplace>?> GetMarketplace(WaypointId marketplaceId, CancellationToken cancellationToken = default)
     {
         var file = Path.Combine(_options.MarketplacesDirectoryPath, $"{marketplaceId.System.Value}/{marketplaceId.Value}.json");
         return GetItem<Marketplace, DataMarketplace>(file, m => m.ToDomain(), cancellationToken);
     }
 
-    public IAsyncEnumerable<DataItemResponse<Marketplace>>? GetMarketplaces(SystemSymbol systemId, CancellationToken cancellationToken = default)
+    public IAsyncEnumerable<DataItemResponse<Marketplace>>? GetMarketplaces(SystemId systemId, CancellationToken cancellationToken = default)
     {
         var file = Path.Combine(_options.MarketplacesDirectoryPath, $"{systemId.Value}");
-        return GetList<Marketplace, DataMarketplace>(file, m => m.ToDomain(), w => w.SystemSymbol == systemId, cancellationToken);
+        return GetList<Marketplace, DataMarketplace>(file, m => m.ToDomain(), w => w.SystemId == systemId, cancellationToken);
     }
 
-    public Task<DataItemResponse<Waypoint>?> GetWaypoint(WaypointSymbol waypointId, CancellationToken cancellationToken = default)
+    public Task<DataItemResponse<Waypoint>?> GetWaypoint(WaypointId waypointId, CancellationToken cancellationToken = default)
     {
         var file = Path.Combine(_options.WaypointsDirectoryPath, $"{waypointId.System.Value}/{waypointId.Value}.json");
         return GetItem<Waypoint, DataWaypoint>(file, m => m.ToDomain(), cancellationToken);
     }
 
-    public IAsyncEnumerable<DataItemResponse<Waypoint>>? GetWaypoints(SystemSymbol systemId, CancellationToken cancellationToken = default)
+    public IAsyncEnumerable<DataItemResponse<Waypoint>>? GetWaypoints(SystemId systemId, CancellationToken cancellationToken = default)
     {
         var file = Path.Combine(_options.WaypointsDirectoryPath, $"{systemId.Value}");
-        return GetList<Waypoint, DataWaypoint>(file, w => w.ToDomain(), w => w.SystemSymbol == systemId, cancellationToken);
+        return GetList<Waypoint, DataWaypoint>(file, w => w.ToDomain(), w => w.SystemId == systemId, cancellationToken);
     }
 
     private Task AddItem<TDomain, TData>(string file, TDomain item, Func<TDomain, TData> map, CancellationToken cancellationToken = default)

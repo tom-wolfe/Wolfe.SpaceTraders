@@ -6,9 +6,9 @@ namespace Wolfe.SpaceTraders.Cli.Commands.Waypoints;
 
 internal static class WaypointsCommand
 {
-    public static readonly Argument<SystemSymbol> SystemIdArgument = new(
+    public static readonly Argument<SystemId> SystemIdArgument = new(
         name: "system-id",
-        parse: r => new SystemSymbol(string.Join(' ', r.Tokens.Select(t => t.Value))),
+        parse: r => new SystemId(string.Join(' ', r.Tokens.Select(t => t.Value))),
         description: "The ID of the system to list waypoints for."
     );
 
@@ -22,9 +22,9 @@ internal static class WaypointsCommand
         IsRequired = false
     };
 
-    public static readonly Option<WaypointTraitSymbol[]?> TraitsOption = new(
+    public static readonly Option<WaypointTraitId[]?> TraitsOption = new(
         aliases: ["-r", "--traits"],
-        parseArgument: r => r.Tokens.Select(t => new WaypointTraitSymbol(t.Value)).ToArray(),
+        parseArgument: r => r.Tokens.Select(t => new WaypointTraitId(t.Value)).ToArray(),
         description: "The traits to filter by."
     )
     {
@@ -32,9 +32,9 @@ internal static class WaypointsCommand
         IsRequired = false
     };
 
-    public static readonly Option<WaypointSymbol?> NearestToOption = new(
+    public static readonly Option<WaypointId?> NearestToOption = new(
         aliases: ["-n", "--nearest-to"],
-        parseArgument: r => new WaypointSymbol(r.Tokens[0].Value),
+        parseArgument: r => new WaypointId(r.Tokens[0].Value),
         description: "The location to show distance relative to."
     )
     {

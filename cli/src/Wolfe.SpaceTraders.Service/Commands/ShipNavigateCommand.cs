@@ -4,5 +4,5 @@ namespace Wolfe.SpaceTraders.Service.Commands;
 
 public class ShipNavigateCommand
 {
-    public required WaypointSymbol WaypointSymbol { get; set; }
+    public required WaypointId WaypointId { get; set; }
 }

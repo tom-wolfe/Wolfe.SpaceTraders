@@ -8,14 +8,14 @@ namespace Wolfe.SpaceTraders.Cli.Commands.Ship.Navigate;
 
 internal static class ShipNavigateCommand
 {
-    public static readonly Argument<ShipSymbol> ShipIdArgument = new(
+    public static readonly Argument<ShipId> ShipIdArgument = new(
         name: "ship-id",
-        parse: r => new ShipSymbol(r.Tokens[0].Value),
+        parse: r => new ShipId(r.Tokens[0].Value),
         description: "The ID of the ship to navigate."
     );
-    public static readonly Argument<WaypointSymbol> WaypointIdArgument = new(
+    public static readonly Argument<WaypointId> WaypointIdArgument = new(
         name: "waypoint-id",
-        parse: r => new WaypointSymbol(r.Tokens[0].Value),
+        parse: r => new WaypointId(r.Tokens[0].Value),
         description: "The ID of the waypoint to navigate to."
     );
 

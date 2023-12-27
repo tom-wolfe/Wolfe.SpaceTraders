@@ -5,7 +5,7 @@ namespace Wolfe.SpaceTraders.Cli.Commands.Waypoint;
 
 internal static class WaypointCommand
 {
-    public static readonly Argument<WaypointSymbol> WaypointIdArgument = new("waypoint-id", r => new WaypointSymbol(string.Join(' ', r.Tokens.Select(t => t.Value))));
+    public static readonly Argument<WaypointId> WaypointIdArgument = new("waypoint-id", r => new WaypointId(string.Join(' ', r.Tokens.Select(t => t.Value))));
 
     public static Command CreateCommand(IServiceProvider services)
     {

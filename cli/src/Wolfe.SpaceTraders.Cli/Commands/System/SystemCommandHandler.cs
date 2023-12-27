@@ -14,8 +14,8 @@ internal class SystemCommandHandler(ISpaceTradersClient client) : CommandHandler
             var system = await client.GetSystem(id, context.GetCancellationToken())
                 ?? throw new Exception($"System '{id}' not found.");
 
-            Console.WriteLine($"ID: {system.Symbol.Value.Color(ConsoleColors.Id)}");
-            Console.WriteLine($"Sector: {system.SectorSymbol.Value.Color(ConsoleColors.Id)}");
+            Console.WriteLine($"ID: {system.Id.Value.Color(ConsoleColors.Id)}");
+            Console.WriteLine($"Sector: {system.SectorId.Value.Color(ConsoleColors.Id)}");
             Console.WriteLine($"Type: {system.Type.Value.Color(ConsoleColors.Code)}");
             Console.WriteLine($"Location: {system.Location}");
 

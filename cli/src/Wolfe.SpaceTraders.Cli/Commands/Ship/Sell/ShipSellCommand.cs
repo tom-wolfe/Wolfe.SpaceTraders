@@ -7,15 +7,15 @@ namespace Wolfe.SpaceTraders.Cli.Commands.Ship.Sell;
 
 internal static class ShipSellCommand
 {
-    public static readonly Argument<ShipSymbol> ShipIdArgument = new(
+    public static readonly Argument<ShipId> ShipIdArgument = new(
         name: "ship",
-        parse: r => new ShipSymbol(r.Tokens[0].Value),
+        parse: r => new ShipId(r.Tokens[0].Value),
         description: "The ID of the ship to sell cargo from."
     );
 
-    public static readonly Argument<TradeSymbol> ItemIdArgument = new(
+    public static readonly Argument<TradeId> ItemIdArgument = new(
         name: "item",
-        parse: r => new TradeSymbol(r.Tokens[0].Value),
+        parse: r => new TradeId(r.Tokens[0].Value),
         description: "The item to sell."
     );
 

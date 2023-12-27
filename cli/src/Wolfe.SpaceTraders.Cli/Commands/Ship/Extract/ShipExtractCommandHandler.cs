@@ -12,7 +12,7 @@ internal class ShipExtractCommandHandler(ISpaceTradersClient client) : CommandHa
         var shipId = context.BindingContext.ParseResult.GetValueForArgument(ShipExtractCommand.ShipIdArgument);
         var result = await client.ShipExtract(shipId, context.GetCancellationToken());
 
-        Console.WriteLine($"Successfully extracted {result.Yield.Units} {result.Yield.Symbol.Value}.".Color(ConsoleColors.Success));
+        Console.WriteLine($"Successfully extracted {result.Yield.Quantity} {result.Yield.TradeId.Value}.".Color(ConsoleColors.Success));
         Console.WriteLine($"Next extraction possible in {result.Cooldown.Remaining.Humanize()}.".Color(ConsoleColors.Success));
         Console.WriteLine();
 

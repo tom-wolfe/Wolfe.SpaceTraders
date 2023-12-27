@@ -10,8 +10,8 @@ internal static class SpaceTradersPatchShipNavResultExtensions
 {
     public static SetShipSpeedResult ToDomain(this SpaceTradersPatchShipNavResult result) => new()
     {
-        SystemSymbol = new SystemSymbol(result.SystemSymbol),
-        WaypointSymbol = new WaypointSymbol(result.WaypointSymbol),
+        SystemId = new SystemId(result.SystemSymbol),
+        WaypointId = new WaypointId(result.WaypointSymbol),
         Status = new NavigationStatus(result.Status),
         Speed = new FlightSpeed(result.FlightMode),
         Route = result.Route.ToDomain()

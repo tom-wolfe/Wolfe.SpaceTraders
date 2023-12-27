@@ -8,10 +8,10 @@ internal static class SpaceTradersSystemExtensions
 {
     public static StarSystem ToDomain(this SpaceTradersSystem system) => new()
     {
-        Symbol = new SystemSymbol(system.Symbol),
+        Id = new SystemId(system.Symbol),
         Type = new SystemType(system.Type),
         Factions = system.Factions.Select(f => f.ToDomain()).ToList(),
-        SectorSymbol = new SectorSymbol(system.SectorSymbol),
+        SectorId = new SectorId(system.SectorSymbol),
         Waypoints = system.Waypoints.Select(w => w.ToDomain()).ToList(),
         Location = new Point(system.X, system.Y),
     };

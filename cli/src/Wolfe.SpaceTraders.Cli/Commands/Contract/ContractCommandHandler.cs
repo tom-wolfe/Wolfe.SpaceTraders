@@ -18,7 +18,7 @@ internal class ContractCommandHandler(ISpaceTradersClient client) : CommandHandl
 
             Console.WriteLine($"ID: {contract.Id.Value.Color(ConsoleColors.Id)}");
             Console.WriteLine($"Type: {contract.Type.Value.Color(ConsoleColors.Category)}");
-            Console.WriteLine($"Faction: {contract.FactionSymbol.Value.Color(ConsoleColors.Code)}");
+            Console.WriteLine($"Faction: {contract.FactionId.Value.Color(ConsoleColors.Code)}");
             Console.WriteLine($"Accepted?: {contract.Accepted.Humanize()}");
             Console.WriteLine($"Fulfilled?: {contract.Fulfilled.Humanize()}");
             if (!contract.Accepted)
@@ -33,9 +33,9 @@ internal class ContractCommandHandler(ISpaceTradersClient client) : CommandHandl
             Console.WriteLine($" - Deliver: ");
             foreach (var deliver in contract.Terms.Deliver)
             {
-                Console.WriteLine($"   - Trade: {deliver.TradeSymbol.Value.Color(ConsoleColors.Code)}");
-                Console.WriteLine($"   - Destination: {deliver.DestinationSymbol.Value.Color(ConsoleColors.Code)}");
-                Console.WriteLine($"   - Units: {deliver.UnitsFulfilled}/{deliver.UnitsRequired}");
+                Console.WriteLine($"   - Trade: {deliver.TradeId.Value.Color(ConsoleColors.Code)}");
+                Console.WriteLine($"   - Destination: {deliver.DestinationId.Value.Color(ConsoleColors.Code)}");
+                Console.WriteLine($"   - QuantityRemaining: {deliver.QuantityFulfilled}/{deliver.QuantityRequired}");
                 if (deliver != contract.Terms.Deliver.Last()) { Console.WriteLine(); }
             }
 

@@ -18,7 +18,7 @@ internal class SystemsCommandHandler : CommandHandler
         var response = _client.GetSystems(context.GetCancellationToken());
         await foreach (var system in response)
         {
-            Console.WriteLine($"ID: {system.Symbol.Value.Color(ConsoleColors.Id)}");
+            Console.WriteLine($"ID: {system.Id.Value.Color(ConsoleColors.Id)}");
             Console.WriteLine($"Type: {system.Type.Value.Color(ConsoleColors.Code)}");
         }
         return ExitCodes.Success;

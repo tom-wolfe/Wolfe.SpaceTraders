@@ -5,8 +5,8 @@ namespace Wolfe.SpaceTraders.Domain.Systems;
 
 public class StarSystem
 {
-    public required SystemSymbol Symbol { get; init; }
-    public required SectorSymbol SectorSymbol { get; init; }
+    public required SystemId Id { get; init; }
+    public required SectorId SectorId { get; init; }
     public required SystemType Type { get; init; }
     public required Point Location { get; init; }
     public required List<Waypoint> Waypoints { get; init; } = [];

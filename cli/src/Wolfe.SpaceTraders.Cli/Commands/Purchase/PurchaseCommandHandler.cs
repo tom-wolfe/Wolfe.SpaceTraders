@@ -24,7 +24,7 @@ internal class PurchaseCommandHandler : CommandHandler
             var request = new PurchaseShipCommand
             {
                 ShipType = shipType,
-                WaypointSymbol = waypointId
+                WaypointId = waypointId
             };
             var response = await _client.PurchaseShip(request, context.GetCancellationToken());
 

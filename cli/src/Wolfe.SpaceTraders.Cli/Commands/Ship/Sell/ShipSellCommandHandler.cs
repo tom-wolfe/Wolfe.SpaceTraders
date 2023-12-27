@@ -19,7 +19,7 @@ internal class ShipSellCommandHandler(ISpaceTradersClient client) : CommandHandl
         };
         var result = await client.ShipSell(shipId, request, context.GetCancellationToken());
         var t = result.Transaction;
-        Console.WriteLine($"Sold {t.Units} {t.TradeSymbol.ToString().Color(ConsoleColors.Code)} for {t.TotalPrice.ToString().Color(ConsoleColors.Currency)}");
+        Console.WriteLine($"Sold {t.Quantity} {t.TradeId.ToString().Color(ConsoleColors.Code)} for {t.TotalPrice.ToString().Color(ConsoleColors.Currency)}");
         Console.WriteLine("Sale concluded successfully.".Color(ConsoleColors.Success));
 
         Console.WriteLine();

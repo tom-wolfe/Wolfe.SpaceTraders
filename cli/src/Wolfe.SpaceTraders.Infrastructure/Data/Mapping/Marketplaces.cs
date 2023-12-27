@@ -9,9 +9,9 @@ internal static class Marketplaces
 {
     public static DataMarketplace ToData(this Marketplace marketplace) => new()
     {
-        Symbol = marketplace.Symbol.Value,
+        Id = marketplace.Id.Value,
         Type = marketplace.Type.Value,
-        System = marketplace.SystemSymbol.Value,
+        System = marketplace.SystemId.Value,
         Location = marketplace.Location.ToData(),
         Traits = marketplace.Traits.Select(t => t.ToData()).ToList(),
         Imports = marketplace.Imports.Select(i => i.ToData()).ToList(),
@@ -21,9 +21,9 @@ internal static class Marketplaces
 
     public static Marketplace ToDomain(this DataMarketplace marketplace) => new()
     {
-        Symbol = new WaypointSymbol(marketplace.Symbol),
+        Id = new WaypointId(marketplace.Id),
         Type = new WaypointType(marketplace.Type),
-        SystemSymbol = new SystemSymbol(marketplace.System),
+        SystemId = new SystemId(marketplace.System),
         Location = marketplace.Location.ToDomain(),
         Traits = marketplace.Traits.Select(t => t.ToDomain()).ToList(),
         Imports = marketplace.Imports.Select(i => i.ToDomain()).ToList(),
@@ -33,14 +33,14 @@ internal static class Marketplaces
 
     private static DataMarketplaceItem ToData(this MarketplaceItem item) => new()
     {
-        Symbol = item.Symbol.Value,
+        Id = item.TradeId.Value,
         Name = item.Name,
         Description = item.Description,
     };
 
     private static MarketplaceItem ToDomain(this DataMarketplaceItem item) => new()
     {
-        Symbol = new TradeSymbol(item.Symbol),
+        TradeId = new TradeId(item.Id),
         Name = item.Name,
         Description = item.Description,
     };
