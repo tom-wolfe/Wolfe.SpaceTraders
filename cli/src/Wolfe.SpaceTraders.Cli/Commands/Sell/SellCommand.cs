@@ -3,9 +3,9 @@ using Wolfe.SpaceTraders.Cli.Extensions;
 using Wolfe.SpaceTraders.Domain.Marketplace;
 using Wolfe.SpaceTraders.Domain.Ships;
 
-namespace Wolfe.SpaceTraders.Cli.Commands.Ship.Sell;
+namespace Wolfe.SpaceTraders.Cli.Commands.Sell;
 
-internal static class ShipSellCommand
+internal static class SellCommand
 {
     public static readonly Argument<ShipId> ShipIdArgument = new(
         name: "ship",
@@ -33,7 +33,7 @@ internal static class ShipSellCommand
         command.AddArgument(ShipIdArgument);
         command.AddArgument(ItemIdArgument);
         command.AddArgument(QuantityArgument);
-        command.SetProvidedHandler<ShipSellCommandHandler>(provider);
+        command.SetProvidedHandler<SellCommandHandler>(provider);
 
         return command;
     }

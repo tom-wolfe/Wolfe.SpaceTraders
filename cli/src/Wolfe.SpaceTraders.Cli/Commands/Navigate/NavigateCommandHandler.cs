@@ -3,19 +3,19 @@ using System.CommandLine.Invocation;
 using Wolfe.SpaceTraders.Cli.Extensions;
 using Wolfe.SpaceTraders.Domain.Fleet;
 
-namespace Wolfe.SpaceTraders.Cli.Commands.Ship.Navigate;
+namespace Wolfe.SpaceTraders.Cli.Commands.Navigate;
 
-internal class ShipNavigateCommandHandler(IFleetClient fleetClient) : CommandHandler
+internal class NavigateCommandHandler(IFleetClient fleetClient) : CommandHandler
 {
     public override async Task<int> InvokeAsync(InvocationContext context)
     {
-        var shipId = context.BindingContext.ParseResult.GetValueForArgument(ShipNavigateCommand.ShipIdArgument);
-        var waypointId = context.BindingContext.ParseResult.GetValueForArgument(ShipNavigateCommand.WaypointIdArgument);
+        var shipId = context.BindingContext.ParseResult.GetValueForArgument(NavigateCommand.ShipIdArgument);
+        var waypointId = context.BindingContext.ParseResult.GetValueForArgument(NavigateCommand.WaypointIdArgument);
 
         var ship = await fleetClient.GetShip(shipId, context.GetCancellationToken())
             ?? throw new Exception($"Ship {shipId.Value} could not be found.");
 
-        var speed = context.BindingContext.ParseResult.GetValueForOption(ShipNavigateCommand.SpeedOption);
+        var speed = context.BindingContext.ParseResult.GetValueForOption(NavigateCommand.SpeedOption);
         if (speed != null)
         {
             await ship.SetSpeed(speed.Value, context.GetCancellationToken());

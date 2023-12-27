@@ -2,13 +2,13 @@
 using Wolfe.SpaceTraders.Cli.Extensions;
 using Wolfe.SpaceTraders.Domain.Fleet;
 
-namespace Wolfe.SpaceTraders.Cli.Commands.Ship.Refuel;
+namespace Wolfe.SpaceTraders.Cli.Commands.Refuel;
 
-internal class ShipRefuelCommandHandler(IFleetClient fleetClient) : CommandHandler
+internal class RefuelCommandHandler(IFleetClient fleetClient) : CommandHandler
 {
     public override async Task<int> InvokeAsync(InvocationContext context)
     {
-        var shipId = context.BindingContext.ParseResult.GetValueForArgument(ShipRefuelCommand.ShipIdArgument);
+        var shipId = context.BindingContext.ParseResult.GetValueForArgument(RefuelCommand.ShipIdArgument);
         var ship = await fleetClient.GetShip(shipId, context.GetCancellationToken())
                    ?? throw new Exception($"Ship {shipId} could not be found.");
 

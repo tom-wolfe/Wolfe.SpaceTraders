@@ -4,9 +4,9 @@ using Wolfe.SpaceTraders.Domain.Navigation;
 using Wolfe.SpaceTraders.Domain.Ships;
 using Wolfe.SpaceTraders.Domain.Waypoints;
 
-namespace Wolfe.SpaceTraders.Cli.Commands.Ship.Navigate;
+namespace Wolfe.SpaceTraders.Cli.Commands.Navigate;
 
-internal static class ShipNavigateCommand
+internal static class NavigateCommand
 {
     public static readonly Argument<ShipId> ShipIdArgument = new(
         name: "ship-id",
@@ -38,7 +38,7 @@ internal static class ShipNavigateCommand
         command.AddArgument(ShipIdArgument);
         command.AddArgument(WaypointIdArgument);
         command.AddOption(SpeedOption);
-        command.SetProvidedHandler<ShipNavigateCommandHandler>(provider);
+        command.SetProvidedHandler<NavigateCommandHandler>(provider);
 
         return command;
     }
