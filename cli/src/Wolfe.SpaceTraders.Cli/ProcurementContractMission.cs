@@ -10,7 +10,7 @@ internal class ProcurementContractMission(Ship ship, Contract contract)
         while (!contract.IsComplete())
         {
             await ClearUnnecessaryItems();
-            await AcquireContractItems();
+            await ExtractContractItems();
             await DeliverContractItems();
         }
         await TurnInContract();
@@ -32,14 +32,15 @@ internal class ProcurementContractMission(Ship ship, Contract contract)
         var itemsToRemove = ship.Cargo.Items
             .ExceptBy(contractItems, i => i.Id);
 
-        // TODO: Sell what we can, and dump the rest.
+        // TODO: Instead of jettisoning, sell the items.
+
         foreach (var item in itemsToRemove)
         {
             await ship.Jettison(item.Id, item.Quantity);
         }
     }
 
-    private async Task AcquireContractItems()
+    private async Task ExtractContractItems()
     {
         Thread.Sleep(1000);
     }
