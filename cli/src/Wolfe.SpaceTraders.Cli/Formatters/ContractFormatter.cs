@@ -27,7 +27,7 @@ internal static class ContractFormatter
         {
             Console.WriteLine($"    * Trade: {deliver.ItemId.Value.Color(ConsoleColors.Code)}");
             Console.WriteLine($"      - Destination: {deliver.DestinationId.Value.Color(ConsoleColors.Code)}");
-            Console.WriteLine($"      - QuantityRemaining: {deliver.QuantityFulfilled}/{deliver.QuantityRequired}");
+            Console.WriteLine($"      - Quantity: {deliver.QuantityFulfilled}/{deliver.QuantityRequired}");
             if (deliver != contract.Terms.Items.Last()) { Console.WriteLine(); }
         }
     }
