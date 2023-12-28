@@ -35,6 +35,26 @@ internal class ShipCommands(IShipService shipService)
         return ExitCodes.Success;
     }
 
+    public async Task<int> Get([Argument] ShipId shipId, CancellationToken cancellationToken = default)
+    {
+        var ship = await shipService.GetShip(shipId, cancellationToken) ?? throw new Exception($"Ship {shipId} could not be found.");
+
+        ShipFormatter.WriteShip(ship);
+
+        return ExitCodes.Success;
+    }
+
+    public async Task<int> List(CancellationToken cancellationToken = default)
+    {
+        var ships = shipService.GetShips(cancellationToken);
+        await foreach (var ship in ships)
+        {
+            ShipFormatter.WriteShip(ship);
+            Console.WriteLine();
+        }
+        return ExitCodes.Success;
+    }
+
     public async Task<int> Navigate([Argument] ShipId shipId, [Argument] WaypointId waypointId, [Option] FlightSpeed? speed, CancellationToken cancellationToken = default)
     {
         var ship = await shipService.GetShip(shipId, cancellationToken) ?? throw new Exception($"Ship {shipId.Value} could not be found.");
@@ -72,26 +92,6 @@ internal class ShipCommands(IShipService shipService)
         Console.WriteLine($"Sold {transaction.Quantity} {transaction.ItemId.ToString()!.Color(ConsoleColors.Code)} for {transaction.TotalPrice.ToString().Color(ConsoleColors.Currency)}");
         Console.WriteLine("Sale concluded successfully.".Color(ConsoleColors.Success));
 
-        return ExitCodes.Success;
-    }
-
-    public async Task<int> Ship([Argument] ShipId shipId, CancellationToken cancellationToken = default)
-    {
-        var ship = await shipService.GetShip(shipId, cancellationToken) ?? throw new Exception($"Ship {shipId} could not be found.");
-
-        ShipFormatter.WriteShip(ship);
-
-        return ExitCodes.Success;
-    }
-
-    public async Task<int> Ships(CancellationToken cancellationToken = default)
-    {
-        var ships = shipService.GetShips(cancellationToken);
-        await foreach (var ship in ships)
-        {
-            ShipFormatter.WriteShip(ship);
-            Console.WriteLine();
-        }
         return ExitCodes.Success;
     }
 

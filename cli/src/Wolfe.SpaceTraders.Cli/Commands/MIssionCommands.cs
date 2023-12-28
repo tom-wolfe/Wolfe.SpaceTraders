@@ -8,7 +8,7 @@ namespace Wolfe.SpaceTraders.Cli.Commands;
 
 internal class MissionCommands(IShipService shipService, IContractService contractService)
 {
-    public async Task<int> Mission([Argument] ShipId shipId, [Argument] ContractId contractId, CancellationToken cancellationToken = default)
+    public async Task<int> Contract([Argument] ShipId shipId, [Argument] ContractId contractId, CancellationToken cancellationToken = default)
     {
         var ship = await shipService.GetShip(shipId, cancellationToken) ?? throw new Exception($"Ship '{shipId}' not found.");
         var contract = await contractService.GetContract(contractId, cancellationToken) ?? throw new Exception($"Contract '{contractId}' not found.");

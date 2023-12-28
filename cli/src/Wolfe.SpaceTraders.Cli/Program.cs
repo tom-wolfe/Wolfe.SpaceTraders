@@ -16,11 +16,18 @@ builder.Services
 
 var app = builder.Build();
 
-app.AddCommands<AgentCommands>();
-app.AddCommands<ContractCommands>();
-app.AddCommands<ExplorationCommands>();
-app.AddCommands<FleetCommands>();
-app.AddCommands<MissionCommands>();
-app.AddCommands<ShipCommands>();
+app.AddCommands<RootCommand>();
 
 app.Run();
+
+[HasSubCommands(typeof(AgentCommands), "agent")]
+[HasSubCommands(typeof(ContractCommands), "contract")]
+[HasSubCommands(typeof(FleetCommands), "fleet")]
+[HasSubCommands(typeof(MarketplaceCommands), "marketplace")]
+[HasSubCommands(typeof(MissionCommands), "mission")]
+[HasSubCommands(typeof(ShipCommands), "ship")]
+[HasSubCommands(typeof(ShipyardCommands), "shipyard")]
+[HasSubCommands(typeof(SystemCommands), "system")]
+[HasSubCommands(typeof(WaypointCommands), "waypoint")]
+// ReSharper disable once ClassNeverInstantiated.Global
+internal class RootCommand;

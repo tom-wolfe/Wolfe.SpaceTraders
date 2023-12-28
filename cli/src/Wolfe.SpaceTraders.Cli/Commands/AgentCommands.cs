@@ -21,6 +21,7 @@ internal class AgentCommands(IAgentService agentService, ITokenService tokenServ
         return ExitCodes.Success;
     }
 
+    [PrimaryCommand]
     public async Task<int> Me(CancellationToken cancellationToken = default)
     {
         var agent = await agentService.GetAgent(cancellationToken);
