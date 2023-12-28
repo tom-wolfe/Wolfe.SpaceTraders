@@ -1,5 +1,6 @@
 ﻿using System.CommandLine.Invocation;
 using Wolfe.SpaceTraders.Cli.Extensions;
+using Wolfe.SpaceTraders.Domain.Missions;
 using Wolfe.SpaceTraders.Service;
 
 namespace Wolfe.SpaceTraders.Cli.Commands.Mission;

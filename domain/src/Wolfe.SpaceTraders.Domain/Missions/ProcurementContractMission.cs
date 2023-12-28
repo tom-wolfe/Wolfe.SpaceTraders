@@ -1,9 +1,9 @@
 ﻿using Wolfe.SpaceTraders.Domain.Contracts;
 using Wolfe.SpaceTraders.Domain.Ships;
 
-namespace Wolfe.SpaceTraders.Cli;
+namespace Wolfe.SpaceTraders.Domain.Missions;
 
-internal class ProcurementContractMission(Ship ship, Contract contract)
+public class ProcurementContractMission(Ship ship, Contract contract)
 {
     public async Task Execute()
     {
