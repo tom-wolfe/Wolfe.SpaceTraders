@@ -5,7 +5,7 @@ namespace Wolfe.SpaceTraders.Domain.Missions;
 
 public class ProcurementContractMission(Ship ship, Contract contract)
 {
-    public async Task Execute()
+    public async Task Execute(CancellationToken cancellationToken = default)
     {
         while (!contract.IsComplete())
         {
