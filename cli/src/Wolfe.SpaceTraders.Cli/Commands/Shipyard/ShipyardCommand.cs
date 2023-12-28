@@ -5,7 +5,7 @@ namespace Wolfe.SpaceTraders.Cli.Commands.Shipyard;
 
 internal static class ShipyardCommand
 {
-    public static readonly Argument<WaypointSymbol> ShipyardIdArgument = new("shipyard-id", r => new WaypointSymbol(string.Join(' ', r.Tokens.Select(t => t.Value))));
+    public static readonly Argument<WaypointId> ShipyardIdArgument = new("shipyard-id", r => new WaypointId(string.Join(' ', r.Tokens.Select(t => t.Value))));
 
     public static Command CreateCommand(IServiceProvider services)
     {

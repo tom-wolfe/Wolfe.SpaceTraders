@@ -3,27 +3,28 @@ using Wolfe.SpaceTraders.Cli.Extensions;
 using Wolfe.SpaceTraders.Domain;
 using Wolfe.SpaceTraders.Infrastructure.Token;
 using Wolfe.SpaceTraders.Service;
+using Wolfe.SpaceTraders.Service.Commands;
 
 namespace Wolfe.SpaceTraders.Cli.Commands.Register;
 
-internal class RegisterCommandHandler(ISpaceTradersClient client, ITokenService token) : CommandHandler
+internal class RegisterCommandHandler(IAgentService agentService, ITokenService token) : CommandHandler
 {
     public override async Task<int> InvokeAsync(InvocationContext context)
     {
-        var symbol = context.BindingContext.ParseResult.GetValueForArgument(RegisterCommand.SymbolArgument);
+        var agentId = context.BindingContext.ParseResult.GetValueForArgument(RegisterCommand.AgentIdArgument);
         var faction = context.BindingContext.ParseResult.GetValueForOption(RegisterCommand.FactionOption);
         var email = context.BindingContext.ParseResult.GetValueForOption(RegisterCommand.EmailOption);
 
-        var request = new Service.Commands.RegisterCommand
+        var request = new CreateAgentCommand
         {
-            Symbol = symbol,
-            Faction = faction ?? FactionSymbol.Cosmic, // Default faction.
+            Agent = agentId,
+            Faction = faction ?? FactionId.Cosmic, // Default faction.
             Email = email
         };
-        var response = await client.Register(request, context.GetCancellationToken());
-        await token.Write(response.Token, context.GetCancellationToken());
+        var response = await agentService.CreateAgent(request, context.GetCancellationToken());
+        await token.SetAccessToken(response.Token, context.GetCancellationToken());
 
-        Console.WriteLine($"Welcome, {response.Agent.Symbol}!".Color(ConsoleColors.Success));
+        Console.WriteLine($"Welcome, {response.Agent.Id}!".Color(ConsoleColors.Success));
 
         return ExitCodes.Success;
     }

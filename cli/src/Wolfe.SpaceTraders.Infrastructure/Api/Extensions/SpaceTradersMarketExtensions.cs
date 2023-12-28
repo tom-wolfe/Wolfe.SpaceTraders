@@ -8,9 +8,9 @@ internal static class SpaceTradersMarketExtensions
 {
     public static Marketplace ToDomain(this SpaceTradersMarketplace marketplace, Waypoint waypoint) => new()
     {
-        Symbol = new WaypointSymbol(marketplace.Symbol),
+        Id = new WaypointId(marketplace.Symbol),
         Type = waypoint.Type,
-        SystemSymbol = waypoint.SystemSymbol,
+        SystemId = waypoint.SystemId,
         Location = waypoint.Location,
         Traits = [.. waypoint.Traits],
         Imports = marketplace.Imports.Select(i => i.ToDomain()).ToList(),

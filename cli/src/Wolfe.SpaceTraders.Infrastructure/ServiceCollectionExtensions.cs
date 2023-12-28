@@ -1,4 +1,7 @@
-﻿using Wolfe.SpaceTraders.Infrastructure.Data;
+﻿using Wolfe.SpaceTraders.Domain.Contracts;
+using Wolfe.SpaceTraders.Domain.Fleet;
+using Wolfe.SpaceTraders.Domain.Ships;
+using Wolfe.SpaceTraders.Infrastructure.Data;
 using Wolfe.SpaceTraders.Infrastructure.Token;
 using Wolfe.SpaceTraders.Sdk;
 using Wolfe.SpaceTraders.Service;
@@ -20,12 +23,18 @@ public static class ServiceCollectionExtensions
                 o.ApiKeyProvider = async (provider, ct) =>
                 {
                     var tokenService = provider.GetRequiredService<ITokenService>();
-                    var token = await tokenService.Read(ct);
+                    var token = await tokenService.GetAccessToken(ct);
                     return token ?? throw new InvalidOperationException("Missing API token.");
                 };
             })
-            .AddSingleton<ISpaceTradersClient, SpaceTradersClient>()
             .AddSingleton<ISpaceTradersDataClient, SpaceTradersFileSystemDataClient>()
-            .AddSingleton<ITokenService, FileTokenService>();
+            .AddSingleton<IAgentService, SpaceTradersAgentService>()
+            .AddSingleton<IExplorationService, SpaceTradersExplorationService>()
+            .AddSingleton<IContractClient, SpaceTradersContractClient>()
+            .AddSingleton<IContractService, SpaceTradersContractService>()
+            .AddSingleton<IFleetService, SpaceTradersFleetService>()
+            .AddSingleton<IShipClient, SpaceTradersShipClient>()
+            .AddSingleton<IShipService, SpaceTradersShipService>()
+            .AddSingleton<ITokenService, TokenService>();
     }
 }

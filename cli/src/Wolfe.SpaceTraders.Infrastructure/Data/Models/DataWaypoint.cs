@@ -2,7 +2,7 @@
 
 internal class DataWaypoint
 {
-    public required string Symbol { get; init; }
+    public required string Id { get; init; }
     public required string Type { get; init; }
     public required string System { get; init; }
     public required DataPoint Location { get; init; }

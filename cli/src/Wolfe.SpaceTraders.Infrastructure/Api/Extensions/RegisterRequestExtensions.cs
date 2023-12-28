@@ -5,9 +5,9 @@ namespace Wolfe.SpaceTraders.Infrastructure.Api.Extensions;
 
 internal static class RegisterRequestExtensions
 {
-    public static SpaceTradersRegisterRequest ToApi(this RegisterCommand command) => new()
+    public static SpaceTradersRegisterRequest ToApi(this CreateAgentCommand command) => new()
     {
-        Symbol = command.Symbol.Value,
+        Symbol = command.Agent.Value,
         Faction = command.Faction.Value,
         Email = command.Email
     };

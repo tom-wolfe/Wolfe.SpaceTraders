@@ -2,7 +2,7 @@
 
 public class WaypointTrait
 {
-    public WaypointTraitSymbol Symbol { get; init; }
+    public WaypointTraitId Id { get; init; }
 
     public required string Name { get; init; }
 

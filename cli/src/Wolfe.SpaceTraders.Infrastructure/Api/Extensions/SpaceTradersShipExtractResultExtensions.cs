@@ -1,5 +1,5 @@
-﻿using Wolfe.SpaceTraders.Sdk.Models.Extraction;
-using Wolfe.SpaceTraders.Service.Results;
+﻿using Wolfe.SpaceTraders.Domain.Ships.Results;
+using Wolfe.SpaceTraders.Sdk.Models.Extraction;
 
 namespace Wolfe.SpaceTraders.Infrastructure.Api.Extensions;
 

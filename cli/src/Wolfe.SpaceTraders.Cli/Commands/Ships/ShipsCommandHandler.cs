@@ -4,7 +4,7 @@ using Wolfe.SpaceTraders.Service;
 
 namespace Wolfe.SpaceTraders.Cli.Commands.Ships;
 
-internal class ShipsCommandHandler(ISpaceTradersClient client) : CommandHandler
+internal class ShipsCommandHandler(IShipService client) : CommandHandler
 {
     public override async Task<int> InvokeAsync(InvocationContext context)
     {

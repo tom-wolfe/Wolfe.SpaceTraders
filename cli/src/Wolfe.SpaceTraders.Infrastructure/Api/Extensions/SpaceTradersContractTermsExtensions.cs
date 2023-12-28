@@ -9,6 +9,6 @@ internal static class SpaceTradersContractTermsExtensions
     {
         Deadline = terms.Deadline,
         Payment = terms.Payment.ToDomain(),
-        Deliver = terms.Deliver.Select(d => d.ToDomain()).ToList(),
+        Items = terms.Deliver.Select(d => d.ToDomain()).ToList(),
     };
 }

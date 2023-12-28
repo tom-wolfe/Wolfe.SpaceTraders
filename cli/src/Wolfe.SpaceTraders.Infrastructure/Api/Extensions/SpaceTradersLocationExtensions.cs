@@ -10,8 +10,8 @@ internal static class SpaceTradersLocationExtensions
     public static WaypointLocation ToDomain(this SpaceTradersWaypointLocation location) => new()
     {
         Type = new WaypointType(location.Type),
-        Symbol = new WaypointSymbol(location.Symbol),
-        SystemSymbol = new SystemSymbol(location.SystemSymbol),
+        Id = new WaypointId(location.Symbol),
+        SystemId = new SystemId(location.SystemSymbol),
         Point = new Point(location.X, location.Y),
     };
 }

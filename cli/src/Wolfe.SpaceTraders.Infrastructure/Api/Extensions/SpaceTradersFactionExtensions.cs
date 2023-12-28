@@ -8,9 +8,9 @@ internal static class SpaceTradersFactionExtensions
 {
     public static Faction ToDomain(this SpaceTradersFaction faction) => new()
     {
-        Symbol = new FactionSymbol(faction.Symbol),
+        Id = new FactionId(faction.Symbol),
         Name = faction.Name,
         Description = faction.Description,
-        Headquarters = new WaypointSymbol(faction.Headquarters),
+        Headquarters = new WaypointId(faction.Headquarters),
     };
 }

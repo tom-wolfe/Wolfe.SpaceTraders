@@ -9,10 +9,10 @@ internal static class SpaceTradersAgentExtensions
 {
     public static Agent ToDomain(this SpaceTradersAgent agent) => new()
     {
-        Symbol = new AgentSymbol(agent.Symbol),
+        Id = new AgentId(agent.Symbol),
         AccountId = new AccountId(agent.AccountId),
         Credits = new Credits(agent.Credits),
-        Headquarters = new WaypointSymbol(agent.Headquarters),
-        StartingFaction = new FactionSymbol(agent.StartingFaction)
+        Headquarters = new WaypointId(agent.Headquarters),
+        FactionId = new FactionId(agent.StartingFaction)
     };
 }

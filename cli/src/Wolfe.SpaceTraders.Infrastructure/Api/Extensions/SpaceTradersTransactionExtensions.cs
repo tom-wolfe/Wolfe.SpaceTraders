@@ -10,13 +10,12 @@ internal static class SpaceTradersTransactionExtensions
 {
     public static Transaction ToDomain(this SpaceTradersTransaction transaction) => new()
     {
-        ShipSymbol = new ShipSymbol(transaction.ShipSymbol),
+        ShipId = new ShipId(transaction.ShipSymbol),
         Timestamp = transaction.Timestamp,
-        WaypointSymbol = new WaypointSymbol(transaction.WaypointSymbol),
+        WaypointId = new WaypointId(transaction.WaypointSymbol),
         Type = new TransactionType(transaction.Type),
         PricePerUnit = new Credits(transaction.PricePerUnit),
-        TotalPrice = new Credits(transaction.TotalPrice),
-        TradeSymbol = new TradeSymbol(transaction.TradeSymbol),
-        Units = transaction.Units,
+        ItemId = new ItemId(transaction.TradeSymbol),
+        Quantity = transaction.Units,
     };
 }

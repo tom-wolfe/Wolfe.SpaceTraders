@@ -7,33 +7,33 @@ namespace Wolfe.SpaceTraders.Cli.Commands.Markets;
 
 internal static class MarketsCommand
 {
-    public static readonly Argument<SystemSymbol> SystemIdArgument = new(
+    public static readonly Argument<SystemId> SystemIdArgument = new(
         name: "system-id",
-        parse: r => new SystemSymbol(string.Join(' ', r.Tokens.Select(t => t.Value))),
+        parse: r => new SystemId(string.Join(' ', r.Tokens.Select(t => t.Value))),
         description: "The ID of the system to list markets for."
     );
 
-    public static readonly Option<TradeSymbol?> BuyingOption = new(
+    public static readonly Option<ItemId?> BuyingOption = new(
         aliases: ["-b", "--buying"],
-        parseArgument: r => new TradeSymbol(r.Tokens[0].Value),
+        parseArgument: r => new ItemId(r.Tokens[0].Value),
         description: "The items that the markets must buy."
     )
     {
         IsRequired = false
     };
 
-    public static readonly Option<TradeSymbol?> SellingOption = new(
+    public static readonly Option<ItemId?> SellingOption = new(
         aliases: ["-s", "--selling"],
-        parseArgument: r => new TradeSymbol(r.Tokens[0].Value),
+        parseArgument: r => new ItemId(r.Tokens[0].Value),
         description: "The items that the market must sell."
     )
     {
         IsRequired = false
     };
 
-    public static readonly Option<WaypointSymbol?> NearestToOption = new(
+    public static readonly Option<WaypointId?> NearestToOption = new(
         aliases: ["-n", "--nearest-to"],
-        parseArgument: r => new WaypointSymbol(r.Tokens[0].Value),
+        parseArgument: r => new WaypointId(r.Tokens[0].Value),
         description: "The location to show distance relative to."
     )
     {

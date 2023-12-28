@@ -8,7 +8,7 @@ internal static class SpaceTradersExtractionYieldExtensions
 {
     public static ExtractionYield ToDomain(this SpaceTradersExtractionYield yield) => new()
     {
-        Symbol = new TradeSymbol(yield.Symbol),
-        Units = yield.Units,
+        ItemId = new ItemId(yield.Symbol),
+        Quantity = yield.Units,
     };
 }

@@ -8,9 +8,9 @@ internal static class SpaceTradersCargoItemExtensions
 {
     public static ShipCargoItem ToDomain(this SpaceTradersCargoItem item) => new()
     {
-        Symbol = new TradeSymbol(item.Symbol),
+        Id = new ItemId(item.Symbol),
         Name = item.Name,
         Description = item.Description,
-        Units = item.Units,
+        Quantity = item.Units,
     };
 }

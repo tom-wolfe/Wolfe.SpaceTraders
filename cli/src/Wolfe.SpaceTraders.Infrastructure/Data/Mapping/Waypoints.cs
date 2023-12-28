@@ -8,32 +8,32 @@ internal static class Waypoints
 {
     public static DataWaypoint ToData(this Waypoint waypoint) => new()
     {
-        Symbol = waypoint.Symbol.Value,
+        Id = waypoint.Id.Value,
         Type = waypoint.Type.Value,
-        System = waypoint.SystemSymbol.Value,
+        System = waypoint.SystemId.Value,
         Location = waypoint.Location.ToData(),
         Traits = waypoint.Traits.Select(t => t.ToData()).ToList()
     };
 
     public static Waypoint ToDomain(this DataWaypoint waypoint) => new()
     {
-        Symbol = new WaypointSymbol(waypoint.Symbol),
+        Id = new WaypointId(waypoint.Id),
         Type = new WaypointType(waypoint.Type),
-        SystemSymbol = new SystemSymbol(waypoint.System),
+        SystemId = new SystemId(waypoint.System),
         Location = waypoint.Location.ToDomain(),
         Traits = waypoint.Traits.Select(t => t.ToDomain()).ToList()
     };
 
     public static DataWaypointTrait ToData(this WaypointTrait trait) => new()
     {
-        Symbol = trait.Symbol.Value,
+        Id = trait.Id.Value,
         Name = trait.Name,
         Description = trait.Description
     };
 
     public static WaypointTrait ToDomain(this DataWaypointTrait trait) => new()
     {
-        Symbol = new WaypointTraitSymbol(trait.Symbol),
+        Id = new WaypointTraitId(trait.Id),
         Name = trait.Name,
         Description = trait.Description
     };

@@ -8,9 +8,9 @@ internal static class SpaceTradersShipyardExtensions
 {
     public static Shipyard ToDomain(this SpaceTradersShipyard shipyard, Waypoint waypoint) => new()
     {
-        Symbol = new WaypointSymbol(shipyard.Symbol),
+        Id = new WaypointId(shipyard.Symbol),
         Type = waypoint.Type,
-        SystemSymbol = waypoint.SystemSymbol,
+        SystemId = waypoint.SystemId,
         Location = waypoint.Location,
         Traits = [.. waypoint.Traits],
         ShipTypes = shipyard.ShipTypes.Select(s => s.ToDomain()).ToList(),

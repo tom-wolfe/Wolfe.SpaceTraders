@@ -8,7 +8,7 @@ internal static class MarketplaceFormatter
 {
     public static void WriteMarketplace(Marketplace marketplace, Point? relativeTo = null)
     {
-        Console.WriteLine($"~ {marketplace.Symbol.Value.Color(ConsoleColors.Id)}");
+        Console.WriteLine($"~ {marketplace.Id.Value.Color(ConsoleColors.Id)}");
 
         var location = $"  Location: {marketplace.Location.ToString().Color(ConsoleColors.Point)}";
         var distance = relativeTo?.DistanceTo(marketplace.Location);
@@ -18,19 +18,19 @@ internal static class MarketplaceFormatter
         Console.WriteLine("  Imports:");
         foreach (var item in marketplace.Imports)
         {
-            Console.WriteLine($"  - {item.Name.Color(ConsoleColors.Information)} ({item.Symbol.Value.Color(ConsoleColors.Code)})");
+            Console.WriteLine($"  - {item.Name.Color(ConsoleColors.Information)} ({item.ItemId.Value.Color(ConsoleColors.Code)})");
         }
 
         Console.WriteLine("  Exports:");
         foreach (var item in marketplace.Exports)
         {
-            Console.WriteLine($"  - {item.Name.Color(ConsoleColors.Information)} ({item.Symbol.Value.Color(ConsoleColors.Code)})");
+            Console.WriteLine($"  - {item.Name.Color(ConsoleColors.Information)} ({item.ItemId.Value.Color(ConsoleColors.Code)})");
         }
 
         Console.WriteLine("  Exchange:");
         foreach (var item in marketplace.Exchange)
         {
-            Console.WriteLine($"  - {item.Name.Color(ConsoleColors.Information)} ({item.Symbol.Value.Color(ConsoleColors.Code)})");
+            Console.WriteLine($"  - {item.Name.Color(ConsoleColors.Information)} ({item.ItemId.Value.Color(ConsoleColors.Code)})");
         }
     }
 }

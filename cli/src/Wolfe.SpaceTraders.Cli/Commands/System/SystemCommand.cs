@@ -5,7 +5,7 @@ namespace Wolfe.SpaceTraders.Cli.Commands.System;
 
 internal static class SystemCommand
 {
-    public static readonly Argument<SystemSymbol> SystemIdArgument = new("system-id", r => new SystemSymbol(string.Join(' ', r.Tokens.Select(t => t.Value))));
+    public static readonly Argument<SystemId> SystemIdArgument = new("system-id", r => new SystemId(string.Join(' ', r.Tokens.Select(t => t.Value))));
 
     public static Command CreateCommand(IServiceProvider services)
     {
