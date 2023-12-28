@@ -10,6 +10,6 @@ internal static class SystemFormatter
         Console.WriteLine($"~ {system.Id.Value.Color(ConsoleColors.Id)}");
         Console.WriteLine($"  Sector: {system.SectorId.Value.Color(ConsoleColors.Id)}");
         Console.WriteLine($"  Type: {system.Type.Value.Color(ConsoleColors.Code)}");
-        Console.WriteLine($"  Location: {system.Location}");
+        Console.WriteLine($"  Location: {system.Location.ToString().Color(ConsoleColors.Point)}");
     }
 }

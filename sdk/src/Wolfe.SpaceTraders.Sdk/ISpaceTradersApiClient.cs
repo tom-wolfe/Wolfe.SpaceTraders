@@ -54,8 +54,6 @@ public interface ISpaceTradersApiClient
     [Get("/systems/{systemId}/waypoints")]
     public Task<IApiResponse<SpaceTradersGetWaypointsResponse>> GetWaypoints(
         string systemId,
-        [Query] string? type,
-        [Query(CollectionFormat.Multi)] string[] traits,
         [Query] int limit = 10,
         [Query] int page = 1,
         CancellationToken cancellationToken = default

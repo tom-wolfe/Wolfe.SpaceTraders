@@ -7,7 +7,7 @@ namespace Wolfe.SpaceTraders.Service;
 
 public interface IExplorationService
 {
-    public Task<Marketplace?> GetMarketplace(WaypointId marketPlaceId, CancellationToken cancellationToken = default);
+    public Task<Marketplace?> GetMarketplace(WaypointId marketplaceId, CancellationToken cancellationToken = default);
     public IAsyncEnumerable<Marketplace> GetMarketplaces(SystemId systemId, CancellationToken cancellationToken = default);
     public Task<Shipyard?> GetShipyard(WaypointId shipyardId, CancellationToken cancellationToken = default);
     public Task<StarSystem?> GetSystem(SystemId systemId, CancellationToken cancellationToken = default);

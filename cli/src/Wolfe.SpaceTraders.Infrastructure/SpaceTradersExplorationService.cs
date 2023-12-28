@@ -7,6 +7,7 @@ using Wolfe.SpaceTraders.Domain.Waypoints;
 using Wolfe.SpaceTraders.Infrastructure.Api;
 using Wolfe.SpaceTraders.Infrastructure.Api.Extensions;
 using Wolfe.SpaceTraders.Infrastructure.Data;
+using Wolfe.SpaceTraders.Infrastructure.Data.Mapping;
 using Wolfe.SpaceTraders.Sdk;
 using Wolfe.SpaceTraders.Sdk.Models.Systems;
 using Wolfe.SpaceTraders.Service;
@@ -27,17 +28,17 @@ internal class SpaceTradersExplorationService(
         return response.GetContent().Data.ToDomain(waypoint);
     }
 
-    public async Task<Marketplace?> GetMarketplace(WaypointId marketPlaceId, CancellationToken cancellationToken = default)
+    public async Task<Marketplace?> GetMarketplace(WaypointId marketplaceId, CancellationToken cancellationToken = default)
     {
-        var cached = await dataClient.GetMarketplace(marketPlaceId, cancellationToken);
+        var cached = await dataClient.GetMarketplace(marketplaceId, cancellationToken);
         if (cached != null)
         {
             return cached.Item;
         }
 
-        var waypoint = await GetWaypoint(marketPlaceId, cancellationToken);
+        var waypoint = await GetWaypoint(marketplaceId, cancellationToken);
         if (waypoint == null) { return null; }
-        var response = await apiClient.GetMarketplace(marketPlaceId.System.Value, marketPlaceId.Value, cancellationToken);
+        var response = await apiClient.GetMarketplace(marketplaceId.System.Value, marketplaceId.Value, cancellationToken);
         if (response.StatusCode == HttpStatusCode.NotFound) { return null; }
         var market = response.GetContent().Data.ToDomain(waypoint);
 
@@ -75,16 +76,41 @@ internal class SpaceTradersExplorationService(
 
     public async Task<StarSystem?> GetSystem(SystemId systemId, CancellationToken cancellationToken = default)
     {
+        var cached = await dataClient.GetSystem(systemId, cancellationToken);
+        if (cached != null)
+        {
+            return cached.Item;
+        }
+
         var response = await apiClient.GetSystem(systemId.Value, cancellationToken);
         if (response.StatusCode == HttpStatusCode.NotFound) { return null; }
-        return response.GetContent().Data.ToDomain();
+        var system = response.GetContent().Data.ToDomain();
+
+        await dataClient.AddSystem(system, cancellationToken);
+        return system;
     }
 
-    public IAsyncEnumerable<StarSystem> GetSystems(CancellationToken cancellationToken = default)
+    public async IAsyncEnumerable<StarSystem> GetSystems([EnumeratorCancellation] CancellationToken cancellationToken = default)
     {
-        return PaginationHelpers.ToAsyncEnumerable<SpaceTradersSystem>(
+        var cached = dataClient.GetSystems(cancellationToken);
+        if (cached != null)
+        {
+            await foreach (var system in cached)
+            {
+                yield return system.Item;
+            }
+            yield break;
+        }
+
+        var systems = PaginationHelpers.ToAsyncEnumerable<SpaceTradersSystem>(
             async p => (await apiClient.GetSystems(20, p, cancellationToken)).GetContent()
         ).SelectAwait(s => ValueTask.FromResult(s.ToDomain()));
+
+        await foreach (var system in systems)
+        {
+            await dataClient.AddSystem(system, cancellationToken);
+            yield return system;
+        }
     }
 
     public async Task<Waypoint?> GetWaypoint(WaypointId waypointId, CancellationToken cancellationToken = default)
@@ -115,12 +141,11 @@ internal class SpaceTradersExplorationService(
             yield break;
         }
 
-        var waypoints = await PaginationHelpers.ToAsyncEnumerable<SpaceTradersWaypoint>(
-            async p => (await apiClient.GetWaypoints(systemId.Value, null, [], 20, p, cancellationToken)).GetContent()
-        ).SelectAwait(s => ValueTask.FromResult(s.ToDomain()))
-        .ToListAsync(cancellationToken);
+        var waypoints = PaginationHelpers.ToAsyncEnumerable<SpaceTradersWaypoint>(
+            async p => (await apiClient.GetWaypoints(systemId.Value, 20, p, cancellationToken)).GetContent()
+        ).SelectAwait(s => ValueTask.FromResult(s.ToDomain()));
 
-        foreach (var waypoint in waypoints)
+        await foreach (var waypoint in waypoints)
         {
             await dataClient.AddWaypoint(waypoint, cancellationToken);
             yield return waypoint;

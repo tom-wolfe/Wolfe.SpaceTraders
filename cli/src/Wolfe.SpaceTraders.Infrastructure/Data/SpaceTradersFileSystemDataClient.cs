@@ -24,6 +24,12 @@ internal class SpaceTradersFileSystemDataClient(IOptions<SpaceTradersDataOptions
         return AddItem(file, marketplace, m => m.ToData(), cancellationToken);
     }
 
+    public Task AddSystem(StarSystem system, CancellationToken cancellationToken = default)
+    {
+        var file = Path.Combine(_options.SystemsDirectory, $"{system.Id.Value}.json");
+        return AddItem(file, system, s => s.ToData(), cancellationToken);
+    }
+
     public Task AddWaypoint(Waypoint waypoint, CancellationToken cancellationToken = default)
     {
         var file = Path.Combine(_options.WaypointsDirectory, $"{waypoint.SystemId.Value}/{waypoint.Id.Value}.json");
@@ -47,6 +53,18 @@ internal class SpaceTradersFileSystemDataClient(IOptions<SpaceTradersDataOptions
     {
         var file = Path.Combine(_options.MarketplacesDirectory, $"{systemId.Value}");
         return GetList<Marketplace, DataMarketplace>(file, m => m.ToDomain(), w => w.SystemId == systemId, cancellationToken);
+    }
+
+    public Task<DataItemResponse<StarSystem>?> GetSystem(SystemId systemId, CancellationToken cancellationToken)
+    {
+        var file = Path.Combine(_options.SystemsDirectory, $"{systemId.Value}.json");
+        return GetItem<StarSystem, DataSystem>(file, s => s.ToDomain(), cancellationToken);
+    }
+
+    public IAsyncEnumerable<DataItemResponse<StarSystem>>? GetSystems(CancellationToken cancellationToken)
+    {
+        var file = _options.SystemsDirectory;
+        return GetList<StarSystem, DataSystem>(file, s => s.ToDomain(), s => true, cancellationToken);
     }
 
     public Task<DataItemResponse<Waypoint>?> GetWaypoint(WaypointId waypointId, CancellationToken cancellationToken = default)
