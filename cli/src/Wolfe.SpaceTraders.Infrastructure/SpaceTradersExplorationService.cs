@@ -19,15 +19,6 @@ internal class SpaceTradersExplorationService(
     ISpaceTradersDataClient dataClient
 ) : IExplorationService
 {
-    public async Task<Shipyard?> GetShipyard(WaypointId shipyardId, CancellationToken cancellationToken = default)
-    {
-        var waypoint = await GetWaypoint(shipyardId, cancellationToken);
-        if (waypoint == null) { return null; }
-        var response = await apiClient.GetShipyard(shipyardId.System.Value, shipyardId.Value, cancellationToken);
-        if (response.StatusCode == HttpStatusCode.NotFound) { return null; }
-        return response.GetContent().Data.ToDomain(waypoint);
-    }
-
     public async Task<Marketplace?> GetMarketplace(WaypointId marketplaceId, CancellationToken cancellationToken = default)
     {
         var cached = await dataClient.GetMarketplace(marketplaceId, cancellationToken);
@@ -71,6 +62,43 @@ internal class SpaceTradersExplorationService(
 
             await dataClient.AddMarketplace(market, cancellationToken);
             yield return market;
+        }
+    }
+
+    public async Task<Shipyard?> GetShipyard(WaypointId shipyardId, CancellationToken cancellationToken = default)
+    {
+        var waypoint = await GetWaypoint(shipyardId, cancellationToken);
+        if (waypoint == null) { return null; }
+        var response = await apiClient.GetShipyard(shipyardId.System.Value, shipyardId.Value, cancellationToken);
+        if (response.StatusCode == HttpStatusCode.NotFound) { return null; }
+        return response.GetContent().Data.ToDomain(waypoint);
+    }
+
+    public async IAsyncEnumerable<Shipyard> GetShipyards(SystemId systemId, [EnumeratorCancellation] CancellationToken cancellationToken = default)
+    {
+        var cached = dataClient.GetShipyards(systemId, cancellationToken);
+        if (cached != null)
+        {
+            await foreach (var shipyard in cached)
+            {
+                yield return shipyard.Item;
+            }
+            yield break;
+        }
+
+        var waypoints = GetWaypoints(systemId, cancellationToken);
+        await foreach (var waypoint in waypoints)
+        {
+            if (!waypoint.IsShipyard)
+            {
+                continue;
+            }
+
+            var shipyard = await GetShipyard(waypoint.Id, cancellationToken);
+            if (shipyard == null) { continue; }
+
+            await dataClient.AddShipyard(shipyard, cancellationToken);
+            yield return shipyard;
         }
     }
 

@@ -2,6 +2,7 @@
 using System.Runtime.CompilerServices;
 using System.Text.Json;
 using Wolfe.SpaceTraders.Domain.Marketplace;
+using Wolfe.SpaceTraders.Domain.Shipyards;
 using Wolfe.SpaceTraders.Domain.Systems;
 using Wolfe.SpaceTraders.Domain.Waypoints;
 using Wolfe.SpaceTraders.Infrastructure.Data.Mapping;
@@ -22,6 +23,12 @@ internal class SpaceTradersFileSystemDataClient(IOptions<SpaceTradersDataOptions
     {
         var file = Path.Combine(_options.MarketplacesDirectory, $"{marketplace.SystemId.Value}/{marketplace.Id.Value}.json");
         return AddItem(file, marketplace, m => m.ToData(), cancellationToken);
+    }
+
+    public Task AddShipyard(Shipyard shipyard, CancellationToken cancellationToken = default)
+    {
+        var file = Path.Combine(_options.ShipyardsDirectory, $"{shipyard.SystemId.Value}/{shipyard.Id.Value}.json");
+        return AddItem(file, shipyard, s => s.ToData(), cancellationToken);
     }
 
     public Task AddSystem(StarSystem system, CancellationToken cancellationToken = default)
@@ -53,6 +60,18 @@ internal class SpaceTradersFileSystemDataClient(IOptions<SpaceTradersDataOptions
     {
         var file = Path.Combine(_options.MarketplacesDirectory, $"{systemId.Value}");
         return GetList<Marketplace, DataMarketplace>(file, m => m.ToDomain(), w => w.SystemId == systemId, cancellationToken);
+    }
+
+    public Task<DataItemResponse<Shipyard>?> GetShipyard(WaypointId shipyardId, CancellationToken cancellationToken = default)
+    {
+        var file = Path.Combine(_options.ShipyardsDirectory, $"{shipyardId.System.Value}/{shipyardId.Value}.json");
+        return GetItem<Shipyard, DataShipyard>(file, s => s.ToDomain(), cancellationToken);
+    }
+
+    public IAsyncEnumerable<DataItemResponse<Shipyard>>? GetShipyards(SystemId systemId, CancellationToken cancellationToken = default)
+    {
+        var file = Path.Combine(_options.ShipyardsDirectory, $"{systemId.Value}");
+        return GetList<Shipyard, DataShipyard>(file, s => s.ToDomain(), w => w.SystemId == systemId, cancellationToken);
     }
 
     public Task<DataItemResponse<StarSystem>?> GetSystem(SystemId systemId, CancellationToken cancellationToken)
