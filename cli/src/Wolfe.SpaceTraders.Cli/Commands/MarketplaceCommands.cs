@@ -1,4 +1,5 @@
 ﻿using Cocona;
+using Microsoft.Extensions.Hosting;
 using Wolfe.SpaceTraders.Cli.Formatters;
 using Wolfe.SpaceTraders.Domain.Marketplace;
 using Wolfe.SpaceTraders.Domain.Systems;
@@ -7,19 +8,19 @@ using Wolfe.SpaceTraders.Service;
 
 namespace Wolfe.SpaceTraders.Cli.Commands;
 
-internal class MarketplaceCommands(IExplorationService explorationService)
+internal class MarketplaceCommands(IExplorationService explorationService, IHostApplicationLifetime host)
 {
-    public async Task<int> Get([Argument] WaypointId marketplaceId, CancellationToken cancellationToken = default)
+    public async Task<int> Get([Argument] WaypointId marketplaceId)
     {
-        var marketplace = await explorationService.GetMarketplace(marketplaceId, cancellationToken) ?? throw new Exception($"Marketplace '{marketplaceId}' not found.");
+        var marketplace = await explorationService.GetMarketplace(marketplaceId, host.ApplicationStopping) ?? throw new Exception($"Marketplace '{marketplaceId}' not found.");
         MarketplaceFormatter.WriteMarketplace(marketplace);
 
         return ExitCodes.Success;
     }
 
-    public async Task<int> List([Argument] SystemId systemId, [Option] ItemId? buying, [Option] ItemId? selling, [Option] WaypointId? nearestTo, CancellationToken cancellationToken = default)
+    public async Task<int> List([Argument] SystemId systemId, [Option] ItemId? buying, [Option] ItemId? selling, [Option] WaypointId? nearestTo)
     {
-        var marketplaces = explorationService.GetMarketplaces(systemId, cancellationToken);
+        var marketplaces = explorationService.GetMarketplaces(systemId, host.ApplicationStopping);
 
         if (selling != null)
         {
@@ -34,7 +35,7 @@ internal class MarketplaceCommands(IExplorationService explorationService)
         Waypoint? relativeWaypoint = null;
         if (nearestTo != null)
         {
-            relativeWaypoint = await explorationService.GetWaypoint(nearestTo.Value, cancellationToken) ?? throw new Exception("Unable to find relative waypoint.");
+            relativeWaypoint = await explorationService.GetWaypoint(nearestTo.Value, host.ApplicationStopping) ?? throw new Exception("Unable to find relative waypoint.");
             marketplaces = marketplaces.OrderBy(w => w.Location.DistanceTo(relativeWaypoint.Location).Total);
         }
 

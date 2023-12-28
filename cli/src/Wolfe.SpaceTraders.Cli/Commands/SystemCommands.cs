@@ -1,23 +1,24 @@
 ﻿using Cocona;
+using Microsoft.Extensions.Hosting;
 using Wolfe.SpaceTraders.Cli.Formatters;
 using Wolfe.SpaceTraders.Domain.Systems;
 using Wolfe.SpaceTraders.Service;
 
 namespace Wolfe.SpaceTraders.Cli.Commands;
 
-internal class SystemCommands(IExplorationService explorationService)
+internal class SystemCommands(IExplorationService explorationService, IHostApplicationLifetime host)
 {
-    public async Task<int> Get([Argument] SystemId systemId, CancellationToken cancellationToken = default)
+    public async Task<int> Get([Argument] SystemId systemId)
     {
-        var system = await explorationService.GetSystem(systemId, cancellationToken) ?? throw new Exception($"System '{systemId}' not found.");
+        var system = await explorationService.GetSystem(systemId, host.ApplicationStopping) ?? throw new Exception($"System '{systemId}' not found.");
         SystemFormatter.WriteSystem(system);
 
         return ExitCodes.Success;
     }
 
-    public async Task<int> List(CancellationToken cancellationToken = default)
+    public async Task<int> List()
     {
-        var systems = explorationService.GetSystems(cancellationToken);
+        var systems = explorationService.GetSystems(host.ApplicationStopping);
 
         await foreach (var system in systems)
         {

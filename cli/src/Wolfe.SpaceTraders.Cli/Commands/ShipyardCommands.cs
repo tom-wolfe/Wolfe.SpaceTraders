@@ -1,4 +1,5 @@
 ﻿using Cocona;
+using Microsoft.Extensions.Hosting;
 using Wolfe.SpaceTraders.Cli.Formatters;
 using Wolfe.SpaceTraders.Domain.Ships;
 using Wolfe.SpaceTraders.Domain.Systems;
@@ -7,19 +8,19 @@ using Wolfe.SpaceTraders.Service;
 
 namespace Wolfe.SpaceTraders.Cli.Commands;
 
-internal class ShipyardCommands(IExplorationService explorationService)
+internal class ShipyardCommands(IExplorationService explorationService, IHostApplicationLifetime host)
 {
-    public async Task<int> Get([Argument] WaypointId shipyardId, CancellationToken cancellationToken = default)
+    public async Task<int> Get([Argument] WaypointId shipyardId)
     {
-        var shipyard = await explorationService.GetShipyard(shipyardId, cancellationToken) ?? throw new Exception($"Shipyard '{shipyardId}' not found.");
+        var shipyard = await explorationService.GetShipyard(shipyardId, host.ApplicationStopping) ?? throw new Exception($"Shipyard '{shipyardId}' not found.");
         ShipyardFormatter.WriteShipyard(shipyard);
 
         return ExitCodes.Success;
     }
 
-    public async Task<int> List([Argument] SystemId systemId, [Option] ShipType? selling, [Option] WaypointId? nearestTo, CancellationToken cancellationToken = default)
+    public async Task<int> List([Argument] SystemId systemId, [Option] ShipType? selling, [Option] WaypointId? nearestTo)
     {
-        var shipyards = explorationService.GetShipyards(systemId, cancellationToken);
+        var shipyards = explorationService.GetShipyards(systemId, host.ApplicationStopping);
 
         if (selling != null)
         {
@@ -29,7 +30,7 @@ internal class ShipyardCommands(IExplorationService explorationService)
         Waypoint? relativeWaypoint = null;
         if (nearestTo != null)
         {
-            relativeWaypoint = await explorationService.GetWaypoint(nearestTo.Value, cancellationToken) ?? throw new Exception("Unable to find relative waypoint.");
+            relativeWaypoint = await explorationService.GetWaypoint(nearestTo.Value, host.ApplicationStopping) ?? throw new Exception("Unable to find relative waypoint.");
             shipyards = shipyards.OrderBy(w => w.Location.DistanceTo(relativeWaypoint.Location).Total);
         }
 
