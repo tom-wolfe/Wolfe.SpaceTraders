@@ -29,8 +29,7 @@ public class ProcurementContractMission(Ship ship, Contract contract)
     private async Task ClearUnnecessaryItems()
     {
         var contractItems = contract.GetOutstandingItems().Select(c => c.ItemId);
-        var itemsToRemove = ship.Cargo.Items
-            .ExceptBy(contractItems, i => i.Id);
+        var itemsToRemove = ship.Cargo.Items.ExceptBy(contractItems, i => i.Id);
 
         foreach (var item in itemsToRemove)
         {
