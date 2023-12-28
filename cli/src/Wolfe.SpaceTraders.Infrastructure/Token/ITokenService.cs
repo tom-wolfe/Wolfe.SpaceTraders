@@ -2,7 +2,6 @@
 
 public interface ITokenService
 {
-    Task<string?> Read(CancellationToken cancellationToken);
-    Task Write(string token, CancellationToken cancellationToken);
-    Task Clear(CancellationToken cancellationToken);
+    Task<string?> GetAccessToken(CancellationToken cancellationToken);
+    Task SetAccessToken(string token, CancellationToken cancellationToken);
 }

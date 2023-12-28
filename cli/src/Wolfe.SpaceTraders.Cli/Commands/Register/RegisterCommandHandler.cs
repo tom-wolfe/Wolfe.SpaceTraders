@@ -22,7 +22,7 @@ internal class RegisterCommandHandler(IAgentService agentService, ITokenService 
             Email = email
         };
         var response = await agentService.CreateAgent(request, context.GetCancellationToken());
-        await token.Write(response.Token, context.GetCancellationToken());
+        await token.SetAccessToken(response.Token, context.GetCancellationToken());
 
         Console.WriteLine($"Welcome, {response.Agent.Id}!".Color(ConsoleColors.Success));
 

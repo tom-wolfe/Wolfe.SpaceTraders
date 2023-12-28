@@ -23,7 +23,7 @@ public static class ServiceCollectionExtensions
                 o.ApiKeyProvider = async (provider, ct) =>
                 {
                     var tokenService = provider.GetRequiredService<ITokenService>();
-                    var token = await tokenService.Read(ct);
+                    var token = await tokenService.GetAccessToken(ct);
                     return token ?? throw new InvalidOperationException("Missing API token.");
                 };
             })
@@ -35,6 +35,6 @@ public static class ServiceCollectionExtensions
             .AddSingleton<IFleetService, SpaceTradersFleetService>()
             .AddSingleton<IShipClient, SpaceTradersShipClient>()
             .AddSingleton<IShipService, SpaceTradersShipService>()
-            .AddSingleton<ITokenService, FileTokenService>();
+            .AddSingleton<ITokenService, TokenService>();
     }
 }
