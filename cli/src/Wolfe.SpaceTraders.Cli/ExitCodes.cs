@@ -1,4 +1,4 @@
-﻿namespace Wolfe.SpaceTraders.Cli.Commands;
+﻿namespace Wolfe.SpaceTraders.Cli;
 
 internal static class ExitCodes
 {

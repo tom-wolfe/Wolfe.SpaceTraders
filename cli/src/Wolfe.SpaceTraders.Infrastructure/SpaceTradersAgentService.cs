@@ -23,6 +23,7 @@ internal class SpaceTradersAgentService(
 
     public async Task<RegisterResult> CreateAgent(CreateAgentCommand command, CancellationToken cancellationToken = default)
     {
+
         var response = await apiClient.Register(command.ToApi(), cancellationToken);
         return response.GetContent().Data.ToDomain(shipClient, contractClient);
     }

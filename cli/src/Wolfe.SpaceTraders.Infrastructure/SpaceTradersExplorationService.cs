@@ -18,26 +18,26 @@ internal class SpaceTradersExplorationService(
     ISpaceTradersDataClient dataClient
 ) : IExplorationService
 {
-    public async Task<Shipyard?> GetShipyard(WaypointId waypointId, CancellationToken cancellationToken = default)
+    public async Task<Shipyard?> GetShipyard(WaypointId shipyardId, CancellationToken cancellationToken = default)
     {
-        var waypoint = await GetWaypoint(waypointId, cancellationToken);
+        var waypoint = await GetWaypoint(shipyardId, cancellationToken);
         if (waypoint == null) { return null; }
-        var response = await apiClient.GetShipyard(waypointId.System.Value, waypointId.Value, cancellationToken);
+        var response = await apiClient.GetShipyard(shipyardId.System.Value, shipyardId.Value, cancellationToken);
         if (response.StatusCode == HttpStatusCode.NotFound) { return null; }
         return response.GetContent().Data.ToDomain(waypoint);
     }
 
-    public async Task<Marketplace?> GetMarketplace(WaypointId waypointId, CancellationToken cancellationToken = default)
+    public async Task<Marketplace?> GetMarketplace(WaypointId marketPlaceId, CancellationToken cancellationToken = default)
     {
-        var cached = await dataClient.GetMarketplace(waypointId, cancellationToken);
+        var cached = await dataClient.GetMarketplace(marketPlaceId, cancellationToken);
         if (cached != null)
         {
             return cached.Item;
         }
 
-        var waypoint = await GetWaypoint(waypointId, cancellationToken);
+        var waypoint = await GetWaypoint(marketPlaceId, cancellationToken);
         if (waypoint == null) { return null; }
-        var response = await apiClient.GetMarketplace(waypointId.System.Value, waypointId.Value, cancellationToken);
+        var response = await apiClient.GetMarketplace(marketPlaceId.System.Value, marketPlaceId.Value, cancellationToken);
         if (response.StatusCode == HttpStatusCode.NotFound) { return null; }
         var market = response.GetContent().Data.ToDomain(waypoint);
 

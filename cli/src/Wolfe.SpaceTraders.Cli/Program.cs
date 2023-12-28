@@ -1,70 +1,26 @@
-﻿using System.CommandLine.Builder;
-using System.CommandLine.Invocation;
-using System.CommandLine.IO;
-using System.CommandLine.Parsing;
-using System.Reflection;
+﻿using Cocona;
 using Wolfe.SpaceTraders.Cli.Commands;
-using Wolfe.SpaceTraders.Cli.Extensions;
 using Wolfe.SpaceTraders.Infrastructure;
-using Wolfe.SpaceTraders.Sdk;
 using Wolfe.SpaceTraders.Service;
 
-var configuration = new ConfigurationBuilder()
-    .AddJsonFile("appsettings.json")
-    .Build();
+var builder = CoconaApp.CreateBuilder();
 
-var services = new ServiceCollection()
-    .AddLogging(builder => builder
-        .AddConfiguration(configuration.GetSection("Logging"))
-        .AddJsonFile()
-    )
-    .AddInfrastructureLayer(configuration)
-    .AddServiceLayer(configuration);
+builder.Services.AddLogging(b => b
+    .ClearProviders()
+    .AddJsonFile()
+);
 
-var handlers = Assembly
-    .GetExecutingAssembly()
-    .GetTypes()
-    .Where(t => t.IsAssignableTo(typeof(ICommandHandler)) && !t.IsAbstract).ToList();
-foreach (var handler in handlers)
-{
-    services.AddTransient(handler, handler);
-}
+builder.Services
+    .AddInfrastructureLayer(builder.Configuration)
+    .AddServiceLayer(builder.Configuration);
 
-var provider = services.BuildServiceProvider();
+var app = builder.Build();
 
-var rootCommand = RootCommand.CreateCommand(provider);
-var parser = new CommandLineBuilder(rootCommand)
-    .UseHelp()
-    .UseVersionOption()
-    .UseParseErrorReporting()
-    .UseExceptionHandler((ex, ctx) =>
-    {
-        if (ex is SpaceTradersApiException spEx)
-        {
-            ctx.Console.Error.WriteLine($"Error: {spEx.Message} ({spEx.ErrorCode})".Color(ConsoleColors.Error));
-        }
-        else
-        {
-            ctx.Console.Error.WriteLine($"Error: {ex.Message}");
-        }
-    })
-    .CancelOnProcessTermination()
-    .Build();
+app.AddCommands<AgentCommands>();
+app.AddCommands<ContractCommands>();
+app.AddCommands<ExplorationCommands>();
+app.AddCommands<FleetCommands>();
+app.AddCommands<MissionCommands>();
+app.AddCommands<ShipCommands>();
 
-if (args.Length != 0)
-{
-    return await parser.InvokeAsync(args);
-}
-
-string? commandLine;
-var lastResult = 0;
-do
-{
-    Console.Write("> ");
-    commandLine = Console.ReadLine();
-    if (!string.IsNullOrEmpty(commandLine))
-    {
-        lastResult = await parser.InvokeAsync(commandLine);
-    }
-} while (!string.IsNullOrWhiteSpace(commandLine));
-return lastResult;
+app.Run();

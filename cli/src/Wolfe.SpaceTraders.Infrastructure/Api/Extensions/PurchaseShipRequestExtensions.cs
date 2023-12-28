@@ -7,7 +7,7 @@ internal static class PurchaseShipRequestExtensions
 {
     public static SpaceTradersPurchaseShipRequest ToApi(this PurchaseShipCommand command) => new()
     {
-        Waypoint = command.WaypointId.Value,
+        Waypoint = command.ShipyardId.Value,
         ShipType = command.ShipType.Value,
     };
 }
