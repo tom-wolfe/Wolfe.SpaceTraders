@@ -32,8 +32,6 @@ public class ProcurementContractMission(Ship ship, Contract contract)
         var itemsToRemove = ship.Cargo.Items
             .ExceptBy(contractItems, i => i.Id);
 
-        // TODO: Instead of jettisoning, sell the items.
-
         foreach (var item in itemsToRemove)
         {
             await ship.Jettison(item.Id, item.Quantity);

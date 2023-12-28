@@ -32,6 +32,12 @@ internal class SpaceTradersShipClient(ISpaceTradersApiClient apiClient) : IShipC
         return response.GetContent().Data.ToDomain();
     }
 
+    public async Task<ShipJettisonResult> Jettison(ShipId shipId, ShipJettisonCommand command, CancellationToken cancellationToken)
+    {
+        var response = await apiClient.ShipJettison(shipId.Value, command.ToApi(), cancellationToken);
+        return response.GetContent().Data.ToDomain();
+    }
+
     public async Task<ShipNavigateResult> Navigate(ShipId shipId, ShipNavigateCommand command, CancellationToken cancellationToken = default)
     {
         var response = await apiClient.ShipNavigate(shipId.Value, command.ToApi(), cancellationToken);

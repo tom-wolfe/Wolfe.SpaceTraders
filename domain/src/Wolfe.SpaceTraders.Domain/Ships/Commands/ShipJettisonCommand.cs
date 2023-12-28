@@ -2,7 +2,7 @@
 
 namespace Wolfe.SpaceTraders.Domain.Ships.Commands;
 
-public class ShipJettisonCommand
+public class ShipSellCommand
 {
     public required ItemId ItemId { get; init; }
     public required int Quantity { get; init; }
