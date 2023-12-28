@@ -10,7 +10,6 @@ internal static class SpaceTradersShipyardExtensions
     {
         Id = new WaypointId(shipyard.Symbol),
         Type = waypoint.Type,
-        SystemId = waypoint.SystemId,
         Location = waypoint.Location,
         Traits = [.. waypoint.Traits],
         ShipTypes = shipyard.ShipTypes.Select(s => s.ToDomain()).ToList(),

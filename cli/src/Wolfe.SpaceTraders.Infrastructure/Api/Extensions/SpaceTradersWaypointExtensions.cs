@@ -1,5 +1,4 @@
 ﻿using Wolfe.SpaceTraders.Domain.Navigation;
-using Wolfe.SpaceTraders.Domain.Systems;
 using Wolfe.SpaceTraders.Domain.Waypoints;
 using Wolfe.SpaceTraders.Sdk.Models.Systems;
 
@@ -11,7 +10,6 @@ internal static class SpaceTradersWaypointExtensions
     {
         Id = new WaypointId(waypoint.Symbol),
         Type = new WaypointType(waypoint.Type),
-        SystemId = new SystemId(waypoint.SystemSymbol),
         Location = new Point(waypoint.X, waypoint.Y),
         Traits = waypoint.Traits.Select(t => t.ToDomain()).ToList(),
     };

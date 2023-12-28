@@ -60,7 +60,7 @@ internal class SpaceTradersExplorationService(
         var waypoints = GetWaypoints(systemId, cancellationToken);
         await foreach (var waypoint in waypoints)
         {
-            if (!waypoint.HasTrait(WaypointTraitId.Marketplace))
+            if (!waypoint.IsMarketplace)
             {
                 continue;
             }

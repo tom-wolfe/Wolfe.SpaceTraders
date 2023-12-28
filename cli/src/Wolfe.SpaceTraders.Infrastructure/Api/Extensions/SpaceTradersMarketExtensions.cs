@@ -10,7 +10,6 @@ internal static class SpaceTradersMarketExtensions
     {
         Id = new WaypointId(marketplace.Symbol),
         Type = waypoint.Type,
-        SystemId = waypoint.SystemId,
         Location = waypoint.Location,
         Traits = [.. waypoint.Traits],
         Imports = marketplace.Imports.Select(i => i.ToDomain()).ToList(),

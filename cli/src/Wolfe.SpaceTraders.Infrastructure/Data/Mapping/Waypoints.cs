@@ -1,5 +1,4 @@
-﻿using Wolfe.SpaceTraders.Domain.Systems;
-using Wolfe.SpaceTraders.Domain.Waypoints;
+﻿using Wolfe.SpaceTraders.Domain.Waypoints;
 using Wolfe.SpaceTraders.Infrastructure.Data.Models;
 
 namespace Wolfe.SpaceTraders.Infrastructure.Data.Mapping;
@@ -10,7 +9,6 @@ internal static class Waypoints
     {
         Id = waypoint.Id.Value,
         Type = waypoint.Type.Value,
-        System = waypoint.SystemId.Value,
         Location = waypoint.Location.ToData(),
         Traits = waypoint.Traits.Select(t => t.ToData()).ToList()
     };
@@ -19,7 +17,6 @@ internal static class Waypoints
     {
         Id = new WaypointId(waypoint.Id),
         Type = new WaypointType(waypoint.Type),
-        SystemId = new SystemId(waypoint.System),
         Location = waypoint.Location.ToDomain(),
         Traits = waypoint.Traits.Select(t => t.ToDomain()).ToList()
     };

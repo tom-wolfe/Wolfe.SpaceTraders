@@ -1,5 +1,4 @@
 ﻿using Wolfe.SpaceTraders.Domain.Marketplace;
-using Wolfe.SpaceTraders.Domain.Systems;
 using Wolfe.SpaceTraders.Domain.Waypoints;
 using Wolfe.SpaceTraders.Infrastructure.Data.Models;
 
@@ -11,7 +10,6 @@ internal static class Marketplaces
     {
         Id = marketplace.Id.Value,
         Type = marketplace.Type.Value,
-        System = marketplace.SystemId.Value,
         Location = marketplace.Location.ToData(),
         Traits = marketplace.Traits.Select(t => t.ToData()).ToList(),
         Imports = marketplace.Imports.Select(i => i.ToData()).ToList(),
@@ -23,7 +21,6 @@ internal static class Marketplaces
     {
         Id = new WaypointId(marketplace.Id),
         Type = new WaypointType(marketplace.Type),
-        SystemId = new SystemId(marketplace.System),
         Location = marketplace.Location.ToDomain(),
         Traits = marketplace.Traits.Select(t => t.ToDomain()).ToList(),
         Imports = marketplace.Imports.Select(i => i.ToDomain()).ToList(),
