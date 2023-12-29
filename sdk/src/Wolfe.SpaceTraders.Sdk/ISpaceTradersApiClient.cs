@@ -73,6 +73,13 @@ public interface ISpaceTradersApiClient
         CancellationToken cancellationToken = default
     );
 
+    /// <summary>
+    /// Retrieve imports, exports and exchange data from a marketplace. Requires a waypoint that has the <code>MARKETPLACE</code> trait to use.
+    /// </summary>
+    /// <param name="systemId">The system symbol</param>
+    /// <param name="waypointId">The waypoint symbol</param>
+    /// <param name="cancellationToken"></param>
+    /// <returns></returns>
     [Get("/systems/{systemId}/waypoints/{waypointId}/market")]
     public Task<IApiResponse<SpaceTradersGetMarketplaceResponse>> GetMarketplace(
         string systemId,

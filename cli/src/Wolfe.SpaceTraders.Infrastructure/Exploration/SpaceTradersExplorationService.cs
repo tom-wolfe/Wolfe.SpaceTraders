@@ -49,7 +49,7 @@ internal class SpaceTradersExplorationService(
         var waypoints = GetWaypoints(systemId, cancellationToken);
         await foreach (var waypoint in waypoints)
         {
-            if (!waypoint.IsMarketplace)
+            if (!waypoint.HasMarketplace)
             {
                 continue;
             }
@@ -86,7 +86,7 @@ internal class SpaceTradersExplorationService(
         var waypoints = GetWaypoints(systemId, cancellationToken);
         await foreach (var waypoint in waypoints)
         {
-            if (!waypoint.IsShipyard)
+            if (!waypoint.HasShipyard)
             {
                 continue;
             }

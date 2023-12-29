@@ -1,4 +1,5 @@
-﻿using Wolfe.SpaceTraders.Domain.Navigation;
+﻿using Wolfe.SpaceTraders.Domain.Exploration;
+using Wolfe.SpaceTraders.Domain.Navigation;
 using Wolfe.SpaceTraders.Domain.Ships.Commands;
 using Wolfe.SpaceTraders.Domain.Ships.Results;
 
@@ -11,6 +12,7 @@ public interface IShipClient
     public Task<ShipJettisonResult> Jettison(ShipId shipId, ShipJettisonCommand command, CancellationToken cancellationToken = default);
     public Task<ShipNavigateResult> Navigate(ShipId shipId, ShipNavigateCommand command, CancellationToken cancellationToken = default);
     public Task<ShipOrbitResult> Orbit(ShipId shipId, CancellationToken cancellationToken = default);
+    public Task<ShipProbeMarketDataResult?> ProbeMarketData(WaypointId waypointId, CancellationToken cancellationToken = default);
     public Task<ShipRefuelResult> Refuel(ShipId shipId, CancellationToken cancellationToken = default);
     public Task<ShipSellResult> Sell(ShipId shipId, ShipSellCommand request, CancellationToken cancellationToken = default);
     public Task<SetShipSpeedResult> SetSpeed(ShipId shipId, FlightSpeed speed, CancellationToken cancellationToken = default);

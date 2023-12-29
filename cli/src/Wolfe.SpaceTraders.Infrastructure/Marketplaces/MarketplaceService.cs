@@ -8,8 +8,6 @@ internal class MarketplaceService(IOptions<MarketServiceOptions> options) : IMar
 {
     public Task<double> GetPercentileVolatility(TimeSpan age, CancellationToken cancellationToken = default)
     {
-        // TODO: Eventually base this on actual market data.
-
         var range = options.Value.MaxAge - options.Value.MinAge;
         var x = age - options.Value.MinAge;
         var percentile = x.TotalMilliseconds / range.TotalMilliseconds;

@@ -16,4 +16,10 @@ internal static class SpaceTradersMarketExtensions
         Exports = marketplace.Exports.Select(e => e.ToDomain()).ToList(),
         Exchange = marketplace.Exchange.Select(e => e.ToDomain()).ToList()
     };
+
+    public static MarketData ToMarketData(this SpaceTradersMarketplace marketplace) => new()
+    {
+        // TODO: Implement ToMarketData
+        RetrievedAt = DateTimeOffset.UtcNow,
+    };
 }

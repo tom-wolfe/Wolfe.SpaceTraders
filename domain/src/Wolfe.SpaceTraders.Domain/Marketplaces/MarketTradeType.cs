@@ -1,0 +1,1 @@
+﻿namespace Wolfe.SpaceTraders.Domain.Marketplaces;[StronglyTypedId]public partial struct MarketTradeType{    public static readonly MarketTradeType Export = new("EXPORT");    public static readonly MarketTradeType Import = new("IMPORT");    public static readonly MarketTradeType Exchange = new("EXCHANGE");}

@@ -103,6 +103,17 @@ public class Ship(
         Navigation = result.Navigation;
     }
 
+    public async Task<MarketData?> ProbeMarketData(CancellationToken cancellationToken)
+    {
+        if (Navigation.Status == NavigationStatus.InTransit)
+        {
+            throw new InvalidOperationException("Cannot probe market data while in transit.");
+        }
+
+        var result = await client.ProbeMarketData(Navigation.WaypointId, cancellationToken);
+        return result?.Data;
+    }
+
     public async ValueTask Refuel(CancellationToken cancellationToken = default)
     {
         var response = await client.Refuel(Id, cancellationToken);
@@ -115,7 +126,7 @@ public class Ship(
         Navigation = response.Navigation;
     }
 
-    public async ValueTask<Transaction> Sell(ItemId itemId, int quantity, CancellationToken cancellationToken = default)
+    public async ValueTask<MarketTransaction> Sell(ItemId itemId, int quantity, CancellationToken cancellationToken = default)
     {
         var request = new ShipSellCommand
         {

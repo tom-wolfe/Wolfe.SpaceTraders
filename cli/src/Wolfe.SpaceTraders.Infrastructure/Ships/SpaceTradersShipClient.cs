@@ -1,4 +1,6 @@
-﻿using Wolfe.SpaceTraders.Domain.Navigation;
+﻿using System.Net;
+using Wolfe.SpaceTraders.Domain.Exploration;
+using Wolfe.SpaceTraders.Domain.Navigation;
 using Wolfe.SpaceTraders.Domain.Ships;
 using Wolfe.SpaceTraders.Domain.Ships.Commands;
 using Wolfe.SpaceTraders.Domain.Ships.Results;
@@ -49,6 +51,28 @@ internal class SpaceTradersShipClient(ISpaceTradersApiClient apiClient) : IShipC
         var response = await apiClient.ShipOrbit(shipId.Value, cancellationToken);
         return response.GetContent().Data.ToDomain();
     }
+
+    public async Task<ShipProbeMarketDataResult?> ProbeMarketData(WaypointId waypointId, CancellationToken cancellationToken = default)
+    {
+        var response = await apiClient.GetMarketplace(waypointId.System.Value, waypointId.Value, cancellationToken);
+
+        // Waypoint is not a marketplace.
+        if (response.StatusCode == HttpStatusCode.NotFound) { return null; }
+
+        var marketplace = response.GetContent().Data;
+
+        // There's no ship at the marketplace.
+        if (marketplace.TradeGoods?.Count == 0)
+        {
+            return new ShipProbeMarketDataResult { Data = null };
+        }
+
+        return new ShipProbeMarketDataResult
+        {
+            Data = marketplace.ToMarketData()
+        };
+    }
+
 
     public async Task<ShipRefuelResult> Refuel(ShipId shipId, CancellationToken cancellationToken = default)
     {

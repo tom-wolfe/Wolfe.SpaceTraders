@@ -21,15 +21,17 @@ public class ProbeMission(
 
             await ship.BeginNavigationTo(marketplace.Id, FlightSpeed.Cruise, cancellationToken);
             await ship.AwaitArrival(cancellationToken);
+            var marketData = await ship.ProbeMarketData(cancellationToken);
+            await marketplaceService.UpdateMarketData(marketplace.Id, marketData, cancellationToken);
         }
     }
 
-    private ValueTask<Marketplaces.Marketplace> HighestPriorityMarketplace(CancellationToken cancellationToken = default) => explorationService
+    private ValueTask<Marketplace> HighestPriorityMarketplace(CancellationToken cancellationToken = default) => explorationService
         .GetMarketplaces(ship.Navigation.WaypointId.System, cancellationToken)
         .OrderByAwaitWithCancellation(MarketplacePriority)
         .FirstAsync(cancellationToken);
 
-    private async ValueTask<double> MarketplacePriority(Marketplaces.Marketplace marketplace, CancellationToken cancellationToken = default)
+    private async ValueTask<double> MarketplacePriority(Marketplace marketplace, CancellationToken cancellationToken = default)
     {
         var distanceFromShip = Math.Round(ship.Location.DistanceTo(marketplace.Location).Total);
 

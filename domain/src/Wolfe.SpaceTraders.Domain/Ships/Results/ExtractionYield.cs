@@ -1,6 +1,6 @@
 ﻿using Wolfe.SpaceTraders.Domain.Marketplaces;
 
-namespace Wolfe.SpaceTraders.Domain.Extraction;
+namespace Wolfe.SpaceTraders.Domain.Ships.Results;
 
 public class ExtractionYield
 {

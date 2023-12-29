@@ -8,7 +8,7 @@ namespace Wolfe.SpaceTraders.Infrastructure.Api.Extensions;
 
 internal static class SpaceTradersTransactionExtensions
 {
-    public static Transaction ToDomain(this SpaceTradersTransaction transaction) => new()
+    public static MarketTransaction ToDomain(this SpaceTradersTransaction transaction) => new()
     {
         ShipId = new ShipId(transaction.ShipSymbol),
         Timestamp = transaction.Timestamp,

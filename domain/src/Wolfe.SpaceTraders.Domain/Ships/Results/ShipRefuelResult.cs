@@ -7,5 +7,5 @@ public class ShipRefuelResult
 {
     public required Agent Agent { get; init; }
     public required ShipFuel Fuel { get; init; }
-    public required Transaction Transaction { get; init; }
+    public required MarketTransaction Transaction { get; init; }
 }
