@@ -7,7 +7,7 @@ using Wolfe.SpaceTraders.Service.Ships;
 
 namespace Wolfe.SpaceTraders.Cli.Commands;
 
-internal class MissionCommands(
+internal class MissionCommands2(
     IMissionService missionService,
     IShipService shipService,
     IContractService contractService,

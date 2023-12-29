@@ -65,15 +65,16 @@ public class ProbeMission(IMissionLog log, Ship ship, IMarketplaceService market
 
         var marketData = await marketplaceService.GetMarketData(marketplace.Id, cancellationToken);
         var volatility = marketData == null ? 100 : await marketplaceService.GetPercentileVolatility(marketData.Age, cancellationToken);
+        var age = marketData == null ? 0 : marketData.Age.TotalMinutes;
 
         // Adjust priority based on percentile chance of market data having changed.
         return volatility switch
         {
-            < 25 => distanceFromShip * 0.5, // Lower value to discourage frequent updates.
-            < 50 => distanceFromShip * 1.0,
-            < 75 => distanceFromShip * 1.1,
-            < 100 => distanceFromShip * 1.2,
-            _ => distanceFromShip * 1.5 // Slightly boosted value to encourage exploration.
+            < 25 => (distanceFromShip + age) * 0.5, // Lower value to discourage frequent updates.
+            < 50 => (distanceFromShip + age) * 1.0,
+            < 75 => (distanceFromShip + age) * 1.1,
+            < 100 => (distanceFromShip + age) * 1.2,
+            _ => (distanceFromShip + age) * 1.5 // Slightly boosted value to encourage exploration.
         };
     }
 }
