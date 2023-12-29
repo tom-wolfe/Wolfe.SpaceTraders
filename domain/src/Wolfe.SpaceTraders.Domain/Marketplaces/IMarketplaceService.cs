@@ -4,7 +4,7 @@ namespace Wolfe.SpaceTraders.Domain.Marketplaces;
 
 public interface IMarketplaceService
 {
-    Task<decimal> GetPercentileVolatility(TimeSpan timeSinceLastUpdate, CancellationToken cancellationToken = default);
+    Task<double> GetPercentileVolatility(TimeSpan age, CancellationToken cancellationToken = default);
     Task<MarketData?> GetMarketData(WaypointId marketplaceId, CancellationToken cancellationToken);
 }
 
