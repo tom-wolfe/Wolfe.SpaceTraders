@@ -1,5 +1,5 @@
 ﻿using Wolfe.SpaceTraders.Domain.Exploration;
-using Wolfe.SpaceTraders.Domain.Marketplace;
+using Wolfe.SpaceTraders.Domain.Marketplaces;
 using Wolfe.SpaceTraders.Infrastructure.Data.Models;
 
 namespace Wolfe.SpaceTraders.Infrastructure.Data.Mapping;

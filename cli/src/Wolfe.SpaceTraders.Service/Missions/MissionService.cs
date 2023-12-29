@@ -1,14 +1,15 @@
 ﻿using Wolfe.SpaceTraders.Domain.Contracts;
 using Wolfe.SpaceTraders.Domain.Exploration;
+using Wolfe.SpaceTraders.Domain.Marketplaces;
 using Wolfe.SpaceTraders.Domain.Missions;
 using Wolfe.SpaceTraders.Domain.Ships;
 
 namespace Wolfe.SpaceTraders.Service.Missions;
 
-// TODO: Rename this to something cooler.
 internal class MissionService(
     IMissionLogFactory logFactory,
     IExplorationService explorationService,
+    IMarketplaceService marketplaceService,
     IWayfinderService wayfinderService
 ) : IMissionService
 {
@@ -21,6 +22,6 @@ internal class MissionService(
         throw new NotImplementedException();
     }
 
-    public IMission CreateProbeMission(Ship ship) => new ProbeMission(logFactory.CreateMissionLog(), ship, explorationService);
+    public IMission CreateProbeMission(Ship ship) => new ProbeMission(logFactory.CreateMissionLog(), ship, explorationService, marketplaceService);
     public IMission CreateTradeMission(Ship ship) => new TradingMission(logFactory.CreateMissionLog(), ship, wayfinderService);
 }

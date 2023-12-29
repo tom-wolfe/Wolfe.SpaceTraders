@@ -6,7 +6,7 @@ using Wolfe.SpaceTraders.Infrastructure.Api.Extensions;
 using Wolfe.SpaceTraders.Sdk;
 using Wolfe.SpaceTraders.Sdk.Requests;
 
-namespace Wolfe.SpaceTraders.Infrastructure;
+namespace Wolfe.SpaceTraders.Infrastructure.Ships;
 
 internal class SpaceTradersShipClient(ISpaceTradersApiClient apiClient) : IShipClient
 {

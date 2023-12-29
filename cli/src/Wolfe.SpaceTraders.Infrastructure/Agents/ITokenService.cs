@@ -1,4 +1,4 @@
-﻿namespace Wolfe.SpaceTraders.Infrastructure.Token;
+﻿namespace Wolfe.SpaceTraders.Infrastructure.Agents;
 
 public interface ITokenService
 {

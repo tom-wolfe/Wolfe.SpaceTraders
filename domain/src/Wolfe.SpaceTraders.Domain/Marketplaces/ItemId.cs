@@ -1,6 +1,6 @@
 ﻿using System.Diagnostics;
 
-namespace Wolfe.SpaceTraders.Domain.Marketplace;
+namespace Wolfe.SpaceTraders.Domain.Marketplaces;
 
 [StronglyTypedId]
 [DebuggerDisplay("{Value}")]

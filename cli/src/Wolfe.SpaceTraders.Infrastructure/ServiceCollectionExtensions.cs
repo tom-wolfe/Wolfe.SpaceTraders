@@ -2,8 +2,12 @@
 using Wolfe.SpaceTraders.Domain.Exploration;
 using Wolfe.SpaceTraders.Domain.Fleet;
 using Wolfe.SpaceTraders.Domain.Ships;
+using Wolfe.SpaceTraders.Infrastructure.Agents;
+using Wolfe.SpaceTraders.Infrastructure.Contracts;
 using Wolfe.SpaceTraders.Infrastructure.Data;
-using Wolfe.SpaceTraders.Infrastructure.Token;
+using Wolfe.SpaceTraders.Infrastructure.Exploration;
+using Wolfe.SpaceTraders.Infrastructure.Fleet;
+using Wolfe.SpaceTraders.Infrastructure.Ships;
 using Wolfe.SpaceTraders.Sdk;
 using Wolfe.SpaceTraders.Service.Agents;
 using Wolfe.SpaceTraders.Service.Contracts;

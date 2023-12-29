@@ -1,8 +1,9 @@
 ﻿using Wolfe.SpaceTraders.Domain.Exploration;
-using Wolfe.SpaceTraders.Domain.Marketplace;
+using Wolfe.SpaceTraders.Domain.Marketplaces;
 using Wolfe.SpaceTraders.Domain.Navigation;
 using Wolfe.SpaceTraders.Domain.Ships.Commands;
 using Wolfe.SpaceTraders.Domain.Ships.Results;
+
 
 namespace Wolfe.SpaceTraders.Domain.Ships;
 
@@ -16,6 +17,7 @@ public class Ship(
     public required ShipId Id { get; init; }
     public required string Name { get; init; }
     public required ShipRole Role { get; init; }
+    public Point Location => Navigation.Route.Origin.Point;
     public Navigation.Navigation Navigation { get; private set; } = navigation;
     public ShipFuel Fuel { get; private set; } = fuel;
     public ShipCargo Cargo { get; private set; } = cargo;

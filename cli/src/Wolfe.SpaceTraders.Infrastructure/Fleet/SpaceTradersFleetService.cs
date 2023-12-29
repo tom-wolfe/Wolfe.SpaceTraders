@@ -5,7 +5,7 @@ using Wolfe.SpaceTraders.Domain.Ships;
 using Wolfe.SpaceTraders.Infrastructure.Api.Extensions;
 using Wolfe.SpaceTraders.Sdk;
 
-namespace Wolfe.SpaceTraders.Infrastructure;
+namespace Wolfe.SpaceTraders.Infrastructure.Fleet;
 
 internal class SpaceTradersFleetService(
     ISpaceTradersApiClient apiClient,

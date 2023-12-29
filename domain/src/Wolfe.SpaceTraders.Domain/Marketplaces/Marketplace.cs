@@ -1,6 +1,6 @@
 ﻿using Wolfe.SpaceTraders.Domain.Exploration;
 
-namespace Wolfe.SpaceTraders.Domain.Marketplace;
+namespace Wolfe.SpaceTraders.Domain.Marketplaces;
 
 public class Marketplace : Waypoint
 {

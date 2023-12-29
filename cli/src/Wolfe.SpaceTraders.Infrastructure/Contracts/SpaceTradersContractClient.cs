@@ -3,7 +3,7 @@ using Wolfe.SpaceTraders.Domain.Contracts.Results;
 using Wolfe.SpaceTraders.Infrastructure.Api.Extensions;
 using Wolfe.SpaceTraders.Sdk;
 
-namespace Wolfe.SpaceTraders.Infrastructure;
+namespace Wolfe.SpaceTraders.Infrastructure.Contracts;
 
 internal class SpaceTradersContractClient(ISpaceTradersApiClient apiClient) : IContractClient
 {

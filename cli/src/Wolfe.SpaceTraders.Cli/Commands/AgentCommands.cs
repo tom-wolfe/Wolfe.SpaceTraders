@@ -4,7 +4,7 @@ using Wolfe.SpaceTraders.Cli.Extensions;
 using Wolfe.SpaceTraders.Cli.Formatters;
 using Wolfe.SpaceTraders.Domain.Agents;
 using Wolfe.SpaceTraders.Domain.Factions;
-using Wolfe.SpaceTraders.Infrastructure.Token;
+using Wolfe.SpaceTraders.Infrastructure.Agents;
 using Wolfe.SpaceTraders.Service.Agents;
 using Wolfe.SpaceTraders.Service.Agents.Commands;
 

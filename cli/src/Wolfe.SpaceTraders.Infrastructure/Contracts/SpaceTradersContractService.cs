@@ -6,7 +6,7 @@ using Wolfe.SpaceTraders.Sdk;
 using Wolfe.SpaceTraders.Sdk.Models.Contracts;
 using Wolfe.SpaceTraders.Service.Contracts;
 
-namespace Wolfe.SpaceTraders.Infrastructure;
+namespace Wolfe.SpaceTraders.Infrastructure.Contracts;
 
 internal class SpaceTradersContractService(
     ISpaceTradersApiClient apiClient,

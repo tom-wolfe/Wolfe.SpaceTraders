@@ -1,5 +1,5 @@
 ﻿using Wolfe.SpaceTraders.Domain.Agents;
-using Wolfe.SpaceTraders.Domain.Marketplace;
+using Wolfe.SpaceTraders.Domain.Marketplaces;
 
 namespace Wolfe.SpaceTraders.Domain.Ships.Results;
 

@@ -1,6 +1,4 @@
 ﻿using System.Net;
-using Wolfe.SpaceTraders.Domain.Fleet.Commands;
-using Wolfe.SpaceTraders.Domain.Fleet.Results;
 using Wolfe.SpaceTraders.Domain.Ships;
 using Wolfe.SpaceTraders.Infrastructure.Api;
 using Wolfe.SpaceTraders.Infrastructure.Api.Extensions;
@@ -8,7 +6,7 @@ using Wolfe.SpaceTraders.Sdk;
 using Wolfe.SpaceTraders.Sdk.Models.Ships;
 using Wolfe.SpaceTraders.Service.Ships;
 
-namespace Wolfe.SpaceTraders.Infrastructure;
+namespace Wolfe.SpaceTraders.Infrastructure.Ships;
 
 internal class SpaceTradersShipService(
     ISpaceTradersApiClient apiClient,
@@ -27,11 +25,5 @@ internal class SpaceTradersShipService(
         return PaginationHelpers.ToAsyncEnumerable<SpaceTradersShip>(
             async p => (await apiClient.GetShips(20, p, cancellationToken)).GetContent()
         ).SelectAwait(s => ValueTask.FromResult(s.ToDomain(shipClient)));
-    }
-
-    public async Task<PurchaseShipResult> PurchaseShip(PurchaseShipCommand command, CancellationToken cancellationToken = default)
-    {
-        var response = await apiClient.PurchaseShip(command.ToApi(), cancellationToken);
-        return response.GetContent().ToDomain(shipClient);
     }
 }

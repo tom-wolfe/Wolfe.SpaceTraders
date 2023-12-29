@@ -1,4 +1,4 @@
-﻿using Wolfe.SpaceTraders.Domain.Marketplace;
+﻿using Wolfe.SpaceTraders.Domain.Marketplaces;
 using Wolfe.SpaceTraders.Domain.Ships;
 using Wolfe.SpaceTraders.Sdk.Models.Ships;
 

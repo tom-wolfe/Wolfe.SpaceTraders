@@ -1,7 +1,7 @@
 ﻿using Wolfe.SpaceTraders.Domain.Exploration;
 using Wolfe.SpaceTraders.Domain.Ships;
 
-namespace Wolfe.SpaceTraders.Domain.Marketplace;
+namespace Wolfe.SpaceTraders.Domain.Marketplaces;
 
 public class Transaction
 {

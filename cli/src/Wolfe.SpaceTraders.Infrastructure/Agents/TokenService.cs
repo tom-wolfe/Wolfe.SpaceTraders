@@ -1,6 +1,6 @@
 ﻿using Wolfe.SpaceTraders.Infrastructure.Data;
 
-namespace Wolfe.SpaceTraders.Infrastructure.Token;
+namespace Wolfe.SpaceTraders.Infrastructure.Agents;
 
 internal class TokenService(ISpaceTradersDataClient dataClient) : ITokenService
 {

@@ -7,7 +7,7 @@ using Wolfe.SpaceTraders.Service.Agents;
 using Wolfe.SpaceTraders.Service.Agents.Commands;
 using Wolfe.SpaceTraders.Service.Agents.Results;
 
-namespace Wolfe.SpaceTraders.Infrastructure;
+namespace Wolfe.SpaceTraders.Infrastructure.Agents;
 
 internal class SpaceTradersAgentService(
     ISpaceTradersApiClient apiClient,
