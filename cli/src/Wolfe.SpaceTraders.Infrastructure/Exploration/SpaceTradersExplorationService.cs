@@ -26,7 +26,7 @@ internal class SpaceTradersExplorationService(
 
         var waypoint = await GetWaypoint(marketplaceId, cancellationToken);
         if (waypoint == null) { return null; }
-        var response = await apiClient.GetMarketplace(marketplaceId.System.Value, marketplaceId.Value, cancellationToken);
+        var response = await apiClient.GetMarketplace(marketplaceId.SystemId.Value, marketplaceId.Value, cancellationToken);
         if (response.StatusCode == HttpStatusCode.NotFound) { return null; }
         var market = response.GetContent().Data.ToDomain(waypoint);
 
@@ -64,11 +64,20 @@ internal class SpaceTradersExplorationService(
 
     public async Task<Shipyard?> GetShipyard(WaypointId shipyardId, CancellationToken cancellationToken = default)
     {
+        var cached = await dataClient.GetShipyard(shipyardId, cancellationToken);
+        if (cached != null)
+        {
+            return cached.Item;
+        }
+
         var waypoint = await GetWaypoint(shipyardId, cancellationToken);
         if (waypoint == null) { return null; }
-        var response = await apiClient.GetShipyard(shipyardId.System.Value, shipyardId.Value, cancellationToken);
+        var response = await apiClient.GetShipyard(shipyardId.SystemId.Value, shipyardId.Value, cancellationToken);
         if (response.StatusCode == HttpStatusCode.NotFound) { return null; }
-        return response.GetContent().Data.ToDomain(waypoint);
+        var shipyard = response.GetContent().Data.ToDomain(waypoint);
+
+        await dataClient.AddShipyard(shipyard, cancellationToken);
+        return shipyard;
     }
 
     public async IAsyncEnumerable<Shipyard> GetShipyards(SystemId systemId, [EnumeratorCancellation] CancellationToken cancellationToken = default)
@@ -146,7 +155,7 @@ internal class SpaceTradersExplorationService(
             return cached.Item;
         }
 
-        var response = await apiClient.GetWaypoint(waypointId.System.Value, waypointId.Value, cancellationToken);
+        var response = await apiClient.GetWaypoint(waypointId.SystemId.Value, waypointId.Value, cancellationToken);
         if (response.StatusCode == HttpStatusCode.NotFound) { return null; }
         var waypoint = response.GetContent().Data.ToDomain();
 

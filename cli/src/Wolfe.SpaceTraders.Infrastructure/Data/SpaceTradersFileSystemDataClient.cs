@@ -18,6 +18,12 @@ internal class SpaceTradersFileSystemDataClient(IOptions<SpaceTradersDataOptions
         WriteIndented = true
     };
 
+    public Task AddMarketData(MarketData marketData, CancellationToken cancellationToken)
+    {
+        var file = Path.Combine(_options.MarketDataDirectory, $"{marketData.WaypointId.SystemId.Value}/{marketData.WaypointId.Value}.json");
+        return AddItem(file, marketData, m => m.ToData(), cancellationToken);
+    }
+
     public Task AddMarketplace(Marketplace marketplace, CancellationToken cancellationToken = default)
     {
         var file = Path.Combine(_options.MarketplacesDirectory, $"{marketplace.SystemId.Value}/{marketplace.Id.Value}.json");
@@ -49,9 +55,15 @@ internal class SpaceTradersFileSystemDataClient(IOptions<SpaceTradersDataOptions
         return data?.Item.Token;
     }
 
+    public Task<DataItemResponse<MarketData>?> GetMarketData(WaypointId marketplaceId, CancellationToken cancellationToken)
+    {
+        var file = Path.Combine(_options.MarketDataDirectory, $"{marketplaceId.SystemId.Value}/{marketplaceId.Value}.json");
+        return GetItem<MarketData, DataMarketData>(file, m => m.ToDomain(), cancellationToken);
+    }
+
     public Task<DataItemResponse<Marketplace>?> GetMarketplace(WaypointId marketplaceId, CancellationToken cancellationToken = default)
     {
-        var file = Path.Combine(_options.MarketplacesDirectory, $"{marketplaceId.System.Value}/{marketplaceId.Value}.json");
+        var file = Path.Combine(_options.MarketplacesDirectory, $"{marketplaceId.SystemId.Value}/{marketplaceId.Value}.json");
         return GetItem<Marketplace, DataMarketplace>(file, m => m.ToDomain(), cancellationToken);
     }
 
@@ -63,7 +75,7 @@ internal class SpaceTradersFileSystemDataClient(IOptions<SpaceTradersDataOptions
 
     public Task<DataItemResponse<Shipyard>?> GetShipyard(WaypointId shipyardId, CancellationToken cancellationToken = default)
     {
-        var file = Path.Combine(_options.ShipyardsDirectory, $"{shipyardId.System.Value}/{shipyardId.Value}.json");
+        var file = Path.Combine(_options.ShipyardsDirectory, $"{shipyardId.SystemId.Value}/{shipyardId.Value}.json");
         return GetItem<Shipyard, DataShipyard>(file, s => s.ToDomain(), cancellationToken);
     }
 
@@ -87,7 +99,7 @@ internal class SpaceTradersFileSystemDataClient(IOptions<SpaceTradersDataOptions
 
     public Task<DataItemResponse<Waypoint>?> GetWaypoint(WaypointId waypointId, CancellationToken cancellationToken = default)
     {
-        var file = Path.Combine(_options.WaypointsDirectory, $"{waypointId.System.Value}/{waypointId.Value}.json");
+        var file = Path.Combine(_options.WaypointsDirectory, $"{waypointId.SystemId.Value}/{waypointId.Value}.json");
         return GetItem<Waypoint, DataWaypoint>(file, m => m.ToDomain(), cancellationToken);
     }
 

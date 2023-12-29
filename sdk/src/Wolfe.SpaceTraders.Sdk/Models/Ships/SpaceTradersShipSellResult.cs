@@ -7,5 +7,5 @@ public class SpaceTradersShipSellResult
 {
     public required SpaceTradersAgent Agent { get; set; }
     public required SpaceTradersShipCargo Cargo { get; set; }
-    public required SpaceTradersTransaction Transaction { get; set; }
+    public required SpaceTradersMarketplaceTransaction Transaction { get; set; }
 }

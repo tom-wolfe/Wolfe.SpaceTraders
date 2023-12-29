@@ -17,7 +17,7 @@ public class Waypoint
     /// <summary>
     /// The system in which the waypoint is located.
     /// </summary>
-    public SystemId SystemId => Id.System;
+    public SystemId SystemId => Id.SystemId;
 
     /// <summary>
     /// Relative position of the waypoint in the system. This is not an absolute position in the universe.
