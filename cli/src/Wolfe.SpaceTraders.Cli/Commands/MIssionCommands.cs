@@ -2,7 +2,6 @@
 using Microsoft.Extensions.Hosting;
 using Wolfe.SpaceTraders.Domain.Contracts;
 using Wolfe.SpaceTraders.Domain.Ships;
-using Wolfe.SpaceTraders.Service.Contracts;
 using Wolfe.SpaceTraders.Service.Missions;
 using Wolfe.SpaceTraders.Service.Ships;
 

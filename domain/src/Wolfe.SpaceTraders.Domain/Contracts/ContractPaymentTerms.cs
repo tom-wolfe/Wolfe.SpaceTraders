@@ -2,6 +2,9 @@
 
 namespace Wolfe.SpaceTraders.Domain.Contracts;
 
+/// <summary>
+/// Defines the payment terms for a contract.
+/// </summary>
 public class ContractPaymentTerms
 {
     /// <summary>

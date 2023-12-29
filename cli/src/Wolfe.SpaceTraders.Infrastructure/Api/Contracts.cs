@@ -10,7 +10,7 @@ namespace Wolfe.SpaceTraders.Infrastructure.Api;
 
 internal static class Contracts
 {
-    public static Contract ToDomain(this SpaceTradersContract contract, IContractClient client) => new(client, contract.Accepted)
+    public static Contract ToDomain(this SpaceTradersContract contract, IContractService contractService) => new(contractService, contract.Accepted)
     {
         Id = new ContractId(contract.Id),
         FactionId = new FactionId(contract.FactionSymbol),
@@ -41,9 +41,9 @@ internal static class Contracts
         Items = terms.Deliver.Select(d => d.ToDomain()).ToList(),
     };
 
-    public static AcceptContractResult ToDomain(this SpaceTradersAcceptedContract contract, IContractClient client) => new()
+    public static AcceptContractResult ToDomain(this SpaceTradersAcceptedContract contract, IContractService contractService) => new()
     {
         Agent = contract.Agent.ToDomain(),
-        Contract = contract.Contract.ToDomain(client),
+        Contract = contract.Contract.ToDomain(contractService),
     };
 }

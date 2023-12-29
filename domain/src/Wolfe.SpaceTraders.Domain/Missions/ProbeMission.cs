@@ -1,5 +1,4 @@
-﻿using Wolfe.SpaceTraders.Domain.Exploration;
-using Wolfe.SpaceTraders.Domain.Marketplaces;
+﻿using Wolfe.SpaceTraders.Domain.Marketplaces;
 using Wolfe.SpaceTraders.Domain.Navigation;
 using Wolfe.SpaceTraders.Domain.Ships;
 
@@ -8,7 +7,6 @@ namespace Wolfe.SpaceTraders.Domain.Missions;
 public class ProbeMission(
     IMissionLog log,
     Ship ship,
-    IExplorationService explorationService,
     IMarketplaceService marketplaceService
 ) : Mission(log)
 {
@@ -26,7 +24,7 @@ public class ProbeMission(
         }
     }
 
-    private ValueTask<Marketplace> HighestPriorityMarketplace(CancellationToken cancellationToken = default) => explorationService
+    private ValueTask<Marketplace> HighestPriorityMarketplace(CancellationToken cancellationToken = default) => marketplaceService
         .GetMarketplaces(ship.Navigation.WaypointId.SystemId, cancellationToken)
         .OrderByAwaitWithCancellation(MarketplacePriority)
         .FirstAsync(cancellationToken);

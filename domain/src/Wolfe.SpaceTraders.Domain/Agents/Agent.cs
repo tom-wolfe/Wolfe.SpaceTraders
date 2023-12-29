@@ -3,6 +3,9 @@ using Wolfe.SpaceTraders.Domain.General;
 
 namespace Wolfe.SpaceTraders.Domain.Agents;
 
+/// <summary>
+/// Represents an a player agent in the SpaceTraders universe.
+/// </summary>
 public class Agent
 {
     /// <summary>

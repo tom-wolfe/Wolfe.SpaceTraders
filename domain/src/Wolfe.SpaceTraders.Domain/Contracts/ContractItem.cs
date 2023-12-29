@@ -3,6 +3,9 @@ using Wolfe.SpaceTraders.Domain.Marketplaces;
 
 namespace Wolfe.SpaceTraders.Domain.Contracts;
 
+/// <summary>
+/// Describes an item that needs to be delivered to a destination in order to complete a contract.
+/// </summary>
 public class ContractItem
 {
     /// <summary>

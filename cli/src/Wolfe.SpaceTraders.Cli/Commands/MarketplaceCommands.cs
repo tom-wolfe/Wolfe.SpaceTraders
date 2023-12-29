@@ -6,11 +6,15 @@ using Wolfe.SpaceTraders.Domain.Marketplaces;
 
 namespace Wolfe.SpaceTraders.Cli.Commands;
 
-internal class MarketplaceCommands(IExplorationService explorationService, IHostApplicationLifetime host)
+internal class MarketplaceCommands(
+    IExplorationService explorationService,
+    IMarketplaceService marketplaceService,
+    IHostApplicationLifetime host
+)
 {
     public async Task<int> Get([Argument] WaypointId marketplaceId)
     {
-        var marketplace = await explorationService.GetMarketplace(marketplaceId, host.ApplicationStopping) ?? throw new Exception($"Marketplace '{marketplaceId}' not found.");
+        var marketplace = await marketplaceService.GetMarketplace(marketplaceId, host.ApplicationStopping) ?? throw new Exception($"Marketplace '{marketplaceId}' not found.");
         MarketplaceFormatter.WriteMarketplace(marketplace);
 
         return ExitCodes.Success;
@@ -18,7 +22,7 @@ internal class MarketplaceCommands(IExplorationService explorationService, IHost
 
     public async Task<int> List([Argument] SystemId systemId, [Option] ItemId? buying, [Option] ItemId? selling, [Option] WaypointId? nearestTo)
     {
-        var marketplaces = explorationService.GetMarketplaces(systemId, host.ApplicationStopping);
+        var marketplaces = marketplaceService.GetMarketplaces(systemId, host.ApplicationStopping);
 
         if (selling != null)
         {

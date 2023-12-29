@@ -12,7 +12,6 @@ using Wolfe.SpaceTraders.Infrastructure.Marketplaces;
 using Wolfe.SpaceTraders.Infrastructure.Ships;
 using Wolfe.SpaceTraders.Sdk;
 using Wolfe.SpaceTraders.Service.Agents;
-using Wolfe.SpaceTraders.Service.Contracts;
 using Wolfe.SpaceTraders.Service.Ships;
 
 namespace Wolfe.SpaceTraders.Infrastructure;
@@ -39,8 +38,7 @@ public static class ServiceCollectionExtensions
             .AddSingleton<ISpaceTradersDataClient, SpaceTradersFileSystemDataClient>()
             .AddSingleton<IAgentService, SpaceTradersAgentService>()
             .AddSingleton<IExplorationService, SpaceTradersExplorationService>()
-            .AddSingleton<IContractClient, SpaceTradersContractClient>()
-            .AddSingleton<IContractService, SpaceTradersContractService>()
+            .AddSingleton<IContractService, ContractService>()
             .AddSingleton<IFleetService, SpaceTradersFleetService>()
             .AddSingleton<IMarketplaceService, MarketplaceService>()
             .AddSingleton<IShipClient, SpaceTradersShipClient>()

@@ -3,7 +3,6 @@ using Microsoft.Extensions.Hosting;
 using Wolfe.SpaceTraders.Cli.Extensions;
 using Wolfe.SpaceTraders.Cli.Formatters;
 using Wolfe.SpaceTraders.Domain.Contracts;
-using Wolfe.SpaceTraders.Service.Contracts;
 
 namespace Wolfe.SpaceTraders.Cli.Commands;
 

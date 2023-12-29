@@ -12,7 +12,7 @@ namespace Wolfe.SpaceTraders.Infrastructure.Agents;
 internal class SpaceTradersAgentService(
     ISpaceTradersApiClient apiClient,
     IShipClient shipClient,
-    IContractClient contractClient
+    IContractService contractService
 ) : IAgentService
 {
     public async Task<Agent> GetAgent(CancellationToken cancellationToken = default)
@@ -25,6 +25,6 @@ internal class SpaceTradersAgentService(
     {
 
         var response = await apiClient.Register(command.ToApi(), cancellationToken);
-        return response.GetContent().Data.ToDomain(shipClient, contractClient);
+        return response.GetContent().Data.ToDomain(shipClient, contractService);
     }
 }

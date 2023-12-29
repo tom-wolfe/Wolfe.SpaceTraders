@@ -3,14 +3,19 @@ using Microsoft.Extensions.Hosting;
 using Wolfe.SpaceTraders.Cli.Formatters;
 using Wolfe.SpaceTraders.Domain.Exploration;
 using Wolfe.SpaceTraders.Domain.Ships;
+using Wolfe.SpaceTraders.Domain.Shipyards;
 
 namespace Wolfe.SpaceTraders.Cli.Commands;
 
-internal class ShipyardCommands(IExplorationService explorationService, IHostApplicationLifetime host)
+internal class ShipyardCommands(
+    IExplorationService explorationService,
+    IShipyardService shipyardService,
+    IHostApplicationLifetime host
+)
 {
     public async Task<int> Get([Argument] WaypointId shipyardId)
     {
-        var shipyard = await explorationService.GetShipyard(shipyardId, host.ApplicationStopping) ?? throw new Exception($"Shipyard '{shipyardId}' not found.");
+        var shipyard = await shipyardService.GetShipyard(shipyardId, host.ApplicationStopping) ?? throw new Exception($"Shipyard '{shipyardId}' not found.");
         ShipyardFormatter.WriteShipyard(shipyard);
 
         return ExitCodes.Success;
@@ -18,7 +23,7 @@ internal class ShipyardCommands(IExplorationService explorationService, IHostApp
 
     public async Task<int> List([Argument] SystemId systemId, [Option] ShipType? selling, [Option] WaypointId? nearestTo)
     {
-        var shipyards = explorationService.GetShipyards(systemId, host.ApplicationStopping);
+        var shipyards = shipyardService.GetShipyards(systemId, host.ApplicationStopping);
 
         if (selling != null)
         {

@@ -1,6 +1,11 @@
 ﻿namespace Wolfe.SpaceTraders.Domain.Contracts;
 
-public class Contract(IContractClient client, bool accepted)
+/// <summary>
+/// A task with a set of terms that can be completed for a payment of credits.
+/// </summary>
+/// <param name="contractService"></param>
+/// <param name="accepted"></param>
+public class Contract(IContractService contractService, bool accepted)
 {
     /// <summary>
     /// ID of the contract.
@@ -68,7 +73,7 @@ public class Contract(IContractClient client, bool accepted)
     /// </remarks>
     public async Task Accept(CancellationToken cancellationToken = default)
     {
-        await client.AcceptContract(Id, cancellationToken);
+        await contractService.AcceptContract(Id, cancellationToken);
         Accepted = true;
     }
 }

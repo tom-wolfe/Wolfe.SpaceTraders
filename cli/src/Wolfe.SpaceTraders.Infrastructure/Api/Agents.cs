@@ -32,11 +32,11 @@ internal static class Agents
     public static RegisterResult ToDomain(
         this SpaceTradersRegistration response,
         IShipClient shipClient,
-        IContractClient contractClient
+        IContractService contractService
     ) => new()
     {
         Agent = response.Agent.ToDomain(),
-        Contract = response.Contract.ToDomain(contractClient),
+        Contract = response.Contract.ToDomain(contractService),
         Faction = response.Faction.ToDomain(),
         Ship = response.Ship.ToDomain(shipClient),
         Token = response.Token

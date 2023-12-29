@@ -8,7 +8,6 @@ namespace Wolfe.SpaceTraders.Service.Missions;
 
 internal class MissionService(
     IMissionLogFactory logFactory,
-    IExplorationService explorationService,
     IMarketplaceService marketplaceService,
     IWayfinderService wayfinderService
 ) : IMissionService
@@ -22,6 +21,6 @@ internal class MissionService(
         throw new NotImplementedException();
     }
 
-    public IMission CreateProbeMission(Ship ship) => new ProbeMission(logFactory.CreateMissionLog(), ship, explorationService, marketplaceService);
+    public IMission CreateProbeMission(Ship ship) => new ProbeMission(logFactory.CreateMissionLog(), ship, marketplaceService);
     public IMission CreateTradeMission(Ship ship) => new TradingMission(logFactory.CreateMissionLog(), ship, wayfinderService);
 }
