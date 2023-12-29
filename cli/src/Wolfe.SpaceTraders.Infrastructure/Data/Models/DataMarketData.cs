@@ -14,7 +14,7 @@ internal class DataMarketTradeGood
     public required string Type { get; init; }
     public required int Volume { get; init; }
     public required string Supply { get; init; }
-    public required string Activity { get; init; }
+    public required string? Activity { get; init; }
     public required long PurchasePrice { get; init; }
     public required long SellPrice { get; init; }
 }

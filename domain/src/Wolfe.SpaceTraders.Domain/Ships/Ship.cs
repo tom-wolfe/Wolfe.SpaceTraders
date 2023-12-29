@@ -31,15 +31,24 @@ public class Ship(
             return ValueTask.CompletedTask;
         }
 
-        var delay = Task.Delay(tta, cancellationToken);
+        var delay = Task
+            .Delay(tta, cancellationToken)
+            .ContinueWith(async t => Navigation = await client.GetNavigation(Id, cancellationToken), cancellationToken)
+            .Unwrap();
         return new ValueTask(delay);
     }
 
-    public async ValueTask BeginNavigationTo(WaypointId waypointId, ShipSpeed? speed = null, CancellationToken cancellationToken = default)
+    public async ValueTask<ShipNavigateResult?> BeginNavigationTo(WaypointId waypointId, ShipSpeed? speed = null, CancellationToken cancellationToken = default)
     {
         if (Navigation.Status == ShipNavigationStatus.InTransit)
         {
             throw new InvalidOperationException("Cannot navigate when ship is already in transit.");
+        }
+
+        if (Navigation.WaypointId == waypointId)
+        {
+            // Already at destination.
+            return null;
         }
 
         await Orbit(cancellationToken);
@@ -49,6 +58,8 @@ public class Ship(
         var result = await client.Navigate(Id, new ShipNavigateCommand { WaypointId = waypointId }, cancellationToken);
         Navigation = result.Navigation;
         Fuel = result.Fuel;
+
+        return result;
     }
 
     public async ValueTask Dock(CancellationToken cancellationToken = default)

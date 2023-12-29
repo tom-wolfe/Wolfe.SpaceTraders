@@ -56,14 +56,27 @@ internal class ShipCommands(IShipService shipService, IHostApplicationLifetime h
         return ExitCodes.Success;
     }
 
-    public async Task<int> Navigate([Argument] ShipId shipId, [Argument] WaypointId waypointId, [Option] ShipSpeed? speed)
+    public async Task<int> Navigate([Argument] ShipId shipId, [Argument] WaypointId waypointId, [Option] ShipSpeed? speed, [Option] bool wait)
     {
         var ship = await shipService.GetShip(shipId, host.ApplicationStopping) ?? throw new Exception($"Ship {shipId.Value} could not be found.");
 
-        await ship.BeginNavigationTo(waypointId, speed, host.ApplicationStopping);
+        var result = await ship.BeginNavigationTo(waypointId, speed, host.ApplicationStopping);
+
+        if (result == null)
+        {
+            Console.WriteLine("Your ship is already at its destination.".Color(ConsoleColors.Success));
+            return ExitCodes.Success;
+        }
 
         Console.WriteLine("Your ship is now in transit.".Color(ConsoleColors.Success));
         Console.WriteLine($"Expected to arrive {ship.Navigation.Route.Arrival.Humanize()}.");
+
+        if (wait)
+        {
+            Console.WriteLine("Waiting...");
+            await ship.AwaitArrival(host.ApplicationStopping);
+            Console.WriteLine("Your ship has arrived.".Color(ConsoleColors.Success));
+        }
 
         return ExitCodes.Success;
     }
@@ -96,6 +109,16 @@ internal class ShipCommands(IShipService shipService, IHostApplicationLifetime h
 
         await ship.Refuel(host.ApplicationStopping);
         Console.WriteLine("Your ship has been refueled.".Color(ConsoleColors.Success));
+
+        return ExitCodes.Success;
+    }
+
+    public async Task<int> Wait([Argument] ShipId shipId)
+    {
+        var ship = await shipService.GetShip(shipId, host.ApplicationStopping) ?? throw new Exception($"Ship {shipId} could not be found.");
+
+        await ship.AwaitArrival(host.ApplicationStopping);
+        Console.WriteLine("Your ship has arrived.".Color(ConsoleColors.Success));
 
         return ExitCodes.Success;
     }

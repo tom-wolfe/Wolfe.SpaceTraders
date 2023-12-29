@@ -31,7 +31,7 @@ public class MarketTradeGood
     /// If the good is an export, this represents how strong the production is for the good. When activity is strong,
     /// consumption or production is near maximum capacity. When activity is weak, consumption or production is near minimum capacity.
     /// </summary>
-    public required MarketTradeActivity Activity { get; init; }
+    public required MarketTradeActivity? Activity { get; init; }
 
     /// <summary>
     /// The price at which this good can be purchased from the market.

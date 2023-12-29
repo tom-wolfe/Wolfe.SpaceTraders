@@ -4,8 +4,8 @@ namespace Wolfe.SpaceTraders.Service.Missions;
 
 internal class ConsoleMissionLog : IMissionLog
 {
-    public void Log(string message)
+    public void Write(string message)
     {
-        Console.WriteLine($"{DateTimeOffset.UtcNow}: {message}");
+        Console.WriteLine($"{message}");
     }
 }

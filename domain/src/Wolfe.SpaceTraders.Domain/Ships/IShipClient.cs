@@ -9,6 +9,7 @@ public interface IShipClient
 {
     public Task<ShipDockResult> Dock(ShipId shipId, CancellationToken cancellationToken = default);
     public Task<ShipExtractResult> Extract(ShipId shipId, CancellationToken cancellationToken = default);
+    public Task<ShipNavigation> GetNavigation(ShipId shipId, CancellationToken cancellationToken = default);
     public Task<ShipJettisonResult> Jettison(ShipId shipId, ShipJettisonCommand command, CancellationToken cancellationToken = default);
     public Task<ShipNavigateResult> Navigate(ShipId shipId, ShipNavigateCommand command, CancellationToken cancellationToken = default);
     public Task<ShipOrbitResult> Orbit(ShipId shipId, CancellationToken cancellationToken = default);

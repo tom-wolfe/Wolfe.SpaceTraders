@@ -64,7 +64,7 @@ internal static class Marketplaces
     {
         ItemId = new ItemId(tradeGood.ItemId),
         Type = new MarketTradeType(tradeGood.Type),
-        Activity = new MarketTradeActivity(tradeGood.Activity),
+        Activity = tradeGood.Activity == null ? null : new MarketTradeActivity(tradeGood.Activity),
         Supply = new MarketTradeSupply(tradeGood.Supply),
         Volume = tradeGood.Volume,
         PurchasePrice = new Credits(tradeGood.PurchasePrice),
@@ -75,7 +75,7 @@ internal static class Marketplaces
     {
         ItemId = marketData.ItemId.Value,
         Type = marketData.Type.Value,
-        Activity = marketData.Activity.Value,
+        Activity = marketData.Activity?.Value,
         Supply = marketData.Supply.Value,
         Volume = marketData.Volume,
         PurchasePrice = marketData.PurchasePrice.Value,

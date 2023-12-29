@@ -2,5 +2,5 @@
 
 public interface IMissionLog
 {
-    public void Log(string message);
+    public void Write(string message);
 }
