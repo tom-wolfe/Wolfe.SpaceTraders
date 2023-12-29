@@ -1,12 +1,12 @@
-﻿using Wolfe.SpaceTraders.Domain.Marketplace;
+﻿using Wolfe.SpaceTraders.Domain.Exploration;
+using Wolfe.SpaceTraders.Domain.Marketplace;
 using Wolfe.SpaceTraders.Domain.Ships;
-using Wolfe.SpaceTraders.Domain.Waypoints;
 
 namespace Wolfe.SpaceTraders.Domain.Missions;
 
-public class TradingMission(Ship ship, IWayfinderService wayfinderService)
+public class TradingMission(IMissionLog log, Ship ship, IWayfinderService wayfinderService) : Mission(log)
 {
-    public async Task Execute(CancellationToken cancellationToken = default)
+    public override async Task Execute(CancellationToken cancellationToken = default)
     {
         while (!cancellationToken.IsCancellationRequested)
         {
@@ -28,7 +28,7 @@ public class TradingMission(Ship ship, IWayfinderService wayfinderService)
         var route = wayfinderService.PlotRoute(ship, destination);
         await foreach (var stop in route)
         {
-            await ship.NavigateTo(stop.Waypoint);
+            await ship.BeginNavigationTo(stop.Waypoint);
             if (stop.Refuel)
             {
                 await ship.Refuel();

@@ -1,10 +1,10 @@
 ﻿using Cocona;
 using Microsoft.Extensions.Hosting;
 using Wolfe.SpaceTraders.Cli.Extensions;
+using Wolfe.SpaceTraders.Domain.Exploration;
 using Wolfe.SpaceTraders.Domain.Fleet;
 using Wolfe.SpaceTraders.Domain.Fleet.Commands;
 using Wolfe.SpaceTraders.Domain.Ships;
-using Wolfe.SpaceTraders.Domain.Waypoints;
 
 namespace Wolfe.SpaceTraders.Cli.Commands;
 

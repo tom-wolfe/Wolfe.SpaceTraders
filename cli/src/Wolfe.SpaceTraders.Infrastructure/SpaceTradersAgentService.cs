@@ -3,9 +3,9 @@ using Wolfe.SpaceTraders.Domain.Contracts;
 using Wolfe.SpaceTraders.Domain.Ships;
 using Wolfe.SpaceTraders.Infrastructure.Api.Extensions;
 using Wolfe.SpaceTraders.Sdk;
-using Wolfe.SpaceTraders.Service;
-using Wolfe.SpaceTraders.Service.Commands;
-using Wolfe.SpaceTraders.Service.Results;
+using Wolfe.SpaceTraders.Service.Agents;
+using Wolfe.SpaceTraders.Service.Agents.Commands;
+using Wolfe.SpaceTraders.Service.Agents.Results;
 
 namespace Wolfe.SpaceTraders.Infrastructure;
 

@@ -1,5 +1,5 @@
-﻿using Wolfe.SpaceTraders.Domain.Navigation;
-using Wolfe.SpaceTraders.Domain.Systems;
+﻿using Wolfe.SpaceTraders.Domain.Exploration;
+using Wolfe.SpaceTraders.Domain.Navigation;
 using Wolfe.SpaceTraders.Sdk.Models.Systems;
 
 namespace Wolfe.SpaceTraders.Infrastructure.Api.Extensions;

@@ -1,4 +1,4 @@
-﻿namespace Wolfe.SpaceTraders.Domain;
+﻿namespace Wolfe.SpaceTraders.Domain.Factions;
 
 [StronglyTypedId]
 public partial struct FactionId

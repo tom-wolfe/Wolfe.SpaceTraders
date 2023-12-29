@@ -1,7 +1,7 @@
 ﻿using Wolfe.SpaceTraders.Domain.Contracts;
 using Wolfe.SpaceTraders.Domain.Ships;
 using Wolfe.SpaceTraders.Sdk.Models.Agents;
-using Wolfe.SpaceTraders.Service.Results;
+using Wolfe.SpaceTraders.Service.Agents.Results;
 
 namespace Wolfe.SpaceTraders.Infrastructure.Api.Extensions;
 

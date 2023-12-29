@@ -1,13 +1,19 @@
 ﻿using Cocona;
 using Microsoft.Extensions.Hosting;
 using Wolfe.SpaceTraders.Domain.Contracts;
-using Wolfe.SpaceTraders.Domain.Missions;
 using Wolfe.SpaceTraders.Domain.Ships;
-using Wolfe.SpaceTraders.Service;
+using Wolfe.SpaceTraders.Service.Contracts;
+using Wolfe.SpaceTraders.Service.Missions;
+using Wolfe.SpaceTraders.Service.Ships;
 
 namespace Wolfe.SpaceTraders.Cli.Commands;
 
-internal class MissionCommands(IShipService shipService, IContractService contractService, IHostApplicationLifetime host)
+internal class MissionCommands(
+    IMissionService missionService,
+    IShipService shipService,
+    IContractService contractService,
+    IHostApplicationLifetime host
+)
 {
     public async Task<int> Contract([Argument] ShipId shipId, [Argument] ContractId contractId)
     {
@@ -15,7 +21,18 @@ internal class MissionCommands(IShipService shipService, IContractService contra
         var contract = await contractService.GetContract(contractId, host.ApplicationStopping) ?? throw new Exception($"Contract '{contractId}' not found.");
 
         // TODO: Make this non-blocking.
-        var mission = new ProcurementContractMission(ship, contract);
+        var mission = missionService.CreateContractMission(ship, contract);
+        await mission.Execute(host.ApplicationStopping);
+
+        return ExitCodes.Success;
+    }
+
+    public async Task<int> Probe([Argument] ShipId shipId)
+    {
+        var ship = await shipService.GetShip(shipId, host.ApplicationStopping) ?? throw new Exception($"Ship '{shipId}' not found.");
+
+        // TODO: Make this non-blocking.
+        var mission = missionService.CreateProbeMission(ship);
         await mission.Execute(host.ApplicationStopping);
 
         return ExitCodes.Success;
@@ -26,7 +43,7 @@ internal class MissionCommands(IShipService shipService, IContractService contra
         var ship = await shipService.GetShip(shipId, host.ApplicationStopping) ?? throw new Exception($"Ship '{shipId}' not found.");
 
         // TODO: Make this non-blocking.
-        var mission = new TradingMission(ship);
+        var mission = missionService.CreateTradeMission(ship);
         await mission.Execute(host.ApplicationStopping);
 
         return ExitCodes.Success;

@@ -1,5 +1,5 @@
-﻿using Wolfe.SpaceTraders.Domain.Marketplace;
-using Wolfe.SpaceTraders.Domain.Waypoints;
+﻿using Wolfe.SpaceTraders.Domain.Exploration;
+using Wolfe.SpaceTraders.Domain.Marketplace;
 
 namespace Wolfe.SpaceTraders.Domain.Contracts;
 

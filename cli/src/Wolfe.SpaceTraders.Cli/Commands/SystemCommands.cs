@@ -1,8 +1,7 @@
 ﻿using Cocona;
 using Microsoft.Extensions.Hosting;
 using Wolfe.SpaceTraders.Cli.Formatters;
-using Wolfe.SpaceTraders.Domain.Systems;
-using Wolfe.SpaceTraders.Service;
+using Wolfe.SpaceTraders.Domain.Exploration;
 
 namespace Wolfe.SpaceTraders.Cli.Commands;
 

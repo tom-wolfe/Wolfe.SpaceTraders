@@ -1,9 +1,9 @@
-﻿using Wolfe.SpaceTraders.Domain;
-using Wolfe.SpaceTraders.Domain.Agents;
+﻿using Wolfe.SpaceTraders.Domain.Agents;
 using Wolfe.SpaceTraders.Domain.Contracts;
+using Wolfe.SpaceTraders.Domain.Factions;
 using Wolfe.SpaceTraders.Domain.Ships;
 
-namespace Wolfe.SpaceTraders.Service.Results;
+namespace Wolfe.SpaceTraders.Service.Agents.Results;
 
 public class RegisterResult
 {

@@ -1,4 +1,4 @@
-﻿using Wolfe.SpaceTraders.Domain.Waypoints;
+﻿using Wolfe.SpaceTraders.Domain.Exploration;
 
 namespace Wolfe.SpaceTraders.Domain.Navigation;
 

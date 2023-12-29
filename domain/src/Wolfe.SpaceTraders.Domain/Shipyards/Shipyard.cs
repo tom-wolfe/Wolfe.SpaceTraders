@@ -1,5 +1,5 @@
-﻿using Wolfe.SpaceTraders.Domain.Ships;
-using Wolfe.SpaceTraders.Domain.Waypoints;
+﻿using Wolfe.SpaceTraders.Domain.Exploration;
+using Wolfe.SpaceTraders.Domain.Ships;
 
 namespace Wolfe.SpaceTraders.Domain.Shipyards;
 

@@ -1,7 +1,7 @@
 ﻿using Wolfe.SpaceTraders.Domain;
+using Wolfe.SpaceTraders.Domain.Exploration;
 using Wolfe.SpaceTraders.Domain.Marketplace;
 using Wolfe.SpaceTraders.Domain.Ships;
-using Wolfe.SpaceTraders.Domain.Waypoints;
 using Wolfe.SpaceTraders.Sdk.Models.Marketplace;
 
 namespace Wolfe.SpaceTraders.Infrastructure.Api.Extensions;

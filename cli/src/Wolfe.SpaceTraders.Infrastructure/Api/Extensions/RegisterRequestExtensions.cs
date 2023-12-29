@@ -1,5 +1,5 @@
 ﻿using Wolfe.SpaceTraders.Sdk.Requests;
-using Wolfe.SpaceTraders.Service.Commands;
+using Wolfe.SpaceTraders.Service.Agents.Commands;
 
 namespace Wolfe.SpaceTraders.Infrastructure.Api.Extensions;
 

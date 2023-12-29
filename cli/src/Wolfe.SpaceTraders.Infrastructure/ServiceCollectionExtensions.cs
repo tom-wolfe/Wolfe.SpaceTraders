@@ -1,10 +1,13 @@
 ﻿using Wolfe.SpaceTraders.Domain.Contracts;
+using Wolfe.SpaceTraders.Domain.Exploration;
 using Wolfe.SpaceTraders.Domain.Fleet;
 using Wolfe.SpaceTraders.Domain.Ships;
 using Wolfe.SpaceTraders.Infrastructure.Data;
 using Wolfe.SpaceTraders.Infrastructure.Token;
 using Wolfe.SpaceTraders.Sdk;
-using Wolfe.SpaceTraders.Service;
+using Wolfe.SpaceTraders.Service.Agents;
+using Wolfe.SpaceTraders.Service.Contracts;
+using Wolfe.SpaceTraders.Service.Ships;
 
 namespace Wolfe.SpaceTraders.Infrastructure;
 

@@ -1,6 +1,6 @@
 ﻿using Wolfe.SpaceTraders.Domain.Contracts;
 
-namespace Wolfe.SpaceTraders.Service;
+namespace Wolfe.SpaceTraders.Service.Contracts;
 
 public interface IContractService
 {

@@ -1,8 +1,8 @@
 ﻿using Wolfe.SpaceTraders.Domain.Agents;
-using Wolfe.SpaceTraders.Service.Commands;
-using Wolfe.SpaceTraders.Service.Results;
+using Wolfe.SpaceTraders.Service.Agents.Commands;
+using Wolfe.SpaceTraders.Service.Agents.Results;
 
-namespace Wolfe.SpaceTraders.Service;
+namespace Wolfe.SpaceTraders.Service.Agents;
 
 public interface IAgentService
 {

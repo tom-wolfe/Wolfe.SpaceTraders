@@ -3,7 +3,7 @@
 public class Contract(IContractClient client, bool accepted)
 {
     public required ContractId Id { get; init; }
-    public required FactionId FactionId { get; init; }
+    public required Factions.FactionId FactionId { get; init; }
     public required ContractType Type { get; init; }
     public required ContractTerms Terms { get; init; }
     public bool Fulfilled { get; init; }

@@ -1,6 +1,6 @@
 ﻿using Wolfe.SpaceTraders.Cli.Extensions;
+using Wolfe.SpaceTraders.Domain.Exploration;
 using Wolfe.SpaceTraders.Domain.Navigation;
-using Wolfe.SpaceTraders.Domain.Waypoints;
 
 namespace Wolfe.SpaceTraders.Cli.Formatters;
 

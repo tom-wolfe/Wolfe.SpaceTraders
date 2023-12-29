@@ -1,4 +1,5 @@
 ﻿using Cocona;
+using Wolfe.SpaceTraders.Cli;
 using Wolfe.SpaceTraders.Cli.Commands;
 using Wolfe.SpaceTraders.Infrastructure;
 using Wolfe.SpaceTraders.Service;
@@ -20,14 +21,17 @@ app.AddCommands<RootCommand>();
 
 app.Run();
 
-[HasSubCommands(typeof(AgentCommands), "agent")]
-[HasSubCommands(typeof(ContractCommands), "contract")]
-[HasSubCommands(typeof(FleetCommands), "fleet")]
-[HasSubCommands(typeof(MarketplaceCommands), "marketplace")]
-[HasSubCommands(typeof(MissionCommands), "mission")]
-[HasSubCommands(typeof(ShipCommands), "ship")]
-[HasSubCommands(typeof(ShipyardCommands), "shipyard")]
-[HasSubCommands(typeof(SystemCommands), "system")]
-[HasSubCommands(typeof(WaypointCommands), "waypoint")]
-// ReSharper disable once ClassNeverInstantiated.Global
-internal class RootCommand;
+namespace Wolfe.SpaceTraders.Cli
+{
+    [HasSubCommands(typeof(AgentCommands), "agent")]
+    [HasSubCommands(typeof(ContractCommands), "contract")]
+    [HasSubCommands(typeof(FleetCommands), "fleet")]
+    [HasSubCommands(typeof(MarketplaceCommands), "marketplace")]
+    [HasSubCommands(typeof(MissionCommands), "mission")]
+    [HasSubCommands(typeof(ShipCommands), "ship")]
+    [HasSubCommands(typeof(ShipyardCommands), "shipyard")]
+    [HasSubCommands(typeof(SystemCommands), "system")]
+    [HasSubCommands(typeof(WaypointCommands), "waypoint")]
+    // ReSharper disable once ClassNeverInstantiated.Global
+    internal class RootCommand;
+}

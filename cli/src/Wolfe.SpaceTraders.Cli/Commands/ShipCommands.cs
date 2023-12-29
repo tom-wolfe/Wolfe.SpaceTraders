@@ -3,11 +3,11 @@ using Humanizer;
 using Microsoft.Extensions.Hosting;
 using Wolfe.SpaceTraders.Cli.Extensions;
 using Wolfe.SpaceTraders.Cli.Formatters;
+using Wolfe.SpaceTraders.Domain.Exploration;
 using Wolfe.SpaceTraders.Domain.Marketplace;
 using Wolfe.SpaceTraders.Domain.Navigation;
 using Wolfe.SpaceTraders.Domain.Ships;
-using Wolfe.SpaceTraders.Domain.Waypoints;
-using Wolfe.SpaceTraders.Service;
+using Wolfe.SpaceTraders.Service.Ships;
 
 namespace Wolfe.SpaceTraders.Cli.Commands;
 
@@ -60,13 +60,7 @@ internal class ShipCommands(IShipService shipService, IHostApplicationLifetime h
     {
         var ship = await shipService.GetShip(shipId, host.ApplicationStopping) ?? throw new Exception($"Ship {shipId.Value} could not be found.");
 
-        if (speed != null)
-        {
-            await ship.SetSpeed(speed.Value, host.ApplicationStopping);
-            Console.WriteLine($"Engine has been set to {speed.Value.Value.Color(ConsoleColors.Status)} speed.");
-        }
-
-        await ship.NavigateTo(waypointId, host.ApplicationStopping);
+        await ship.BeginNavigationTo(waypointId, speed, host.ApplicationStopping);
 
         Console.WriteLine("Your ship is now in transit.".Color(ConsoleColors.Success));
         Console.WriteLine($"Expected to arrive {ship.Navigation.Route.Arrival.Humanize()}.");

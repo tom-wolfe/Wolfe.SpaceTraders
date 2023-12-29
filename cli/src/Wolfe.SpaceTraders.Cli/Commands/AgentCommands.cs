@@ -2,11 +2,11 @@
 using Microsoft.Extensions.Hosting;
 using Wolfe.SpaceTraders.Cli.Extensions;
 using Wolfe.SpaceTraders.Cli.Formatters;
-using Wolfe.SpaceTraders.Domain;
 using Wolfe.SpaceTraders.Domain.Agents;
+using Wolfe.SpaceTraders.Domain.Factions;
 using Wolfe.SpaceTraders.Infrastructure.Token;
-using Wolfe.SpaceTraders.Service;
-using Wolfe.SpaceTraders.Service.Commands;
+using Wolfe.SpaceTraders.Service.Agents;
+using Wolfe.SpaceTraders.Service.Agents.Commands;
 
 namespace Wolfe.SpaceTraders.Cli.Commands;
 

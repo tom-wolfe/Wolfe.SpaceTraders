@@ -1,4 +1,4 @@
-﻿namespace Wolfe.SpaceTraders.Domain.Waypoints;
+﻿namespace Wolfe.SpaceTraders.Domain.Exploration;
 
 public class WaypointTrait
 {

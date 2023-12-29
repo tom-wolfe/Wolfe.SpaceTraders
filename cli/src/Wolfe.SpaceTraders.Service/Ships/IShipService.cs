@@ -1,6 +1,6 @@
 ﻿using Wolfe.SpaceTraders.Domain.Ships;
 
-namespace Wolfe.SpaceTraders.Service;
+namespace Wolfe.SpaceTraders.Service.Ships;
 
 public interface IShipService
 {

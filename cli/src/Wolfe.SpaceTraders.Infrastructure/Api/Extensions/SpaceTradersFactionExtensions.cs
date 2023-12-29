@@ -1,5 +1,5 @@
-﻿using Wolfe.SpaceTraders.Domain;
-using Wolfe.SpaceTraders.Domain.Waypoints;
+﻿using Wolfe.SpaceTraders.Domain.Exploration;
+using Wolfe.SpaceTraders.Domain.Factions;
 using Wolfe.SpaceTraders.Sdk.Models.Agents;
 
 namespace Wolfe.SpaceTraders.Infrastructure.Api.Extensions;

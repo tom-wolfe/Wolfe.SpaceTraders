@@ -3,9 +3,9 @@ using Wolfe.SpaceTraders.Domain.Ships;
 
 namespace Wolfe.SpaceTraders.Domain.Missions;
 
-public class ProcurementContractMission(Ship ship, Contract contract)
+public class ProcurementContractMission(IMissionLog log, Ship ship, Contract contract) : Mission(log)
 {
-    public async Task Execute(CancellationToken cancellationToken = default)
+    public override async Task Execute(CancellationToken cancellationToken = default)
     {
         while (!contract.IsComplete())
         {

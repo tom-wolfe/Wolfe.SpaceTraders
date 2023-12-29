@@ -1,4 +1,4 @@
-﻿namespace Wolfe.SpaceTraders.Domain.Waypoints;
+﻿namespace Wolfe.SpaceTraders.Domain.Exploration;
 
 [StronglyTypedId]
 public partial struct WaypointType

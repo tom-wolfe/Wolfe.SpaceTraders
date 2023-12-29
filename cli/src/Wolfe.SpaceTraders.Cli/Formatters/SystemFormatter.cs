@@ -1,5 +1,5 @@
 ﻿using Wolfe.SpaceTraders.Cli.Extensions;
-using Wolfe.SpaceTraders.Domain.Systems;
+using Wolfe.SpaceTraders.Domain.Exploration;
 
 namespace Wolfe.SpaceTraders.Cli.Formatters;
 

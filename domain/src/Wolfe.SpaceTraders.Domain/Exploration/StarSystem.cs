@@ -1,6 +1,6 @@
 ﻿using Wolfe.SpaceTraders.Domain.Navigation;
 
-namespace Wolfe.SpaceTraders.Domain.Systems;
+namespace Wolfe.SpaceTraders.Domain.Exploration;
 
 public class StarSystem
 {

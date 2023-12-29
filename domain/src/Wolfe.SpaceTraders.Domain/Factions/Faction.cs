@@ -1,6 +1,6 @@
-﻿using Wolfe.SpaceTraders.Domain.Waypoints;
+﻿using Wolfe.SpaceTraders.Domain.Exploration;
 
-namespace Wolfe.SpaceTraders.Domain;
+namespace Wolfe.SpaceTraders.Domain.Factions;
 
 public class Faction
 {

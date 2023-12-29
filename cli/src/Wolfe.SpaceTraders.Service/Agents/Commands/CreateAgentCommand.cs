@@ -1,7 +1,7 @@
-﻿using Wolfe.SpaceTraders.Domain;
-using Wolfe.SpaceTraders.Domain.Agents;
+﻿using Wolfe.SpaceTraders.Domain.Agents;
+using Wolfe.SpaceTraders.Domain.Factions;
 
-namespace Wolfe.SpaceTraders.Service.Commands;
+namespace Wolfe.SpaceTraders.Service.Agents.Commands;
 
 public class CreateAgentCommand
 {

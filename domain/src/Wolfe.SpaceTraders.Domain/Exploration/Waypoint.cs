@@ -1,7 +1,6 @@
 ﻿using Wolfe.SpaceTraders.Domain.Navigation;
-using Wolfe.SpaceTraders.Domain.Systems;
 
-namespace Wolfe.SpaceTraders.Domain.Waypoints;
+namespace Wolfe.SpaceTraders.Domain.Exploration;
 
 public class Waypoint
 {

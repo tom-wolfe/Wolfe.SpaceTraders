@@ -1,10 +1,9 @@
 ﻿using Microsoft.Extensions.Options;
 using System.Runtime.CompilerServices;
 using System.Text.Json;
+using Wolfe.SpaceTraders.Domain.Exploration;
 using Wolfe.SpaceTraders.Domain.Marketplace;
 using Wolfe.SpaceTraders.Domain.Shipyards;
-using Wolfe.SpaceTraders.Domain.Systems;
-using Wolfe.SpaceTraders.Domain.Waypoints;
 using Wolfe.SpaceTraders.Infrastructure.Data.Mapping;
 using Wolfe.SpaceTraders.Infrastructure.Data.Models;
 

@@ -1,7 +1,6 @@
-﻿using Wolfe.SpaceTraders.Domain.Marketplace;
+﻿using Wolfe.SpaceTraders.Domain.Exploration;
+using Wolfe.SpaceTraders.Domain.Marketplace;
 using Wolfe.SpaceTraders.Domain.Shipyards;
-using Wolfe.SpaceTraders.Domain.Systems;
-using Wolfe.SpaceTraders.Domain.Waypoints;
 
 namespace Wolfe.SpaceTraders.Infrastructure.Data;
 
