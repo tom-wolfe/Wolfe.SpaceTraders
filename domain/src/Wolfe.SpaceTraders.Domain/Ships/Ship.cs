@@ -12,21 +12,21 @@ public class Ship(
     IShipClient client,
     ShipCargo cargo,
     ShipFuel fuel,
-    Navigation.Navigation navigation
+    ShipNavigation navigation
 )
 {
     public required ShipId Id { get; init; }
     public required string Name { get; init; }
     public required ShipRole Role { get; init; }
     public Point Location => Navigation.Route.Origin.Point;
-    public Navigation.Navigation Navigation { get; private set; } = navigation;
+    public ShipNavigation Navigation { get; private set; } = navigation;
     public ShipFuel Fuel { get; private set; } = fuel;
     public ShipCargo Cargo { get; private set; } = cargo;
 
     public ValueTask AwaitArrival(CancellationToken cancellationToken = default)
     {
         var tta = Navigation.Route.TimeToArrival;
-        if (Navigation.Status != NavigationStatus.InTransit || tta.TotalMilliseconds <= 0)
+        if (Navigation.Status != ShipNavigationStatus.InTransit || tta.TotalMilliseconds <= 0)
         {
             return ValueTask.CompletedTask;
         }
@@ -37,7 +37,7 @@ public class Ship(
 
     public async ValueTask BeginNavigationTo(WaypointId waypointId, ShipSpeed? speed = null, CancellationToken cancellationToken = default)
     {
-        if (Navigation.Status == NavigationStatus.InTransit)
+        if (Navigation.Status == ShipNavigationStatus.InTransit)
         {
             throw new InvalidOperationException("Cannot navigate when ship is already in transit.");
         }
@@ -53,12 +53,12 @@ public class Ship(
 
     public async ValueTask Dock(CancellationToken cancellationToken = default)
     {
-        if (Navigation.Status == NavigationStatus.InTransit)
+        if (Navigation.Status == ShipNavigationStatus.InTransit)
         {
             throw new InvalidOperationException("Cannot dock ship while in transit.");
         }
 
-        if (Navigation.Status == NavigationStatus.Docked)
+        if (Navigation.Status == ShipNavigationStatus.Docked)
         {
             return;
         }
@@ -69,7 +69,7 @@ public class Ship(
 
     public async ValueTask<ShipExtractResult> Extract(CancellationToken cancellationToken = default)
     {
-        if (Navigation.Status == NavigationStatus.InTransit)
+        if (Navigation.Status == ShipNavigationStatus.InTransit)
         {
             throw new InvalidOperationException("Cannot extract resources while in transit.");
         }
@@ -90,12 +90,12 @@ public class Ship(
 
     public async ValueTask Orbit(CancellationToken cancellationToken = default)
     {
-        if (Navigation.Status == NavigationStatus.InTransit)
+        if (Navigation.Status == ShipNavigationStatus.InTransit)
         {
             throw new InvalidOperationException("Ship is in transit.");
         }
 
-        if (Navigation.Status == NavigationStatus.InOrbit)
+        if (Navigation.Status == ShipNavigationStatus.InOrbit)
         {
             return;
         }
@@ -106,7 +106,7 @@ public class Ship(
 
     public async Task<MarketData?> ProbeMarketData(CancellationToken cancellationToken)
     {
-        if (Navigation.Status == NavigationStatus.InTransit)
+        if (Navigation.Status == ShipNavigationStatus.InTransit)
         {
             throw new InvalidOperationException("Cannot probe market data while in transit.");
         }

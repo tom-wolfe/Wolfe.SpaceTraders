@@ -12,7 +12,7 @@ internal static class ShipFormatter
         Console.WriteLine($"~ {ship.Id.Value.Color(ConsoleColors.Id)} ({ship.Role.Value.Color(ConsoleColors.Category)}) [{ship.Navigation.Status.Value.Color(ConsoleColors.Status)}]");
         Console.WriteLine($"  Location: {ship.Navigation.WaypointId.Value.Color(ConsoleColors.Code)}");
 
-        if (ship.Navigation.Status == NavigationStatus.InTransit)
+        if (ship.Navigation.Status == ShipNavigationStatus.InTransit)
         {
             Console.WriteLine($"  Arrival: {ship.Navigation.Route.Arrival.Humanize().Color(ConsoleColors.Information)}");
         }

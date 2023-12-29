@@ -1,9 +1,9 @@
 ﻿using Wolfe.SpaceTraders.Domain.Exploration;
 using Wolfe.SpaceTraders.Domain.General;
 
-namespace Wolfe.SpaceTraders.Domain.Navigation;
+namespace Wolfe.SpaceTraders.Domain.Ships;
 
-public class WaypointLocation
+public class ShipNavigationRouteWaypoint
 {
     public required WaypointId Id { get; init; }
     public required WaypointType Type { get; init; }

@@ -119,7 +119,7 @@ internal static class Ships
         Units = command.Quantity
     };
 
-    public static NavigationRoute ToDomain(this SpaceTradersShipNavRoute route) => new()
+    public static ShipNavigationRoute ToDomain(this SpaceTradersShipNavRoute route) => new()
     {
         Arrival = route.Arrival,
         Origin = route.Origin.ToDomain(),
@@ -127,15 +127,15 @@ internal static class Ships
         DepartureTime = route.DepartureTime,
     };
 
-    public static Navigation ToDomain(this SpaceTradersShipNav navigation) => new()
+    public static ShipNavigation ToDomain(this SpaceTradersShipNav navigation) => new()
     {
         WaypointId = new WaypointId(navigation.WaypointSymbol),
-        Status = new NavigationStatus(navigation.Status),
+        Status = new ShipNavigationStatus(navigation.Status),
         Speed = new ShipSpeed(navigation.FlightMode),
         Route = navigation.Route.ToDomain()
     };
 
-    public static WaypointLocation ToDomain(this SpaceTradersShipNavRouteWaypoint location) => new()
+    public static ShipNavigationRouteWaypoint ToDomain(this SpaceTradersShipNavRouteWaypoint location) => new()
     {
         Type = new WaypointType(location.Type),
         Id = new WaypointId(location.Symbol),
