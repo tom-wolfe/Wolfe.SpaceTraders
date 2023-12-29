@@ -7,7 +7,6 @@ using Wolfe.SpaceTraders.Domain.Ships.Commands;
 using Wolfe.SpaceTraders.Domain.Ships.Results;
 using Wolfe.SpaceTraders.Sdk.Models.Extraction;
 using Wolfe.SpaceTraders.Sdk.Models.Jettison;
-using Wolfe.SpaceTraders.Sdk.Models.Navigation;
 using Wolfe.SpaceTraders.Sdk.Models.Ships;
 using Wolfe.SpaceTraders.Sdk.Requests;
 
@@ -120,7 +119,7 @@ internal static class Ships
         Units = command.Quantity
     };
 
-    public static NavigationRoute ToDomain(this SpaceTradersNavigationRoute route) => new()
+    public static NavigationRoute ToDomain(this SpaceTradersShipNavRoute route) => new()
     {
         Arrival = route.Arrival,
         Origin = route.Origin.ToDomain(),
@@ -128,7 +127,7 @@ internal static class Ships
         DepartureTime = route.DepartureTime,
     };
 
-    public static Navigation ToDomain(this SpaceTradersNavigation navigation) => new()
+    public static Navigation ToDomain(this SpaceTradersShipNav navigation) => new()
     {
         WaypointId = new WaypointId(navigation.WaypointSymbol),
         Status = new NavigationStatus(navigation.Status),
@@ -136,7 +135,7 @@ internal static class Ships
         Route = navigation.Route.ToDomain()
     };
 
-    public static WaypointLocation ToDomain(this SpaceTradersWaypointLocation location) => new()
+    public static WaypointLocation ToDomain(this SpaceTradersShipNavRouteWaypoint location) => new()
     {
         Type = new WaypointType(location.Type),
         Id = new WaypointId(location.Symbol),
