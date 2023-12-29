@@ -2,7 +2,7 @@
 using Wolfe.SpaceTraders.Domain.Fleet.Commands;
 using Wolfe.SpaceTraders.Domain.Fleet.Results;
 using Wolfe.SpaceTraders.Domain.Ships;
-using Wolfe.SpaceTraders.Infrastructure.Api.Extensions;
+using Wolfe.SpaceTraders.Infrastructure.Api;
 using Wolfe.SpaceTraders.Sdk;
 
 namespace Wolfe.SpaceTraders.Infrastructure.Fleet;

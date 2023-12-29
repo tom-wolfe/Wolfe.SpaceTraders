@@ -1,4 +1,5 @@
-﻿using Wolfe.SpaceTraders.Domain.Ships;
+﻿using Wolfe.SpaceTraders.Domain.General;
+using Wolfe.SpaceTraders.Domain.Ships;
 
 namespace Wolfe.SpaceTraders.Domain.Marketplaces;
 

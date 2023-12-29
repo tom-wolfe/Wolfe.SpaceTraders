@@ -2,9 +2,9 @@
 using Wolfe.SpaceTraders.Domain.Factions;
 using Wolfe.SpaceTraders.Sdk.Models.Agents;
 
-namespace Wolfe.SpaceTraders.Infrastructure.Api.Extensions;
+namespace Wolfe.SpaceTraders.Infrastructure.Api;
 
-internal static class SpaceTradersFactionExtensions
+internal static class Factions
 {
     public static Faction ToDomain(this SpaceTradersFaction faction) => new()
     {

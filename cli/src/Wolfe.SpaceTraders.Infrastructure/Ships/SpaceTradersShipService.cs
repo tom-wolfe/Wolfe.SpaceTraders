@@ -1,7 +1,6 @@
 ﻿using System.Net;
 using Wolfe.SpaceTraders.Domain.Ships;
 using Wolfe.SpaceTraders.Infrastructure.Api;
-using Wolfe.SpaceTraders.Infrastructure.Api.Extensions;
 using Wolfe.SpaceTraders.Sdk;
 using Wolfe.SpaceTraders.Sdk.Models.Ships;
 using Wolfe.SpaceTraders.Service.Ships;

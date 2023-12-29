@@ -19,7 +19,7 @@ public class ProbeMission(
             var marketplace = await HighestPriorityMarketplace(cancellationToken);
             if (cancellationToken.IsCancellationRequested) { return; }
 
-            await ship.BeginNavigationTo(marketplace.Id, FlightSpeed.Cruise, cancellationToken);
+            await ship.BeginNavigationTo(marketplace.Id, ShipSpeed.Cruise, cancellationToken);
             await ship.AwaitArrival(cancellationToken);
             var marketData = await ship.ProbeMarketData(cancellationToken) ?? throw new Exception("Missing market data.");
             await marketplaceService.AddMarketData(marketData, cancellationToken);

@@ -1,4 +1,5 @@
 ﻿using Wolfe.SpaceTraders.Domain.Exploration;
+using Wolfe.SpaceTraders.Domain.General;
 using Wolfe.SpaceTraders.Domain.Marketplaces;
 using Wolfe.SpaceTraders.Domain.Navigation;
 using Wolfe.SpaceTraders.Domain.Ships.Commands;
@@ -34,7 +35,7 @@ public class Ship(
         return new ValueTask(delay);
     }
 
-    public async ValueTask BeginNavigationTo(WaypointId waypointId, FlightSpeed? speed = null, CancellationToken cancellationToken = default)
+    public async ValueTask BeginNavigationTo(WaypointId waypointId, ShipSpeed? speed = null, CancellationToken cancellationToken = default)
     {
         if (Navigation.Status == NavigationStatus.InTransit)
         {
@@ -120,7 +121,7 @@ public class Ship(
         Fuel = response.Fuel;
     }
 
-    public async ValueTask SetSpeed(FlightSpeed speed, CancellationToken cancellationToken = default)
+    public async ValueTask SetSpeed(ShipSpeed speed, CancellationToken cancellationToken = default)
     {
         var response = await client.SetSpeed(Id, speed, cancellationToken);
         Navigation = response.Navigation;

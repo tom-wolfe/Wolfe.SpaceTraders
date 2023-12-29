@@ -1,7 +1,6 @@
 ﻿using System.Net;
 using Wolfe.SpaceTraders.Domain.Contracts;
 using Wolfe.SpaceTraders.Infrastructure.Api;
-using Wolfe.SpaceTraders.Infrastructure.Api.Extensions;
 using Wolfe.SpaceTraders.Sdk;
 using Wolfe.SpaceTraders.Sdk.Models.Contracts;
 using Wolfe.SpaceTraders.Service.Contracts;

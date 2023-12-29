@@ -1,4 +1,6 @@
-﻿namespace Wolfe.SpaceTraders.Domain.Marketplaces;
+﻿using Wolfe.SpaceTraders.Domain.General;
+
+namespace Wolfe.SpaceTraders.Domain.Marketplaces;
 
 public class MarketTradeGood
 {

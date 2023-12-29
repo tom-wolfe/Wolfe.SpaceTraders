@@ -1,6 +1,6 @@
 ﻿using Wolfe.SpaceTraders.Cli.Extensions;
+using Wolfe.SpaceTraders.Domain.General;
 using Wolfe.SpaceTraders.Domain.Marketplaces;
-using Wolfe.SpaceTraders.Domain.Navigation;
 
 namespace Wolfe.SpaceTraders.Cli.Formatters;
 

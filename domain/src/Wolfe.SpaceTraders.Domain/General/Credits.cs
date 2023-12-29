@@ -1,4 +1,4 @@
-﻿namespace Wolfe.SpaceTraders.Domain;
+﻿namespace Wolfe.SpaceTraders.Domain.General;
 
 public record Credits(long Value)
 {

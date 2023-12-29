@@ -1,4 +1,4 @@
-﻿using Wolfe.SpaceTraders.Domain.Navigation;
+﻿using Wolfe.SpaceTraders.Domain.General;
 using Wolfe.SpaceTraders.Infrastructure.Data.Models;
 
 namespace Wolfe.SpaceTraders.Infrastructure.Data.Mapping;

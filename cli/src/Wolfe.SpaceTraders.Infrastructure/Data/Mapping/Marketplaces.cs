@@ -1,5 +1,5 @@
-﻿using Wolfe.SpaceTraders.Domain;
-using Wolfe.SpaceTraders.Domain.Exploration;
+﻿using Wolfe.SpaceTraders.Domain.Exploration;
+using Wolfe.SpaceTraders.Domain.General;
 using Wolfe.SpaceTraders.Domain.Marketplaces;
 using Wolfe.SpaceTraders.Domain.Ships;
 using Wolfe.SpaceTraders.Infrastructure.Data.Models;

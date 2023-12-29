@@ -1,12 +1,12 @@
-﻿using Wolfe.SpaceTraders.Domain;
-using Wolfe.SpaceTraders.Domain.Exploration;
+﻿using Wolfe.SpaceTraders.Domain.Exploration;
+using Wolfe.SpaceTraders.Domain.General;
 using Wolfe.SpaceTraders.Domain.Marketplaces;
 using Wolfe.SpaceTraders.Domain.Ships;
 using Wolfe.SpaceTraders.Sdk.Models.Marketplace;
 
-namespace Wolfe.SpaceTraders.Infrastructure.Api.Extensions;
+namespace Wolfe.SpaceTraders.Infrastructure.Api;
 
-internal static class SpaceTradersMarketExtensions
+internal static class Markets
 {
     public static Marketplace ToDomain(this SpaceTradersMarketplace marketplace, Waypoint waypoint) => new()
     {
@@ -17,6 +17,13 @@ internal static class SpaceTradersMarketExtensions
         Imports = marketplace.Imports.Select(i => i.ToDomain()).ToList(),
         Exports = marketplace.Exports.Select(e => e.ToDomain()).ToList(),
         Exchange = marketplace.Exchange.Select(e => e.ToDomain()).ToList()
+    };
+
+    public static MarketplaceItem ToDomain(this SpaceTradersMarketplaceItem item) => new()
+    {
+        ItemId = new ItemId(item.Symbol),
+        Name = item.Name,
+        Description = item.Description
     };
 
     public static MarketData? ToMarketData(this SpaceTradersMarketplace marketplace)

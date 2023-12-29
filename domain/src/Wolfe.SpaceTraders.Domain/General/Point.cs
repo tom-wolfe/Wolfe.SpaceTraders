@@ -1,4 +1,4 @@
-﻿namespace Wolfe.SpaceTraders.Domain.Navigation;
+﻿namespace Wolfe.SpaceTraders.Domain.General;
 
 public record Point(int X, int Y)
 {

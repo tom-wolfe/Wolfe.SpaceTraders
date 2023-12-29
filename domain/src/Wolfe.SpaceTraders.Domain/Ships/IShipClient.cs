@@ -15,5 +15,5 @@ public interface IShipClient
     public Task<ShipProbeMarketDataResult?> ProbeMarketData(WaypointId waypointId, CancellationToken cancellationToken = default);
     public Task<ShipRefuelResult> Refuel(ShipId shipId, CancellationToken cancellationToken = default);
     public Task<ShipSellResult> Sell(ShipId shipId, ShipSellCommand request, CancellationToken cancellationToken = default);
-    public Task<SetShipSpeedResult> SetSpeed(ShipId shipId, FlightSpeed speed, CancellationToken cancellationToken = default);
+    public Task<SetShipSpeedResult> SetSpeed(ShipId shipId, ShipSpeed speed, CancellationToken cancellationToken = default);
 }

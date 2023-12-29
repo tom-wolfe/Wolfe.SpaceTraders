@@ -4,7 +4,7 @@ using Wolfe.SpaceTraders.Domain.Navigation;
 using Wolfe.SpaceTraders.Domain.Ships;
 using Wolfe.SpaceTraders.Domain.Ships.Commands;
 using Wolfe.SpaceTraders.Domain.Ships.Results;
-using Wolfe.SpaceTraders.Infrastructure.Api.Extensions;
+using Wolfe.SpaceTraders.Infrastructure.Api;
 using Wolfe.SpaceTraders.Sdk;
 using Wolfe.SpaceTraders.Sdk.Requests;
 
@@ -12,7 +12,7 @@ namespace Wolfe.SpaceTraders.Infrastructure.Ships;
 
 internal class SpaceTradersShipClient(ISpaceTradersApiClient apiClient) : IShipClient
 {
-    public async Task<SetShipSpeedResult> SetSpeed(ShipId shipId, FlightSpeed speed, CancellationToken cancellationToken = default)
+    public async Task<SetShipSpeedResult> SetSpeed(ShipId shipId, ShipSpeed speed, CancellationToken cancellationToken = default)
     {
         var request = new SpaceTradersPatchShipNavRequest { FlightMode = speed.Value };
         var response = await apiClient.PatchShipNav(shipId.Value, request, cancellationToken);

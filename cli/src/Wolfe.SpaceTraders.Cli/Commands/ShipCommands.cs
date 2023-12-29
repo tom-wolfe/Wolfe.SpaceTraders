@@ -56,7 +56,7 @@ internal class ShipCommands(IShipService shipService, IHostApplicationLifetime h
         return ExitCodes.Success;
     }
 
-    public async Task<int> Navigate([Argument] ShipId shipId, [Argument] WaypointId waypointId, [Option] FlightSpeed? speed)
+    public async Task<int> Navigate([Argument] ShipId shipId, [Argument] WaypointId waypointId, [Option] ShipSpeed? speed)
     {
         var ship = await shipService.GetShip(shipId, host.ApplicationStopping) ?? throw new Exception($"Ship {shipId.Value} could not be found.");
 

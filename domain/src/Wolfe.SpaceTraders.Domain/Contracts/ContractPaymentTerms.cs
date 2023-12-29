@@ -1,4 +1,6 @@
-﻿namespace Wolfe.SpaceTraders.Domain.Contracts;
+﻿using Wolfe.SpaceTraders.Domain.General;
+
+namespace Wolfe.SpaceTraders.Domain.Contracts;
 
 public class ContractPaymentTerms
 {

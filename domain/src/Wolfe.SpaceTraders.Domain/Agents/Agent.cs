@@ -1,4 +1,5 @@
 ﻿using Wolfe.SpaceTraders.Domain.Exploration;
+using Wolfe.SpaceTraders.Domain.General;
 
 namespace Wolfe.SpaceTraders.Domain.Agents;
 
