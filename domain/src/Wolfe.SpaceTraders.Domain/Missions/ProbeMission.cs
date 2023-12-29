@@ -4,12 +4,19 @@ using Wolfe.SpaceTraders.Domain.Ships;
 
 namespace Wolfe.SpaceTraders.Domain.Missions;
 
+/// <summary>
+/// A mission that will navigate between marketplaces and probe their market data.
+/// </summary>
+/// <param name="log">The log to write entries to.</param>
+/// <param name="ship">The ship that will navigate and perform the probe.</param>
+/// <param name="marketplaceService">The service that provides market data.</param>
 public class ProbeMission(
     IMissionLog log,
     Ship ship,
     IMarketplaceService marketplaceService
 ) : Mission(log)
 {
+    /// <inheritdoc/>
     public override async Task Execute(CancellationToken cancellationToken = default)
     {
         while (!cancellationToken.IsCancellationRequested)
