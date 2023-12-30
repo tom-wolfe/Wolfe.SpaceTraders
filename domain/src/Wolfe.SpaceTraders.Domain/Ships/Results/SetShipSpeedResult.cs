@@ -2,5 +2,5 @@
 
 public class SetShipSpeedResult
 {
-    public required Navigation.Navigation Navigation { get; init; }
+    public required ShipNavigation Navigation { get; init; }
 }

@@ -1,8 +1,10 @@
-﻿using Wolfe.SpaceTraders.Domain.Marketplace;
+﻿using Wolfe.SpaceTraders.Domain.Exploration;
+using Wolfe.SpaceTraders.Domain.General;
+using Wolfe.SpaceTraders.Domain.Marketplaces;
 using Wolfe.SpaceTraders.Domain.Navigation;
 using Wolfe.SpaceTraders.Domain.Ships.Commands;
 using Wolfe.SpaceTraders.Domain.Ships.Results;
-using Wolfe.SpaceTraders.Domain.Waypoints;
+
 
 namespace Wolfe.SpaceTraders.Domain.Ships;
 
@@ -10,43 +12,80 @@ public class Ship(
     IShipClient client,
     ShipCargo cargo,
     ShipFuel fuel,
-    Navigation.Navigation navigation
+    ShipNavigation navigation
 )
 {
     public required ShipId Id { get; init; }
     public required string Name { get; init; }
     public required ShipRole Role { get; init; }
-    public Navigation.Navigation Navigation { get; private set; } = navigation;
+    public Point Location => Navigation.Route.Origin.Point;
+    public ShipNavigation Navigation { get; private set; } = navigation;
     public ShipFuel Fuel { get; private set; } = fuel;
     public ShipCargo Cargo { get; private set; } = cargo;
 
-    public async Task Dock(CancellationToken cancellationToken = default)
+    public ValueTask AwaitArrival(CancellationToken cancellationToken = default)
     {
-        if (Navigation.Status == NavigationStatus.InTransit)
+        var tta = Navigation.Route.TimeToArrival;
+        if (Navigation.Status != ShipNavigationStatus.InTransit || tta.TotalMilliseconds <= 0)
+        {
+            return ValueTask.CompletedTask;
+        }
+
+        var delay = Task
+            .Delay(tta, cancellationToken)
+            .ContinueWith(async t => Navigation = await client.GetNavigation(Id, cancellationToken), cancellationToken)
+            .Unwrap();
+        return new ValueTask(delay);
+    }
+
+    public async ValueTask<ShipNavigateResult?> BeginNavigationTo(WaypointId waypointId, ShipSpeed? speed = null, CancellationToken cancellationToken = default)
+    {
+        if (Navigation.Status == ShipNavigationStatus.InTransit)
+        {
+            throw new InvalidOperationException("Cannot navigate when ship is already in transit.");
+        }
+
+        if (Navigation.WaypointId == waypointId)
+        {
+            // Already at destination.
+            return null;
+        }
+
+        await Orbit(cancellationToken);
+
+        if (speed != null) { await SetSpeed(speed.Value, cancellationToken); }
+
+        var result = await client.Navigate(Id, new ShipNavigateCommand { WaypointId = waypointId }, cancellationToken);
+        Navigation = result.Navigation;
+        Fuel = result.Fuel;
+
+        return result;
+    }
+
+    public async ValueTask Dock(CancellationToken cancellationToken = default)
+    {
+        if (Navigation.Status == ShipNavigationStatus.InTransit)
         {
             throw new InvalidOperationException("Cannot dock ship while in transit.");
         }
 
-        if (Navigation.Status == NavigationStatus.Docked)
+        if (Navigation.Status == ShipNavigationStatus.Docked)
         {
-            throw new InvalidOperationException("Ship is already docked.");
+            return;
         }
 
         var response = await client.Dock(Id, cancellationToken);
         Navigation = response.Navigation;
     }
 
-    public async Task<ShipExtractResult> Extract(CancellationToken cancellationToken = default)
+    public async ValueTask<ShipExtractResult> Extract(CancellationToken cancellationToken = default)
     {
-        if (Navigation.Status == NavigationStatus.InTransit)
+        if (Navigation.Status == ShipNavigationStatus.InTransit)
         {
             throw new InvalidOperationException("Cannot extract resources while in transit.");
         }
 
-        if (Navigation.Status == NavigationStatus.Docked)
-        {
-            throw new InvalidOperationException("Cannot extract resources while docked.");
-        }
+        await Dock(cancellationToken);
 
         var response = await client.Extract(Id, cancellationToken);
         Cargo = response.Cargo;
@@ -54,58 +93,52 @@ public class Ship(
         return response;
     }
 
-    public Task Jettison(ItemId itemId, int quantity)
+    public async ValueTask Jettison(ItemId itemId, int quantity, CancellationToken cancellationToken = default)
     {
-        // TODO: Implement.
-        return Task.CompletedTask;
+        var result = await client.Jettison(Id, new ShipJettisonCommand { ItemId = itemId, Quantity = quantity }, cancellationToken);
+        Cargo = result.Cargo;
     }
 
-    public async Task NavigateTo(WaypointId waypointId, CancellationToken cancellationToken = default)
+    public async ValueTask Orbit(CancellationToken cancellationToken = default)
     {
-        if (Navigation.Status == NavigationStatus.InTransit)
-        {
-            throw new InvalidOperationException("Cannot navigate when ship is already in transit.");
-        }
-
-        if (Navigation.Status == NavigationStatus.Docked)
-        {
-            throw new InvalidOperationException("Ship is currently docked.");
-        }
-
-        var result = await client.Navigate(Id, new ShipNavigateCommand { WaypointId = waypointId }, cancellationToken);
-        Navigation = result.Navigation;
-        Fuel = result.Fuel;
-    }
-
-    public async Task Orbit(CancellationToken cancellationToken = default)
-    {
-        if (Navigation.Status == NavigationStatus.InTransit)
+        if (Navigation.Status == ShipNavigationStatus.InTransit)
         {
             throw new InvalidOperationException("Ship is in transit.");
         }
 
-        if (Navigation.Status == NavigationStatus.InOrbit)
+        if (Navigation.Status == ShipNavigationStatus.InOrbit)
         {
-            throw new InvalidOperationException("Ship is already in orbit.");
+            return;
         }
 
         var result = await client.Orbit(Id, cancellationToken);
         Navigation = result.Navigation;
     }
 
-    public async Task Refuel(CancellationToken cancellationToken = default)
+    public async Task<MarketData?> ProbeMarketData(CancellationToken cancellationToken)
+    {
+        if (Navigation.Status == ShipNavigationStatus.InTransit)
+        {
+            throw new InvalidOperationException("Cannot probe market data while in transit.");
+        }
+
+        var result = await client.ProbeMarketData(Navigation.WaypointId, cancellationToken);
+        return result?.Data;
+    }
+
+    public async ValueTask Refuel(CancellationToken cancellationToken = default)
     {
         var response = await client.Refuel(Id, cancellationToken);
         Fuel = response.Fuel;
     }
 
-    public async Task SetSpeed(FlightSpeed speed, CancellationToken cancellationToken = default)
+    public async ValueTask SetSpeed(ShipSpeed speed, CancellationToken cancellationToken = default)
     {
         var response = await client.SetSpeed(Id, speed, cancellationToken);
         Navigation = response.Navigation;
     }
 
-    public async Task<Transaction> Sell(ItemId itemId, int quantity, CancellationToken cancellationToken = default)
+    public async ValueTask<MarketTransaction> Sell(ItemId itemId, int quantity, CancellationToken cancellationToken = default)
     {
         var request = new ShipSellCommand
         {

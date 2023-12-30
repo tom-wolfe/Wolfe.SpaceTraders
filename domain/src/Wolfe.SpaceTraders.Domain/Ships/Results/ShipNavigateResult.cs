@@ -3,5 +3,5 @@
 public class ShipNavigateResult
 {
     public required ShipFuel Fuel { get; init; }
-    public required Navigation.Navigation Navigation { get; init; }
+    public required ShipNavigation Navigation { get; init; }
 }

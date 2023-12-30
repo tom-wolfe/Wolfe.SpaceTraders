@@ -1,17 +1,18 @@
-﻿using Wolfe.SpaceTraders.Domain.Marketplace;
+﻿using Wolfe.SpaceTraders.Domain.Exploration;
+using Wolfe.SpaceTraders.Domain.Marketplaces;
 using Wolfe.SpaceTraders.Domain.Shipyards;
-using Wolfe.SpaceTraders.Domain.Systems;
-using Wolfe.SpaceTraders.Domain.Waypoints;
 
 namespace Wolfe.SpaceTraders.Infrastructure.Data;
 
 internal interface ISpaceTradersDataClient
 {
+    public Task AddMarketData(MarketData marketData, CancellationToken cancellationToken);
     public Task AddMarketplace(Marketplace marketplace, CancellationToken cancellationToken = default);
     public Task AddShipyard(Shipyard shipyard, CancellationToken cancellationToken = default);
     public Task AddSystem(StarSystem system, CancellationToken cancellationToken = default);
     public Task AddWaypoint(Waypoint waypoint, CancellationToken cancellationToken = default);
     public Task<string?> GetAccessToken(CancellationToken cancellationToken = default);
+    public Task<DataItemResponse<MarketData>?> GetMarketData(WaypointId marketplaceId, CancellationToken cancellationToken);
     public Task<DataItemResponse<Marketplace>?> GetMarketplace(WaypointId marketplaceId, CancellationToken cancellationToken = default);
     public IAsyncEnumerable<DataItemResponse<Marketplace>>? GetMarketplaces(SystemId systemId, CancellationToken cancellationToken = default);
     public Task<DataItemResponse<Shipyard>?> GetShipyard(WaypointId shipyardId, CancellationToken cancellationToken = default);

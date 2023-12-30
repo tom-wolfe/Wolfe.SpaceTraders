@@ -3,9 +3,9 @@ using Wolfe.SpaceTraders.Domain.Ships;
 
 namespace Wolfe.SpaceTraders.Domain.Missions;
 
-public class ProcurementContractMission(Ship ship, Contract contract)
+public class ProcurementContractMission(IMissionLog log, Ship ship, Contract contract) : Mission(log)
 {
-    public async Task Execute()
+    public override async Task Execute(CancellationToken cancellationToken = default)
     {
         while (!contract.IsComplete())
         {
@@ -29,10 +29,7 @@ public class ProcurementContractMission(Ship ship, Contract contract)
     private async Task ClearUnnecessaryItems()
     {
         var contractItems = contract.GetOutstandingItems().Select(c => c.ItemId);
-        var itemsToRemove = ship.Cargo.Items
-            .ExceptBy(contractItems, i => i.Id);
-
-        // TODO: Instead of jettisoning, sell the items.
+        var itemsToRemove = ship.Cargo.Items.ExceptBy(contractItems, i => i.Id);
 
         foreach (var item in itemsToRemove)
         {
