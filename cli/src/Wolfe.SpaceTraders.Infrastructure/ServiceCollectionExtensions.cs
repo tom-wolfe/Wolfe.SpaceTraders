@@ -68,7 +68,7 @@ public static class ServiceCollectionExtensions
                 return new MongoClient(options.ConnectionString);
             })
             .AddSingleton<IExplorationStore, MongoExplorationStore>()
-            .AddSingleton<IMarketplaceStore, IMarketplaceStore>()
+            .AddSingleton<IMarketplaceStore, MongoMarketplaceStore>()
             .AddSingleton<IShipyardStore, MongoShipyardStore>();
     }
 
