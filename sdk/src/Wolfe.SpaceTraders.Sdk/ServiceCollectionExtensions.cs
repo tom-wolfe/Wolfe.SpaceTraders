@@ -8,7 +8,7 @@ namespace Wolfe.SpaceTraders.Sdk;
 
 public static class ServiceCollectionExtensions
 {
-    public static IServiceCollection AddSpaceTradersApi(this IServiceCollection services, Action<SpaceTradersOptions> configure)
+    public static IServiceCollection AddSpaceTraders(this IServiceCollection services, Action<SpaceTradersOptions> configure)
     {
         services
             .AddOptions<SpaceTradersOptions>()

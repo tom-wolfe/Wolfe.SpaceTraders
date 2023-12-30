@@ -19,7 +19,7 @@ internal interface ISpaceTradersDataClient
     public IAsyncEnumerable<DataItemResponse<Shipyard>>? GetShipyards(SystemId systemId, CancellationToken cancellationToken = default);
     public Task<DataItemResponse<StarSystem>?> GetSystem(SystemId systemId, CancellationToken cancellationToken = default);
     public IAsyncEnumerable<DataItemResponse<StarSystem>>? GetSystems(CancellationToken cancellationToken = default);
-    public Task<DataItemResponse<Waypoint>?> GetWaypoint(WaypointId waypointId, CancellationToken cancellationToken = default);
-    public IAsyncEnumerable<DataItemResponse<Waypoint>>? GetWaypoints(SystemId systemId, CancellationToken cancellationToken = default);
+    public Task<Waypoint?> GetWaypoint(WaypointId waypointId, CancellationToken cancellationToken = default);
+    public IAsyncEnumerable<Waypoint>? GetWaypoints(SystemId systemId, CancellationToken cancellationToken = default);
     public Task SetAccessToken(string token, CancellationToken cancellationToken = default);
 }

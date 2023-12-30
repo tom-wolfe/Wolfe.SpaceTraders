@@ -10,7 +10,7 @@ using Wolfe.SpaceTraders.Sdk;
 namespace Wolfe.SpaceTraders.Infrastructure.Marketplaces;
 
 internal class MarketplaceService(
-    IOptions<MarketServiceOptions> options,
+    IOptions<MarketplaceServiceOptions> options,
     ISpaceTradersApiClient apiClient,
     ISpaceTradersDataClient dataClient,
     IExplorationService explorationService
@@ -61,7 +61,6 @@ internal class MarketplaceService(
             yield return market;
         }
     }
-
 
     public Task<double> GetPercentileVolatility(TimeSpan age, CancellationToken cancellationToken = default)
     {

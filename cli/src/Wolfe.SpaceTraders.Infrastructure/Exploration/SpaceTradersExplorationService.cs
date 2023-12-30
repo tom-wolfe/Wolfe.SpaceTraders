@@ -102,10 +102,7 @@ internal class SpaceTradersExplorationService(
     public async Task<Waypoint?> GetWaypoint(WaypointId waypointId, CancellationToken cancellationToken = default)
     {
         var cached = await dataClient.GetWaypoint(waypointId, cancellationToken);
-        if (cached != null)
-        {
-            return cached.Item;
-        }
+        if (cached != null) { return cached; }
 
         var response = await apiClient.GetWaypoint(waypointId.SystemId.Value, waypointId.Value, cancellationToken);
         if (response.StatusCode == HttpStatusCode.NotFound) { return null; }
@@ -118,15 +115,20 @@ internal class SpaceTradersExplorationService(
     public async IAsyncEnumerable<Waypoint> GetWaypoints(SystemId systemId, [EnumeratorCancellation] CancellationToken cancellationToken = default)
     {
         var cached = dataClient.GetWaypoints(systemId, cancellationToken);
+        var hasCache = false;
         if (cached != null)
         {
             await foreach (var waypoint in cached)
             {
-                yield return waypoint.Item;
+                hasCache = true;
+                yield return waypoint;
             }
-            yield break;
+
+            // We've found at least one cached waypoint, so we can stop here.
+            if (hasCache) { yield break; }
         }
 
+        // We didn't find any cached waypoints, so we'll need to fetch them from the API.
         var waypoints = PaginationHelpers.ToAsyncEnumerable<SpaceTradersWaypoint>(
             async p => (await apiClient.GetWaypoints(systemId.Value, 20, p, cancellationToken)).GetContent()
         ).SelectAwait(s => ValueTask.FromResult(s.ToDomain()));

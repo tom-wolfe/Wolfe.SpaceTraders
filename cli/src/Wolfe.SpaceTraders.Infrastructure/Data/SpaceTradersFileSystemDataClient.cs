@@ -1,4 +1,5 @@
 ﻿using Microsoft.Extensions.Options;
+using MongoDB.Driver;
 using System.Runtime.CompilerServices;
 using System.Text.Json;
 using Wolfe.SpaceTraders.Domain.Exploration;
@@ -6,17 +7,30 @@ using Wolfe.SpaceTraders.Domain.Marketplaces;
 using Wolfe.SpaceTraders.Domain.Shipyards;
 using Wolfe.SpaceTraders.Infrastructure.Data.Mapping;
 using Wolfe.SpaceTraders.Infrastructure.Data.Models;
+using Wolfe.SpaceTraders.Infrastructure.Mongo;
+using Wolfe.SpaceTraders.Infrastructure.Mongo.Extensions;
+using Wolfe.SpaceTraders.Infrastructure.Mongo.Mapping;
+using Wolfe.SpaceTraders.Infrastructure.Mongo.Models;
 
 namespace Wolfe.SpaceTraders.Infrastructure.Data;
 
-internal class SpaceTradersFileSystemDataClient(IOptions<SpaceTradersDataOptions> options) : ISpaceTradersDataClient
+internal class SpaceTradersFileSystemDataClient : ISpaceTradersDataClient
 {
-    private readonly SpaceTradersDataOptions _options = options.Value;
+    private static readonly ReplaceOptions InsertOrUpdate = new() { IsUpsert = true };
+    private readonly SpaceTradersDataOptions _options;
+    private readonly IMongoCollection<MongoWaypoint> _waypointsCollection;
     private readonly JsonSerializerOptions _jsonOptions = new(JsonSerializerDefaults.Web)
     {
         PropertyNamingPolicy = JsonNamingPolicy.CamelCase,
         WriteIndented = true
     };
+
+    public SpaceTradersFileSystemDataClient(IOptions<SpaceTradersDataOptions> options, IOptions<MongoOptions> mongoOptions, IMongoClient mongoClient)
+    {
+        _options = options.Value;
+        var database = mongoClient.GetDatabase(mongoOptions.Value.Database);
+        _waypointsCollection = database.GetCollection<MongoWaypoint>(mongoOptions.Value.WaypointsCollection);
+    }
 
     public Task AddMarketData(MarketData marketData, CancellationToken cancellationToken)
     {
@@ -44,8 +58,8 @@ internal class SpaceTradersFileSystemDataClient(IOptions<SpaceTradersDataOptions
 
     public Task AddWaypoint(Waypoint waypoint, CancellationToken cancellationToken = default)
     {
-        var file = Path.Combine(_options.WaypointsDirectory, $"{waypoint.SystemId.Value}/{waypoint.Id.Value}.json");
-        return AddItem(file, waypoint, w => w.ToData(), cancellationToken);
+        var mongoWaypoint = waypoint.ToMongo();
+        return _waypointsCollection.ReplaceOneAsync(x => x.Id == mongoWaypoint.Id, mongoWaypoint, InsertOrUpdate, cancellationToken);
     }
 
     public async Task<string?> GetAccessToken(CancellationToken cancellationToken = default)
@@ -97,16 +111,21 @@ internal class SpaceTradersFileSystemDataClient(IOptions<SpaceTradersDataOptions
         return GetList<StarSystem, DataSystem>(file, s => s.ToDomain(), s => true, cancellationToken);
     }
 
-    public Task<DataItemResponse<Waypoint>?> GetWaypoint(WaypointId waypointId, CancellationToken cancellationToken = default)
+    public async Task<Waypoint?> GetWaypoint(WaypointId waypointId, CancellationToken cancellationToken = default)
     {
-        var file = Path.Combine(_options.WaypointsDirectory, $"{waypointId.SystemId.Value}/{waypointId.Value}.json");
-        return GetItem<Waypoint, DataWaypoint>(file, m => m.ToDomain(), cancellationToken);
+        var results = await _waypointsCollection.FindAsync(w => w.Id == waypointId.Value, cancellationToken: cancellationToken);
+        var mongoWaypoint = await results.FirstOrDefaultAsync(cancellationToken: cancellationToken);
+        return mongoWaypoint?.ToDomain();
     }
 
-    public IAsyncEnumerable<DataItemResponse<Waypoint>>? GetWaypoints(SystemId systemId, CancellationToken cancellationToken = default)
+    public async IAsyncEnumerable<Waypoint>? GetWaypoints(SystemId systemId, [EnumeratorCancellation] CancellationToken cancellationToken = default)
     {
-        var file = Path.Combine(_options.WaypointsDirectory, $"{systemId.Value}");
-        return GetList<Waypoint, DataWaypoint>(file, w => w.ToDomain(), w => w.SystemId == systemId, cancellationToken);
+        var query = await _waypointsCollection.FindAsync(w => w.SystemId == systemId.Value, cancellationToken: cancellationToken);
+        var results = query.ToAsyncEnumerable(cancellationToken: cancellationToken);
+        await foreach (var result in results)
+        {
+            yield return result.ToDomain();
+        }
     }
 
     private Task AddItem<TDomain, TData>(string file, TDomain item, Func<TDomain, TData> map, CancellationToken cancellationToken = default)
