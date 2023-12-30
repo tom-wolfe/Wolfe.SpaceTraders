@@ -11,7 +11,6 @@ internal interface ISpaceTradersDataClient
     public Task AddShipyard(Shipyard shipyard, CancellationToken cancellationToken = default);
     public Task AddSystem(StarSystem system, CancellationToken cancellationToken = default);
     public Task AddWaypoint(Waypoint waypoint, CancellationToken cancellationToken = default);
-    public Task<string?> GetAccessToken(CancellationToken cancellationToken = default);
     public Task<DataItemResponse<MarketData>?> GetMarketData(WaypointId marketplaceId, CancellationToken cancellationToken);
     public Task<Marketplace?> GetMarketplace(WaypointId marketplaceId, CancellationToken cancellationToken = default);
     public IAsyncEnumerable<Marketplace> GetMarketplaces(SystemId systemId, CancellationToken cancellationToken = default);
@@ -21,5 +20,4 @@ internal interface ISpaceTradersDataClient
     public IAsyncEnumerable<StarSystem> GetSystems(CancellationToken cancellationToken = default);
     public Task<Waypoint?> GetWaypoint(WaypointId waypointId, CancellationToken cancellationToken = default);
     public IAsyncEnumerable<Waypoint> GetWaypoints(SystemId systemId, CancellationToken cancellationToken = default);
-    public Task SetAccessToken(string token, CancellationToken cancellationToken = default);
 }

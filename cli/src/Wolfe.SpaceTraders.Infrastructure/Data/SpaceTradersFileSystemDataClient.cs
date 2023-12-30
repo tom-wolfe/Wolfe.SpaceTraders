@@ -5,7 +5,6 @@ using System.Text.Json;
 using Wolfe.SpaceTraders.Domain.Exploration;
 using Wolfe.SpaceTraders.Domain.Marketplaces;
 using Wolfe.SpaceTraders.Domain.Shipyards;
-using Wolfe.SpaceTraders.Infrastructure.Api;
 using Wolfe.SpaceTraders.Infrastructure.Data.Mapping;
 using Wolfe.SpaceTraders.Infrastructure.Data.Models;
 using Wolfe.SpaceTraders.Infrastructure.Mongo;
@@ -17,11 +16,11 @@ namespace Wolfe.SpaceTraders.Infrastructure.Data;
 
 internal class SpaceTradersFileSystemDataClient : ISpaceTradersDataClient
 {
-    private static readonly ReplaceOptions InsertOrUpdate = new() { IsUpsert = true };
     private readonly SpaceTradersDataOptions _options;
     private readonly IMongoCollection<MongoMarketplace> _marketplacesCollection;
     private readonly IMongoCollection<MongoShipyard> _shipyardsCollection;
     private readonly IMongoCollection<MongoSystem> _systemsCollection;
+
     private readonly IMongoCollection<MongoWaypoint> _waypointsCollection;
     private readonly JsonSerializerOptions _jsonOptions = new(JsonSerializerDefaults.Web)
     {
@@ -48,32 +47,25 @@ internal class SpaceTradersFileSystemDataClient : ISpaceTradersDataClient
     public Task AddMarketplace(Marketplace marketplace, CancellationToken cancellationToken = default)
     {
         var mongoMarketplace = marketplace.ToMongo();
-        return _marketplacesCollection.ReplaceOneAsync(x => x.Id == mongoMarketplace.Id, mongoMarketplace, InsertOrUpdate, cancellationToken);
+        return _marketplacesCollection.ReplaceOneAsync(x => x.Id == mongoMarketplace.Id, mongoMarketplace, MongoHelpers.InsertOrUpdate, cancellationToken);
     }
 
     public Task AddShipyard(Shipyard shipyard, CancellationToken cancellationToken = default)
     {
         var mongoShipyard = shipyard.ToMongo();
-        return _shipyardsCollection.ReplaceOneAsync(x => x.Id == mongoShipyard.Id, mongoShipyard, InsertOrUpdate, cancellationToken);
+        return _shipyardsCollection.ReplaceOneAsync(x => x.Id == mongoShipyard.Id, mongoShipyard, MongoHelpers.InsertOrUpdate, cancellationToken);
     }
 
     public Task AddSystem(StarSystem system, CancellationToken cancellationToken = default)
     {
         var mongoSystem = system.ToMongo();
-        return _systemsCollection.ReplaceOneAsync(x => x.Id == mongoSystem.Id, mongoSystem, InsertOrUpdate, cancellationToken);
+        return _systemsCollection.ReplaceOneAsync(x => x.Id == mongoSystem.Id, mongoSystem, MongoHelpers.InsertOrUpdate, cancellationToken);
     }
 
     public Task AddWaypoint(Waypoint waypoint, CancellationToken cancellationToken = default)
     {
         var mongoWaypoint = waypoint.ToMongo();
-        return _waypointsCollection.ReplaceOneAsync(x => x.Id == mongoWaypoint.Id, mongoWaypoint, InsertOrUpdate, cancellationToken);
-    }
-
-    public async Task<string?> GetAccessToken(CancellationToken cancellationToken = default)
-    {
-        var file = Path.Combine(_options.AccessTokensDirectory, "token.json");
-        var data = await ReadItem<DataItem<DataAccessToken>>(file, cancellationToken);
-        return data?.Item.Token;
+        return _waypointsCollection.ReplaceOneAsync(x => x.Id == mongoWaypoint.Id, mongoWaypoint, MongoHelpers.InsertOrUpdate, cancellationToken);
     }
 
     public Task<DataItemResponse<MarketData>?> GetMarketData(WaypointId marketplaceId, CancellationToken cancellationToken)
@@ -171,43 +163,6 @@ internal class SpaceTradersFileSystemDataClient : ISpaceTradersDataClient
             Item = map(data.Item)
         };
     }
-
-    private IAsyncEnumerable<DataItemResponse<TDomain>>? GetList<TDomain, TData>(
-        string directory,
-        Func<TData, TDomain> map,
-        Func<TDomain, bool> filter,
-        CancellationToken cancellationToken = default
-    )
-    {
-        return Directory.Exists(directory) ? Yield(cancellationToken) : null;
-        async IAsyncEnumerable<DataItemResponse<TDomain>> Yield([EnumeratorCancellation] CancellationToken ct)
-        {
-            foreach (var file in Directory.GetFiles(directory))
-            {
-                var item = await GetItem(file, map, ct)
-                    ?? throw new Exception($"Error loading file: {file}.");
-                if (filter(item.Item))
-                {
-                    yield return item;
-                }
-            }
-        }
-    }
-
-    public Task SetAccessToken(string token, CancellationToken cancellationToken = default)
-    {
-        var file = Path.Combine(_options.AccessTokensDirectory, "token.json");
-        var data = new DataItem<DataAccessToken>
-        {
-            RetrievedAt = DateTimeOffset.UtcNow,
-            Item = new DataAccessToken
-            {
-                Token = token
-            }
-        };
-        return WriteItem(file, data, cancellationToken);
-    }
-
 
     private async Task<T?> ReadItem<T>(string path, CancellationToken cancellationToken = default)
     {
