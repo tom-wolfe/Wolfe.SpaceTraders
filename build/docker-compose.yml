@@ -1,0 +1,10 @@
+name: space-traders
+
+services:
+  mongodb: 
+    image: mongo
+    restart: always
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: spacetraders
+      MONGO_INITDB_ROOT_PASSWORD: password
+      # 27017 is the default port for MongoDB
