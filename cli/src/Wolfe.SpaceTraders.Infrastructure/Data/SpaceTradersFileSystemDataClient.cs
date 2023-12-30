@@ -5,6 +5,7 @@ using System.Text.Json;
 using Wolfe.SpaceTraders.Domain.Exploration;
 using Wolfe.SpaceTraders.Domain.Marketplaces;
 using Wolfe.SpaceTraders.Domain.Shipyards;
+using Wolfe.SpaceTraders.Infrastructure.Api;
 using Wolfe.SpaceTraders.Infrastructure.Data.Mapping;
 using Wolfe.SpaceTraders.Infrastructure.Data.Models;
 using Wolfe.SpaceTraders.Infrastructure.Mongo;
@@ -18,6 +19,8 @@ internal class SpaceTradersFileSystemDataClient : ISpaceTradersDataClient
 {
     private static readonly ReplaceOptions InsertOrUpdate = new() { IsUpsert = true };
     private readonly SpaceTradersDataOptions _options;
+    private readonly IMongoCollection<MongoMarketplace> _marketplacesCollection;
+    private readonly IMongoCollection<MongoShipyard> _shipyardsCollection;
     private readonly IMongoCollection<MongoWaypoint> _waypointsCollection;
     private readonly JsonSerializerOptions _jsonOptions = new(JsonSerializerDefaults.Web)
     {
@@ -29,6 +32,8 @@ internal class SpaceTradersFileSystemDataClient : ISpaceTradersDataClient
     {
         _options = options.Value;
         var database = mongoClient.GetDatabase(mongoOptions.Value.Database);
+        _marketplacesCollection = database.GetCollection<MongoMarketplace>(mongoOptions.Value.MarketplacesCollection);
+        _shipyardsCollection = database.GetCollection<MongoShipyard>(mongoOptions.Value.ShipyardsCollection);
         _waypointsCollection = database.GetCollection<MongoWaypoint>(mongoOptions.Value.WaypointsCollection);
     }
 
@@ -40,14 +45,14 @@ internal class SpaceTradersFileSystemDataClient : ISpaceTradersDataClient
 
     public Task AddMarketplace(Marketplace marketplace, CancellationToken cancellationToken = default)
     {
-        var file = Path.Combine(_options.MarketplacesDirectory, $"{marketplace.SystemId.Value}/{marketplace.Id.Value}.json");
-        return AddItem(file, marketplace, m => m.ToData(), cancellationToken);
+        var mongoMarketplace = marketplace.ToMongo();
+        return _marketplacesCollection.ReplaceOneAsync(x => x.Id == mongoMarketplace.Id, mongoMarketplace, InsertOrUpdate, cancellationToken);
     }
 
     public Task AddShipyard(Shipyard shipyard, CancellationToken cancellationToken = default)
     {
-        var file = Path.Combine(_options.ShipyardsDirectory, $"{shipyard.SystemId.Value}/{shipyard.Id.Value}.json");
-        return AddItem(file, shipyard, s => s.ToData(), cancellationToken);
+        var mongoShipyard = shipyard.ToMongo();
+        return _shipyardsCollection.ReplaceOneAsync(x => x.Id == mongoShipyard.Id, mongoShipyard, InsertOrUpdate, cancellationToken);
     }
 
     public Task AddSystem(StarSystem system, CancellationToken cancellationToken = default)
@@ -75,28 +80,38 @@ internal class SpaceTradersFileSystemDataClient : ISpaceTradersDataClient
         return GetItem<MarketData, DataMarketData>(file, m => m.ToDomain(), cancellationToken);
     }
 
-    public Task<DataItemResponse<Marketplace>?> GetMarketplace(WaypointId marketplaceId, CancellationToken cancellationToken = default)
+    public async Task<Marketplace?> GetMarketplace(WaypointId marketplaceId, CancellationToken cancellationToken = default)
     {
-        var file = Path.Combine(_options.MarketplacesDirectory, $"{marketplaceId.SystemId.Value}/{marketplaceId.Value}.json");
-        return GetItem<Marketplace, DataMarketplace>(file, m => m.ToDomain(), cancellationToken);
+        var results = await _marketplacesCollection.FindAsync(s => s.Id == marketplaceId.Value, cancellationToken: cancellationToken);
+        var mongoMarketplace = await results.FirstOrDefaultAsync(cancellationToken: cancellationToken);
+        return mongoMarketplace?.ToDomain();
     }
 
-    public IAsyncEnumerable<DataItemResponse<Marketplace>>? GetMarketplaces(SystemId systemId, CancellationToken cancellationToken = default)
+    public async IAsyncEnumerable<Marketplace> GetMarketplaces(SystemId systemId, [EnumeratorCancellation] CancellationToken cancellationToken = default)
     {
-        var file = Path.Combine(_options.MarketplacesDirectory, $"{systemId.Value}");
-        return GetList<Marketplace, DataMarketplace>(file, m => m.ToDomain(), w => w.SystemId == systemId, cancellationToken);
+        var query = await _marketplacesCollection.FindAsync(w => w.SystemId == systemId.Value, cancellationToken: cancellationToken);
+        var results = query.ToAsyncEnumerable(cancellationToken: cancellationToken);
+        await foreach (var result in results)
+        {
+            yield return result.ToDomain();
+        }
     }
 
-    public Task<DataItemResponse<Shipyard>?> GetShipyard(WaypointId shipyardId, CancellationToken cancellationToken = default)
+    public async Task<Shipyard?> GetShipyard(WaypointId shipyardId, CancellationToken cancellationToken = default)
     {
-        var file = Path.Combine(_options.ShipyardsDirectory, $"{shipyardId.SystemId.Value}/{shipyardId.Value}.json");
-        return GetItem<Shipyard, DataShipyard>(file, s => s.ToDomain(), cancellationToken);
+        var results = await _shipyardsCollection.FindAsync(s => s.Id == shipyardId.Value, cancellationToken: cancellationToken);
+        var mongoShipyard = await results.FirstOrDefaultAsync(cancellationToken: cancellationToken);
+        return mongoShipyard?.ToDomain();
     }
 
-    public IAsyncEnumerable<DataItemResponse<Shipyard>>? GetShipyards(SystemId systemId, CancellationToken cancellationToken = default)
+    public async IAsyncEnumerable<Shipyard> GetShipyards(SystemId systemId, [EnumeratorCancellation] CancellationToken cancellationToken = default)
     {
-        var file = Path.Combine(_options.ShipyardsDirectory, $"{systemId.Value}");
-        return GetList<Shipyard, DataShipyard>(file, s => s.ToDomain(), w => w.SystemId == systemId, cancellationToken);
+        var query = await _shipyardsCollection.FindAsync(w => w.SystemId == systemId.Value, cancellationToken: cancellationToken);
+        var results = query.ToAsyncEnumerable(cancellationToken: cancellationToken);
+        await foreach (var result in results)
+        {
+            yield return result.ToDomain();
+        }
     }
 
     public Task<DataItemResponse<StarSystem>?> GetSystem(SystemId systemId, CancellationToken cancellationToken)
@@ -118,7 +133,7 @@ internal class SpaceTradersFileSystemDataClient : ISpaceTradersDataClient
         return mongoWaypoint?.ToDomain();
     }
 
-    public async IAsyncEnumerable<Waypoint>? GetWaypoints(SystemId systemId, [EnumeratorCancellation] CancellationToken cancellationToken = default)
+    public async IAsyncEnumerable<Waypoint> GetWaypoints(SystemId systemId, [EnumeratorCancellation] CancellationToken cancellationToken = default)
     {
         var query = await _waypointsCollection.FindAsync(w => w.SystemId == systemId.Value, cancellationToken: cancellationToken);
         var results = query.ToAsyncEnumerable(cancellationToken: cancellationToken);

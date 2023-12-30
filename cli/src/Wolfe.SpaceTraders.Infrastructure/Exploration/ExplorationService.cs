@@ -1,7 +1,6 @@
 ﻿using System.Net;
 using System.Runtime.CompilerServices;
 using Wolfe.SpaceTraders.Domain.Exploration;
-using Wolfe.SpaceTraders.Domain.Shipyards;
 using Wolfe.SpaceTraders.Infrastructure.Api;
 using Wolfe.SpaceTraders.Infrastructure.Data;
 using Wolfe.SpaceTraders.Sdk;
@@ -9,57 +8,11 @@ using Wolfe.SpaceTraders.Sdk.Models.Systems;
 
 namespace Wolfe.SpaceTraders.Infrastructure.Exploration;
 
-internal class SpaceTradersExplorationService(
+internal class ExplorationService(
     ISpaceTradersApiClient apiClient,
     ISpaceTradersDataClient dataClient
 ) : IExplorationService
 {
-    public async Task<Shipyard?> GetShipyard(WaypointId shipyardId, CancellationToken cancellationToken = default)
-    {
-        var cached = await dataClient.GetShipyard(shipyardId, cancellationToken);
-        if (cached != null)
-        {
-            return cached.Item;
-        }
-
-        var waypoint = await GetWaypoint(shipyardId, cancellationToken);
-        if (waypoint == null) { return null; }
-        var response = await apiClient.GetShipyard(shipyardId.SystemId.Value, shipyardId.Value, cancellationToken);
-        if (response.StatusCode == HttpStatusCode.NotFound) { return null; }
-        var shipyard = response.GetContent().Data.ToDomain(waypoint);
-
-        await dataClient.AddShipyard(shipyard, cancellationToken);
-        return shipyard;
-    }
-
-    public async IAsyncEnumerable<Shipyard> GetShipyards(SystemId systemId, [EnumeratorCancellation] CancellationToken cancellationToken = default)
-    {
-        var cached = dataClient.GetShipyards(systemId, cancellationToken);
-        if (cached != null)
-        {
-            await foreach (var shipyard in cached)
-            {
-                yield return shipyard.Item;
-            }
-            yield break;
-        }
-
-        var waypoints = GetWaypoints(systemId, cancellationToken);
-        await foreach (var waypoint in waypoints)
-        {
-            if (!waypoint.HasShipyard)
-            {
-                continue;
-            }
-
-            var shipyard = await GetShipyard(waypoint.Id, cancellationToken);
-            if (shipyard == null) { continue; }
-
-            await dataClient.AddShipyard(shipyard, cancellationToken);
-            yield return shipyard;
-        }
-    }
-
     public async Task<StarSystem?> GetSystem(SystemId systemId, CancellationToken cancellationToken = default)
     {
         var cached = await dataClient.GetSystem(systemId, cancellationToken);
@@ -116,17 +69,13 @@ internal class SpaceTradersExplorationService(
     {
         var cached = dataClient.GetWaypoints(systemId, cancellationToken);
         var hasCache = false;
-        if (cached != null)
-        {
-            await foreach (var waypoint in cached)
-            {
-                hasCache = true;
-                yield return waypoint;
-            }
 
-            // We've found at least one cached waypoint, so we can stop here.
-            if (hasCache) { yield break; }
+        await foreach (var waypoint in cached)
+        {
+            hasCache = true;
+            yield return waypoint;
         }
+        if (hasCache) { yield break; }
 
         // We didn't find any cached waypoints, so we'll need to fetch them from the API.
         var waypoints = PaginationHelpers.ToAsyncEnumerable<SpaceTradersWaypoint>(

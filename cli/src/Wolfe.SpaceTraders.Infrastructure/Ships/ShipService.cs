@@ -7,7 +7,7 @@ using Wolfe.SpaceTraders.Service.Ships;
 
 namespace Wolfe.SpaceTraders.Infrastructure.Ships;
 
-internal class SpaceTradersShipService(
+internal class ShipService(
     ISpaceTradersApiClient apiClient,
     IShipClient shipClient
 ) : IShipService

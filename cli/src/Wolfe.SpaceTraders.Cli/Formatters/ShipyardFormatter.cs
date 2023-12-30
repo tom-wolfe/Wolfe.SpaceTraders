@@ -20,10 +20,5 @@ internal static class ShipyardFormatter
         {
             Console.WriteLine($"  - {type.Type.Value.Color(ConsoleColors.Code)}");
         }
-        Console.WriteLine("  Ships:");
-        foreach (var ship in shipyard.Ships)
-        {
-            Console.WriteLine($"  - {ship.Type.Value.Color(ConsoleColors.Code)} ({ship.PurchasePrice.ToString().Color(ConsoleColors.Currency)})");
-        }
     }
 }

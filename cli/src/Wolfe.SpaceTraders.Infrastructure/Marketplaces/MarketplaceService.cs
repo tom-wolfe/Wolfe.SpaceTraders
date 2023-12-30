@@ -19,10 +19,7 @@ internal class MarketplaceService(
     public async Task<Marketplace?> GetMarketplace(WaypointId marketplaceId, CancellationToken cancellationToken = default)
     {
         var cached = await dataClient.GetMarketplace(marketplaceId, cancellationToken);
-        if (cached != null)
-        {
-            return cached.Item;
-        }
+        if (cached != null) { return cached; }
 
         var waypoint = await explorationService.GetWaypoint(marketplaceId, cancellationToken);
         if (waypoint == null) { return null; }
@@ -37,14 +34,14 @@ internal class MarketplaceService(
     public async IAsyncEnumerable<Marketplace> GetMarketplaces(SystemId systemId, [EnumeratorCancellation] CancellationToken cancellationToken = default)
     {
         var cached = dataClient.GetMarketplaces(systemId, cancellationToken);
-        if (cached != null)
+        var hasCached = false;
+
+        await foreach (var marketplace in cached)
         {
-            await foreach (var marketplace in cached)
-            {
-                yield return marketplace.Item;
-            }
-            yield break;
+            hasCached = true;
+            yield return marketplace;
         }
+        if (hasCached) { yield break; }
 
         var waypoints = explorationService.GetWaypoints(systemId, cancellationToken);
         await foreach (var waypoint in waypoints)
@@ -57,7 +54,6 @@ internal class MarketplaceService(
             var market = await GetMarketplace(waypoint.Id, cancellationToken);
             if (market == null) { continue; }
 
-            await dataClient.AddMarketplace(market, cancellationToken);
             yield return market;
         }
     }

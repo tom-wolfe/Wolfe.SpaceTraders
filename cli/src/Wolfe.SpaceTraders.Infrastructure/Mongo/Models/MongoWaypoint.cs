@@ -16,5 +16,4 @@ internal class MongoWaypoint
     public required IReadOnlyCollection<MongoWaypointTrait> Traits { get; init; } = [];
 }
 
-internal record MongoPoint(int X, int Y);
 internal record MongoWaypointTrait(string Id, string Name, string Description);

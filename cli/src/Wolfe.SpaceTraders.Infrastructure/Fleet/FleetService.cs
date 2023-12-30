@@ -7,7 +7,7 @@ using Wolfe.SpaceTraders.Sdk;
 
 namespace Wolfe.SpaceTraders.Infrastructure.Fleet;
 
-internal class SpaceTradersFleetService(
+internal class FleetService(
     ISpaceTradersApiClient apiClient,
     IShipClient shipClient
 ) : IFleetService

@@ -10,7 +10,7 @@ using Wolfe.SpaceTraders.Sdk.Requests;
 
 namespace Wolfe.SpaceTraders.Infrastructure.Ships;
 
-internal class SpaceTradersShipClient(ISpaceTradersApiClient apiClient) : IShipClient
+internal class ShipClient(ISpaceTradersApiClient apiClient) : IShipClient
 {
     public async Task<SetShipSpeedResult> SetSpeed(ShipId shipId, ShipSpeed speed, CancellationToken cancellationToken = default)
     {

@@ -1,7 +1,8 @@
 {
   "profiles": {
     "Wolfe.SpaceTraders.Cli": {
-      "commandName": "Project"
+      "commandName": "Project",
+      "commandLineArgs": "shipyard list X1-YG4"
     }
   }
 }

@@ -10,5 +10,5 @@ internal class SpaceTradersDataOptions
     public string MarketplacesDirectory => Path.Combine(RootDirectory, "marketplaces");
     public string ShipyardsDirectory => Path.Combine(RootDirectory, "shipyards");
     public string SystemsDirectory => Path.Combine(RootDirectory, "systems");
-    public string WaypointsDirectory => Path.Combine(RootDirectory, "waypoints");
+
 }

@@ -6,6 +6,7 @@ using Wolfe.SpaceTraders.Domain.Exploration;
 using Wolfe.SpaceTraders.Domain.Fleet;
 using Wolfe.SpaceTraders.Domain.Marketplaces;
 using Wolfe.SpaceTraders.Domain.Ships;
+using Wolfe.SpaceTraders.Domain.Shipyards;
 using Wolfe.SpaceTraders.Infrastructure.Agents;
 using Wolfe.SpaceTraders.Infrastructure.Contracts;
 using Wolfe.SpaceTraders.Infrastructure.Data;
@@ -14,6 +15,7 @@ using Wolfe.SpaceTraders.Infrastructure.Fleet;
 using Wolfe.SpaceTraders.Infrastructure.Marketplaces;
 using Wolfe.SpaceTraders.Infrastructure.Mongo;
 using Wolfe.SpaceTraders.Infrastructure.Ships;
+using Wolfe.SpaceTraders.Infrastructure.Shipyards;
 using Wolfe.SpaceTraders.Sdk;
 using Wolfe.SpaceTraders.Service.Agents;
 using Wolfe.SpaceTraders.Service.Ships;
@@ -31,12 +33,13 @@ public static class ServiceCollectionExtensions
             .AddMongo(configuration)
             .AddSpaceTradersApi(configuration)
             .AddSingleton<IAgentService, SpaceTradersAgentService>()
-            .AddSingleton<IExplorationService, SpaceTradersExplorationService>()
+            .AddSingleton<IExplorationService, ExplorationService>()
             .AddSingleton<IContractService, ContractService>()
-            .AddSingleton<IFleetService, SpaceTradersFleetService>()
+            .AddSingleton<IFleetService, FleetService>()
             .AddSingleton<IMarketplaceService, MarketplaceService>()
-            .AddSingleton<IShipClient, SpaceTradersShipClient>()
-            .AddSingleton<IShipService, SpaceTradersShipService>()
+            .AddSingleton<IShipyardService, ShipyardService>()
+            .AddSingleton<IShipClient, ShipClient>()
+            .AddSingleton<IShipService, ShipService>()
             .AddSingleton<ITokenService, TokenService>();
     }
 
