@@ -7,5 +7,6 @@ internal class MongoOptions
 
     public required string MarketplacesCollection { get; init; } = "marketplaces";
     public required string ShipyardsCollection { get; init; } = "shipyards";
+    public required string SystemsCollection { get; init; } = "systems";
     public required string WaypointsCollection { get; init; } = "waypoints";
 }

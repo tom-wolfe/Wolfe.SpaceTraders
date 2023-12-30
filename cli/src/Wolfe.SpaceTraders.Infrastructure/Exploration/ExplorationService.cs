@@ -16,10 +16,7 @@ internal class ExplorationService(
     public async Task<StarSystem?> GetSystem(SystemId systemId, CancellationToken cancellationToken = default)
     {
         var cached = await dataClient.GetSystem(systemId, cancellationToken);
-        if (cached != null)
-        {
-            return cached.Item;
-        }
+        if (cached != null) { return cached; }
 
         var response = await apiClient.GetSystem(systemId.Value, cancellationToken);
         if (response.StatusCode == HttpStatusCode.NotFound) { return null; }
@@ -32,14 +29,15 @@ internal class ExplorationService(
     public async IAsyncEnumerable<StarSystem> GetSystems([EnumeratorCancellation] CancellationToken cancellationToken = default)
     {
         var cached = dataClient.GetSystems(cancellationToken);
-        if (cached != null)
+        var hasCache = false;
+
+        await foreach (var system in cached)
         {
-            await foreach (var system in cached)
-            {
-                yield return system.Item;
-            }
-            yield break;
+            hasCache = true;
+            yield return system;
         }
+        if (hasCache) { yield break; }
+
 
         var systems = PaginationHelpers.ToAsyncEnumerable<SpaceTradersSystem>(
             async p => (await apiClient.GetSystems(20, p, cancellationToken)).GetContent()

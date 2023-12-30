@@ -21,6 +21,7 @@ internal class SpaceTradersFileSystemDataClient : ISpaceTradersDataClient
     private readonly SpaceTradersDataOptions _options;
     private readonly IMongoCollection<MongoMarketplace> _marketplacesCollection;
     private readonly IMongoCollection<MongoShipyard> _shipyardsCollection;
+    private readonly IMongoCollection<MongoSystem> _systemsCollection;
     private readonly IMongoCollection<MongoWaypoint> _waypointsCollection;
     private readonly JsonSerializerOptions _jsonOptions = new(JsonSerializerDefaults.Web)
     {
@@ -34,6 +35,7 @@ internal class SpaceTradersFileSystemDataClient : ISpaceTradersDataClient
         var database = mongoClient.GetDatabase(mongoOptions.Value.Database);
         _marketplacesCollection = database.GetCollection<MongoMarketplace>(mongoOptions.Value.MarketplacesCollection);
         _shipyardsCollection = database.GetCollection<MongoShipyard>(mongoOptions.Value.ShipyardsCollection);
+        _systemsCollection = database.GetCollection<MongoSystem>(mongoOptions.Value.SystemsCollection);
         _waypointsCollection = database.GetCollection<MongoWaypoint>(mongoOptions.Value.WaypointsCollection);
     }
 
@@ -57,8 +59,8 @@ internal class SpaceTradersFileSystemDataClient : ISpaceTradersDataClient
 
     public Task AddSystem(StarSystem system, CancellationToken cancellationToken = default)
     {
-        var file = Path.Combine(_options.SystemsDirectory, $"{system.Id.Value}.json");
-        return AddItem(file, system, s => s.ToData(), cancellationToken);
+        var mongoSystem = system.ToMongo();
+        return _systemsCollection.ReplaceOneAsync(x => x.Id == mongoSystem.Id, mongoSystem, InsertOrUpdate, cancellationToken);
     }
 
     public Task AddWaypoint(Waypoint waypoint, CancellationToken cancellationToken = default)
@@ -114,16 +116,21 @@ internal class SpaceTradersFileSystemDataClient : ISpaceTradersDataClient
         }
     }
 
-    public Task<DataItemResponse<StarSystem>?> GetSystem(SystemId systemId, CancellationToken cancellationToken)
+    public async Task<StarSystem?> GetSystem(SystemId systemId, CancellationToken cancellationToken)
     {
-        var file = Path.Combine(_options.SystemsDirectory, $"{systemId.Value}.json");
-        return GetItem<StarSystem, DataSystem>(file, s => s.ToDomain(), cancellationToken);
+        var results = await _systemsCollection.FindAsync(s => s.Id == systemId.Value, cancellationToken: cancellationToken);
+        var mongoSystem = await results.FirstOrDefaultAsync(cancellationToken: cancellationToken);
+        return mongoSystem?.ToDomain();
     }
 
-    public IAsyncEnumerable<DataItemResponse<StarSystem>>? GetSystems(CancellationToken cancellationToken)
+    public async IAsyncEnumerable<StarSystem> GetSystems([EnumeratorCancellation] CancellationToken cancellationToken)
     {
-        var file = _options.SystemsDirectory;
-        return GetList<StarSystem, DataSystem>(file, s => s.ToDomain(), s => true, cancellationToken);
+        var query = await _systemsCollection.FindAsync(_ => true, cancellationToken: cancellationToken);
+        var results = query.ToAsyncEnumerable(cancellationToken: cancellationToken);
+        await foreach (var result in results)
+        {
+            yield return result.ToDomain();
+        }
     }
 
     public async Task<Waypoint?> GetWaypoint(WaypointId waypointId, CancellationToken cancellationToken = default)
