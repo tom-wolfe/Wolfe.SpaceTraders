@@ -14,7 +14,13 @@ namespace Wolfe.SpaceTraders.Domain.Missions;
 /// <param name="log">The log to write entries to.</param>
 /// <param name="ship">The ship that will navigate and perform the probe.</param>
 /// <param name="marketplaceService">The service that provides market data.</param>
-public class ProbeMission(IMissionLog log, Ship ship, IMarketplaceService marketplaceService) : Mission(log)
+/// <param name="priorityService">The service that prioritizes market exploration.</param>
+public class ProbeMission(
+    IMissionLog log,
+    Ship ship,
+    IMarketplaceService marketplaceService,
+    IMarketPriorityService priorityService
+) : Mission(log)
 {
     /// <inheritdoc/>
     public override async Task Execute(CancellationToken cancellationToken = default)
@@ -23,19 +29,25 @@ public class ProbeMission(IMissionLog log, Ship ship, IMarketplaceService market
         {
             while (true)
             {
-                log.Write("Scanning system for un-probed markets...");
-                var marketplace = await HighestPriorityMarketplace(CancellationToken.None);
-                var distance = (int)Math.Round(ship.Location.DistanceTo(marketplace.Location).Total);
-                log.Write($"Setting course for next marketplace: {marketplace.Id.Value} at a distance of {distance}.");
+                log.Write($"Scanning system for un-probed markets near {ship.Navigation.WaypointId}...");
+                var market = await priorityService.GetPriorityMarkets(ship.Navigation.WaypointId, cancellationToken).FirstAsync(cancellationToken);
+                log.Write($"Setting course for next marketplace: {market.MarketId.Value} at a distance of {market.Distance}.");
 
                 cancellationToken.ThrowIfCancellationRequested();
 
-                var result = await ship.BeginNavigationTo(marketplace.Id, ShipSpeed.Burn, CancellationToken.None)
-                             ?? throw new Exception("Probe ship already at destination.");
-                log.Write($"Expected to arrive in {result.Navigation.Route.TimeToArrival.Humanize()}.");
+                if (ship.Navigation.WaypointId == market.MarketId)
+                {
+                    log.Write("Ship is already at destination. Collecting market data.");
+                }
+                else
+                {
+                    var result = await ship.BeginNavigationTo(market.MarketId, ShipSpeed.Burn, CancellationToken.None)
+                                 ?? throw new Exception("Probe ship already at destination.");
+                    log.Write($"Expected to arrive in {result.Navigation.Route.TimeToArrival.Humanize()}.");
 
-                await ship.AwaitArrival(CancellationToken.None);
-                log.Write("Arrived at destination. Collecting market data.");
+                    await ship.AwaitArrival(CancellationToken.None);
+                    log.Write("Arrived at destination. Collecting market data.");
+                }
 
                 var marketData = await ship.ProbeMarketData(CancellationToken.None) ?? throw new Exception("Missing market data.");
                 await marketplaceService.AddMarketData(marketData, CancellationToken.None);
@@ -53,28 +65,5 @@ public class ProbeMission(IMissionLog log, Ship ship, IMarketplaceService market
         log.Write("Mission complete.");
     }
 
-    private ValueTask<Marketplace> HighestPriorityMarketplace(CancellationToken cancellationToken = default) => marketplaceService
-        .GetMarketplaces(ship.Navigation.WaypointId.SystemId, cancellationToken)
-        .Where(m => m.Id != ship.Navigation.WaypointId)
-        .OrderByAwaitWithCancellation(MarketplacePriority)
-        .FirstAsync(cancellationToken);
 
-    private async ValueTask<double> MarketplacePriority(Marketplace marketplace, CancellationToken cancellationToken = default)
-    {
-        var distanceFromShip = Math.Round(ship.Location.DistanceTo(marketplace.Location).Total);
-
-        var marketData = await marketplaceService.GetMarketData(marketplace.Id, cancellationToken);
-        var volatility = marketData == null ? 100 : await marketplaceService.GetPercentileVolatility(marketData.Age, cancellationToken);
-        var age = marketData == null ? 0 : marketData.Age.TotalMinutes;
-
-        // Adjust priority based on percentile chance of market data having changed.
-        return volatility switch
-        {
-            < 25 => (distanceFromShip + age) * 0.5, // Lower value to discourage frequent updates.
-            < 50 => (distanceFromShip + age) * 1.0,
-            < 75 => (distanceFromShip + age) * 1.1,
-            < 100 => (distanceFromShip + age) * 1.2,
-            _ => (distanceFromShip + age) * 1.5 // Slightly boosted value to encourage exploration.
-        };
-    }
 }
