@@ -1,7 +1,7 @@
 ﻿using MongoDB.Driver;
 using System.Runtime.CompilerServices;
 
-namespace Wolfe.SpaceTraders.Infrastructure.Mongo.Extensions;
+namespace Wolfe.SpaceTraders.Infrastructure.Mongo;
 
 internal static class AsyncCursorExtensions
 {

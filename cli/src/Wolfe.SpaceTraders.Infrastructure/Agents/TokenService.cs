@@ -1,7 +1,7 @@
 ﻿using Microsoft.Extensions.Options;
 using MongoDB.Driver;
+using Wolfe.SpaceTraders.Infrastructure.Agents.Models;
 using Wolfe.SpaceTraders.Infrastructure.Mongo;
-using Wolfe.SpaceTraders.Infrastructure.Mongo.Models;
 
 namespace Wolfe.SpaceTraders.Infrastructure.Agents;
 

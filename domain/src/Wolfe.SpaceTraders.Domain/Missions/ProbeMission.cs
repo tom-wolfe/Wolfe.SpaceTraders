@@ -1,7 +1,7 @@
 ﻿using Humanizer;
 using Wolfe.SpaceTraders.Domain.Marketplaces;
-using Wolfe.SpaceTraders.Domain.Navigation;
 using Wolfe.SpaceTraders.Domain.Ships;
+using ShipSpeed = Wolfe.SpaceTraders.Domain.Ships.ShipSpeed;
 
 namespace Wolfe.SpaceTraders.Domain.Missions;
 

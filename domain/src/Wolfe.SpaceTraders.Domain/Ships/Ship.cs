@@ -1,7 +1,6 @@
 ﻿using Wolfe.SpaceTraders.Domain.Exploration;
 using Wolfe.SpaceTraders.Domain.General;
 using Wolfe.SpaceTraders.Domain.Marketplaces;
-using Wolfe.SpaceTraders.Domain.Navigation;
 using Wolfe.SpaceTraders.Domain.Ships.Commands;
 using Wolfe.SpaceTraders.Domain.Ships.Results;
 

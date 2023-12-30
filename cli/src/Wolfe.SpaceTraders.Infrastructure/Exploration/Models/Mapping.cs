@@ -1,10 +1,24 @@
 ﻿using Wolfe.SpaceTraders.Domain.Exploration;
-using Wolfe.SpaceTraders.Infrastructure.Mongo.Models;
+using Wolfe.SpaceTraders.Domain.General;
 
-namespace Wolfe.SpaceTraders.Infrastructure.Mongo.Mapping;
+namespace Wolfe.SpaceTraders.Infrastructure.Exploration.Models;
 
-internal static class Waypoints
+internal static class Mapping
 {
+    public static MongoSystem ToMongo(this StarSystem system) => new()
+    {
+        Id = system.Id.Value,
+        Type = system.Type.Value,
+        Location = system.Location.ToMongo(),
+    };
+
+    public static StarSystem ToDomain(this MongoSystem system) => new()
+    {
+        Id = new SystemId(system.Id),
+        Type = new SystemType(system.Type),
+        Location = system.Location.ToDomain(),
+    };
+
     public static MongoWaypoint ToMongo(this Waypoint waypoint) => new()
     {
         Id = waypoint.Id.Value,
@@ -30,4 +44,7 @@ internal static class Waypoints
         Name = trait.Name,
         Description = trait.Description
     };
+
+    public static MongoPoint ToMongo(this Point point) => new(point.X, point.Y);
+    public static Point ToDomain(this MongoPoint point) => new(point.X, point.Y);
 }

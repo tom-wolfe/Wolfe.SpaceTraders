@@ -1,11 +1,12 @@
 ﻿using Wolfe.SpaceTraders.Domain.Exploration;
 using Wolfe.SpaceTraders.Domain.Ships;
 using Wolfe.SpaceTraders.Domain.Shipyards;
-using Wolfe.SpaceTraders.Infrastructure.Mongo.Models;
+using Wolfe.SpaceTraders.Infrastructure.Exploration.Models;
+using Wolfe.SpaceTraders.Infrastructure.Shipyards.Models;
 
-namespace Wolfe.SpaceTraders.Infrastructure.Mongo.Mapping;
+namespace Wolfe.SpaceTraders.Infrastructure.Shipyards.Models;
 
-internal static class Shipyards
+internal static class Mapping
 {
     public static MongoShipyard ToMongo(this Shipyard shipyard) => new()
     {

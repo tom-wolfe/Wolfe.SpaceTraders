@@ -5,7 +5,6 @@ using Wolfe.SpaceTraders.Cli.Extensions;
 using Wolfe.SpaceTraders.Cli.Formatters;
 using Wolfe.SpaceTraders.Domain.Exploration;
 using Wolfe.SpaceTraders.Domain.Marketplaces;
-using Wolfe.SpaceTraders.Domain.Navigation;
 using Wolfe.SpaceTraders.Domain.Ships;
 using Wolfe.SpaceTraders.Service.Ships;
 

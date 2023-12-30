@@ -1,4 +1,6 @@
-﻿namespace Wolfe.SpaceTraders.Infrastructure.Mongo.Models;
+﻿using Wolfe.SpaceTraders.Infrastructure.Exploration.Models;
+
+namespace Wolfe.SpaceTraders.Infrastructure.Shipyards.Models;
 
 internal class MongoShipyard : MongoWaypoint
 {

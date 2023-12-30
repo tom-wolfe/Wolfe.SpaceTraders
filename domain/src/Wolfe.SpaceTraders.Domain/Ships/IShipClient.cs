@@ -1,5 +1,4 @@
 ﻿using Wolfe.SpaceTraders.Domain.Exploration;
-using Wolfe.SpaceTraders.Domain.Navigation;
 using Wolfe.SpaceTraders.Domain.Ships.Commands;
 using Wolfe.SpaceTraders.Domain.Ships.Results;
 

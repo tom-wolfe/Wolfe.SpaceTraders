@@ -1,10 +1,10 @@
 ﻿using Wolfe.SpaceTraders.Domain.Exploration;
 using Wolfe.SpaceTraders.Domain.Marketplaces;
-using Wolfe.SpaceTraders.Infrastructure.Mongo.Models;
+using Wolfe.SpaceTraders.Infrastructure.Exploration.Models;
 
-namespace Wolfe.SpaceTraders.Infrastructure.Mongo.Mapping;
+namespace Wolfe.SpaceTraders.Infrastructure.Marketplaces.Models;
 
-internal static class Marketplaces
+internal static class Mapping
 {
     public static MongoMarketplace ToMongo(this Marketplace marketplace) => new()
     {

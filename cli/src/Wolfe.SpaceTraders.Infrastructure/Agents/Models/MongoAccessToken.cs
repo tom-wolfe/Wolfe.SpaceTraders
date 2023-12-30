@@ -1,6 +1,6 @@
 ﻿using MongoDB.Bson.Serialization.Attributes;
 
-namespace Wolfe.SpaceTraders.Infrastructure.Mongo.Models;
+namespace Wolfe.SpaceTraders.Infrastructure.Agents.Models;
 
 internal class MongoAccessToken
 {

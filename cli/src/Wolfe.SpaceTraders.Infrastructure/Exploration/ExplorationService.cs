@@ -2,7 +2,6 @@
 using System.Runtime.CompilerServices;
 using Wolfe.SpaceTraders.Domain.Exploration;
 using Wolfe.SpaceTraders.Infrastructure.Api;
-using Wolfe.SpaceTraders.Infrastructure.Data;
 using Wolfe.SpaceTraders.Sdk;
 using Wolfe.SpaceTraders.Sdk.Models.Systems;
 
@@ -10,25 +9,25 @@ namespace Wolfe.SpaceTraders.Infrastructure.Exploration;
 
 internal class ExplorationService(
     ISpaceTradersApiClient apiClient,
-    ISpaceTradersDataClient dataClient
+    IExplorationStore explorationStore
 ) : IExplorationService
 {
     public async Task<StarSystem?> GetSystem(SystemId systemId, CancellationToken cancellationToken = default)
     {
-        var cached = await dataClient.GetSystem(systemId, cancellationToken);
+        var cached = await explorationStore.GetSystem(systemId, cancellationToken);
         if (cached != null) { return cached; }
 
         var response = await apiClient.GetSystem(systemId.Value, cancellationToken);
         if (response.StatusCode == HttpStatusCode.NotFound) { return null; }
         var system = response.GetContent().Data.ToDomain();
 
-        await dataClient.AddSystem(system, cancellationToken);
+        await explorationStore.AddSystem(system, cancellationToken);
         return system;
     }
 
     public async IAsyncEnumerable<StarSystem> GetSystems([EnumeratorCancellation] CancellationToken cancellationToken = default)
     {
-        var cached = dataClient.GetSystems(cancellationToken);
+        var cached = explorationStore.GetSystems(cancellationToken);
         var hasCache = false;
 
         await foreach (var system in cached)
@@ -45,27 +44,27 @@ internal class ExplorationService(
 
         await foreach (var system in systems)
         {
-            await dataClient.AddSystem(system, cancellationToken);
+            await explorationStore.AddSystem(system, cancellationToken);
             yield return system;
         }
     }
 
     public async Task<Waypoint?> GetWaypoint(WaypointId waypointId, CancellationToken cancellationToken = default)
     {
-        var cached = await dataClient.GetWaypoint(waypointId, cancellationToken);
+        var cached = await explorationStore.GetWaypoint(waypointId, cancellationToken);
         if (cached != null) { return cached; }
 
         var response = await apiClient.GetWaypoint(waypointId.SystemId.Value, waypointId.Value, cancellationToken);
         if (response.StatusCode == HttpStatusCode.NotFound) { return null; }
         var waypoint = response.GetContent().Data.ToDomain();
 
-        await dataClient.AddWaypoint(waypoint, cancellationToken);
+        await explorationStore.AddWaypoint(waypoint, cancellationToken);
         return waypoint;
     }
 
     public async IAsyncEnumerable<Waypoint> GetWaypoints(SystemId systemId, [EnumeratorCancellation] CancellationToken cancellationToken = default)
     {
-        var cached = dataClient.GetWaypoints(systemId, cancellationToken);
+        var cached = explorationStore.GetWaypoints(systemId, cancellationToken);
         var hasCache = false;
 
         await foreach (var waypoint in cached)
@@ -82,7 +81,7 @@ internal class ExplorationService(
 
         await foreach (var waypoint in waypoints)
         {
-            await dataClient.AddWaypoint(waypoint, cancellationToken);
+            await explorationStore.AddWaypoint(waypoint, cancellationToken);
             yield return waypoint;
         }
     }

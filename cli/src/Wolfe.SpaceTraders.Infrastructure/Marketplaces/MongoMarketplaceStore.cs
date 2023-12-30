@@ -4,38 +4,30 @@ using System.Runtime.CompilerServices;
 using System.Text.Json;
 using Wolfe.SpaceTraders.Domain.Exploration;
 using Wolfe.SpaceTraders.Domain.Marketplaces;
-using Wolfe.SpaceTraders.Domain.Shipyards;
+using Wolfe.SpaceTraders.Infrastructure.Data;
 using Wolfe.SpaceTraders.Infrastructure.Data.Mapping;
 using Wolfe.SpaceTraders.Infrastructure.Data.Models;
+using Wolfe.SpaceTraders.Infrastructure.Marketplaces.Models;
 using Wolfe.SpaceTraders.Infrastructure.Mongo;
-using Wolfe.SpaceTraders.Infrastructure.Mongo.Extensions;
-using Wolfe.SpaceTraders.Infrastructure.Mongo.Mapping;
-using Wolfe.SpaceTraders.Infrastructure.Mongo.Models;
 
-namespace Wolfe.SpaceTraders.Infrastructure.Data;
+namespace Wolfe.SpaceTraders.Infrastructure.Marketplaces;
 
-internal class SpaceTradersFileSystemDataClient : ISpaceTradersDataClient
+internal class MongoMarketplaceStore : IMarketplaceStore
 {
     private readonly SpaceTradersDataOptions _options;
     private readonly IMongoCollection<MongoMarketplace> _marketplacesCollection;
-    private readonly IMongoCollection<MongoShipyard> _shipyardsCollection;
-    private readonly IMongoCollection<MongoSystem> _systemsCollection;
 
-    private readonly IMongoCollection<MongoWaypoint> _waypointsCollection;
     private readonly JsonSerializerOptions _jsonOptions = new(JsonSerializerDefaults.Web)
     {
         PropertyNamingPolicy = JsonNamingPolicy.CamelCase,
         WriteIndented = true
     };
 
-    public SpaceTradersFileSystemDataClient(IOptions<SpaceTradersDataOptions> options, IOptions<MongoOptions> mongoOptions, IMongoClient mongoClient)
+    public MongoMarketplaceStore(IOptions<SpaceTradersDataOptions> options, IOptions<MongoOptions> mongoOptions, IMongoClient mongoClient)
     {
         _options = options.Value;
         var database = mongoClient.GetDatabase(mongoOptions.Value.Database);
         _marketplacesCollection = database.GetCollection<MongoMarketplace>(mongoOptions.Value.MarketplacesCollection);
-        _shipyardsCollection = database.GetCollection<MongoShipyard>(mongoOptions.Value.ShipyardsCollection);
-        _systemsCollection = database.GetCollection<MongoSystem>(mongoOptions.Value.SystemsCollection);
-        _waypointsCollection = database.GetCollection<MongoWaypoint>(mongoOptions.Value.WaypointsCollection);
     }
 
     public Task AddMarketData(MarketData marketData, CancellationToken cancellationToken)
@@ -48,24 +40,6 @@ internal class SpaceTradersFileSystemDataClient : ISpaceTradersDataClient
     {
         var mongoMarketplace = marketplace.ToMongo();
         return _marketplacesCollection.ReplaceOneAsync(x => x.Id == mongoMarketplace.Id, mongoMarketplace, MongoHelpers.InsertOrUpdate, cancellationToken);
-    }
-
-    public Task AddShipyard(Shipyard shipyard, CancellationToken cancellationToken = default)
-    {
-        var mongoShipyard = shipyard.ToMongo();
-        return _shipyardsCollection.ReplaceOneAsync(x => x.Id == mongoShipyard.Id, mongoShipyard, MongoHelpers.InsertOrUpdate, cancellationToken);
-    }
-
-    public Task AddSystem(StarSystem system, CancellationToken cancellationToken = default)
-    {
-        var mongoSystem = system.ToMongo();
-        return _systemsCollection.ReplaceOneAsync(x => x.Id == mongoSystem.Id, mongoSystem, MongoHelpers.InsertOrUpdate, cancellationToken);
-    }
-
-    public Task AddWaypoint(Waypoint waypoint, CancellationToken cancellationToken = default)
-    {
-        var mongoWaypoint = waypoint.ToMongo();
-        return _waypointsCollection.ReplaceOneAsync(x => x.Id == mongoWaypoint.Id, mongoWaypoint, MongoHelpers.InsertOrUpdate, cancellationToken);
     }
 
     public Task<DataItemResponse<MarketData>?> GetMarketData(WaypointId marketplaceId, CancellationToken cancellationToken)
@@ -84,57 +58,6 @@ internal class SpaceTradersFileSystemDataClient : ISpaceTradersDataClient
     public async IAsyncEnumerable<Marketplace> GetMarketplaces(SystemId systemId, [EnumeratorCancellation] CancellationToken cancellationToken = default)
     {
         var query = await _marketplacesCollection.FindAsync(w => w.SystemId == systemId.Value, cancellationToken: cancellationToken);
-        var results = query.ToAsyncEnumerable(cancellationToken: cancellationToken);
-        await foreach (var result in results)
-        {
-            yield return result.ToDomain();
-        }
-    }
-
-    public async Task<Shipyard?> GetShipyard(WaypointId shipyardId, CancellationToken cancellationToken = default)
-    {
-        var results = await _shipyardsCollection.FindAsync(s => s.Id == shipyardId.Value, cancellationToken: cancellationToken);
-        var mongoShipyard = await results.FirstOrDefaultAsync(cancellationToken: cancellationToken);
-        return mongoShipyard?.ToDomain();
-    }
-
-    public async IAsyncEnumerable<Shipyard> GetShipyards(SystemId systemId, [EnumeratorCancellation] CancellationToken cancellationToken = default)
-    {
-        var query = await _shipyardsCollection.FindAsync(w => w.SystemId == systemId.Value, cancellationToken: cancellationToken);
-        var results = query.ToAsyncEnumerable(cancellationToken: cancellationToken);
-        await foreach (var result in results)
-        {
-            yield return result.ToDomain();
-        }
-    }
-
-    public async Task<StarSystem?> GetSystem(SystemId systemId, CancellationToken cancellationToken)
-    {
-        var results = await _systemsCollection.FindAsync(s => s.Id == systemId.Value, cancellationToken: cancellationToken);
-        var mongoSystem = await results.FirstOrDefaultAsync(cancellationToken: cancellationToken);
-        return mongoSystem?.ToDomain();
-    }
-
-    public async IAsyncEnumerable<StarSystem> GetSystems([EnumeratorCancellation] CancellationToken cancellationToken)
-    {
-        var query = await _systemsCollection.FindAsync(_ => true, cancellationToken: cancellationToken);
-        var results = query.ToAsyncEnumerable(cancellationToken: cancellationToken);
-        await foreach (var result in results)
-        {
-            yield return result.ToDomain();
-        }
-    }
-
-    public async Task<Waypoint?> GetWaypoint(WaypointId waypointId, CancellationToken cancellationToken = default)
-    {
-        var results = await _waypointsCollection.FindAsync(w => w.Id == waypointId.Value, cancellationToken: cancellationToken);
-        var mongoWaypoint = await results.FirstOrDefaultAsync(cancellationToken: cancellationToken);
-        return mongoWaypoint?.ToDomain();
-    }
-
-    public async IAsyncEnumerable<Waypoint> GetWaypoints(SystemId systemId, [EnumeratorCancellation] CancellationToken cancellationToken = default)
-    {
-        var query = await _waypointsCollection.FindAsync(w => w.SystemId == systemId.Value, cancellationToken: cancellationToken);
         var results = query.ToAsyncEnumerable(cancellationToken: cancellationToken);
         await foreach (var result in results)
         {

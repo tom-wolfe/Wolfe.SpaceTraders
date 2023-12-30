@@ -3,20 +3,19 @@ using System.Runtime.CompilerServices;
 using Wolfe.SpaceTraders.Domain.Exploration;
 using Wolfe.SpaceTraders.Domain.Shipyards;
 using Wolfe.SpaceTraders.Infrastructure.Api;
-using Wolfe.SpaceTraders.Infrastructure.Data;
 using Wolfe.SpaceTraders.Sdk;
 
 namespace Wolfe.SpaceTraders.Infrastructure.Shipyards;
 
 internal class ShipyardService(
     ISpaceTradersApiClient apiClient,
-    ISpaceTradersDataClient dataClient,
+    IShipyardStore shipyardStore,
     IExplorationService explorationService
 ) : IShipyardService
 {
     public async Task<Shipyard?> GetShipyard(WaypointId shipyardId, CancellationToken cancellationToken = default)
     {
-        var cached = await dataClient.GetShipyard(shipyardId, cancellationToken);
+        var cached = await shipyardStore.GetShipyard(shipyardId, cancellationToken);
         if (cached != null) { return cached; }
 
         var waypoint = await explorationService.GetWaypoint(shipyardId, cancellationToken);
@@ -25,13 +24,13 @@ internal class ShipyardService(
         if (response.StatusCode == HttpStatusCode.NotFound) { return null; }
         var shipyard = response.GetContent().Data.ToDomain(waypoint);
 
-        await dataClient.AddShipyard(shipyard, cancellationToken);
+        await shipyardStore.AddShipyard(shipyard, cancellationToken);
         return shipyard;
     }
 
     public async IAsyncEnumerable<Shipyard> GetShipyards(SystemId systemId, [EnumeratorCancellation] CancellationToken cancellationToken = default)
     {
-        var cached = dataClient.GetShipyards(systemId, cancellationToken);
+        var cached = shipyardStore.GetShipyards(systemId, cancellationToken);
         var hasCached = false;
 
         await foreach (var shipyard in cached)

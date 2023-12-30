@@ -1,4 +1,4 @@
-﻿namespace Wolfe.SpaceTraders.Domain.Navigation;
+﻿namespace Wolfe.SpaceTraders.Domain.Ships;
 
 [StronglyTypedId]
 public partial struct ShipNavigationStatus

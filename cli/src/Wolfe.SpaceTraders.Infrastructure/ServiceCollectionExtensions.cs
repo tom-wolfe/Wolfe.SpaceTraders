@@ -66,10 +66,12 @@ public static class ServiceCollectionExtensions
             {
                 var options = p.GetRequiredService<IOptions<MongoOptions>>().Value;
                 return new MongoClient(options.ConnectionString);
-            });
+            })
+            .AddSingleton<IExplorationStore, MongoExplorationStore>()
+            .AddSingleton<IMarketplaceStore, IMarketplaceStore>()
+            .AddSingleton<IShipyardStore, MongoShipyardStore>();
     }
 
     private static IServiceCollection AddFileDatabase(this IServiceCollection services, IConfiguration configuration) => services
-        .Configure<SpaceTradersDataOptions>(configuration.GetSection("Database").Bind)
-        .AddSingleton<ISpaceTradersDataClient, SpaceTradersFileSystemDataClient>();
+        .Configure<SpaceTradersDataOptions>(configuration.GetSection("Database").Bind);
 }
