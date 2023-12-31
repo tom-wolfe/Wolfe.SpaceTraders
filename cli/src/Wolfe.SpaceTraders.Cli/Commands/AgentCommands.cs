@@ -1,6 +1,5 @@
 ﻿using Cocona;
 using Microsoft.Extensions.Hosting;
-using Wolfe.SpaceTraders.Cli.Extensions;
 using Wolfe.SpaceTraders.Cli.Formatters;
 using Wolfe.SpaceTraders.Domain.Agents;
 using Wolfe.SpaceTraders.Domain.Factions;
@@ -15,9 +14,8 @@ internal class AgentCommands(IAgentService agentService, ITokenService tokenServ
     public async Task<int> Login([Argument] string token)
     {
         await tokenService.SetAccessToken(token, host.ApplicationStopping);
-
         var agent = await agentService.GetAgent(host.ApplicationStopping);
-        Console.WriteLine($"Welcome, {agent.Id}!".Color(ConsoleColors.Success));
+        ConsoleHelpers.WriteLineSuccess($"Welcome, {agent.Id}!");
 
         return ExitCodes.Success;
     }
@@ -25,8 +23,7 @@ internal class AgentCommands(IAgentService agentService, ITokenService tokenServ
     public async Task<int> Logout()
     {
         await tokenService.ClearAccessToken(host.ApplicationStopping);
-
-        Console.WriteLine("Logged out successfully.".Color(ConsoleColors.Success));
+        ConsoleHelpers.WriteLineSuccess($"Logged out successfully.");
 
         return ExitCodes.Success;
     }
@@ -49,8 +46,7 @@ internal class AgentCommands(IAgentService agentService, ITokenService tokenServ
         };
         var response = await agentService.CreateAgent(request, host.ApplicationStopping);
         await tokenService.SetAccessToken(response.Token, host.ApplicationStopping);
-
-        Console.WriteLine($"Welcome, {response.Agent.Id}!".Color(ConsoleColors.Success));
+        ConsoleHelpers.WriteLineSuccess($"Welcome, {response.Agent.Id}!");
 
         return ExitCodes.Success;
     }

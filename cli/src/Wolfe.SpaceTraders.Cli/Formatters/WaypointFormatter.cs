@@ -1,4 +1,4 @@
-﻿using Wolfe.SpaceTraders.Cli.Extensions;
+﻿using Spectre.Console;
 using Wolfe.SpaceTraders.Domain.Exploration;
 using Wolfe.SpaceTraders.Domain.General;
 
@@ -8,17 +8,33 @@ internal static class WaypointFormatter
 {
     public static void WriteWaypoint(Waypoint waypoint, Point? relativeTo = null)
     {
-        Console.WriteLine($"~ {waypoint.Id.Value.Color(ConsoleColors.Id)} ({waypoint.Type.Value.Color(ConsoleColors.Category)})");
+        ConsoleHelpers.WriteLineFormatted($"~ {waypoint.Id} ({waypoint.Type})");
 
-        var location = $"  Location: {waypoint.Location.ToString().Color(ConsoleColors.Point)}";
+        ConsoleHelpers.WriteFormatted($"  Location: {waypoint.Location}");
         var distance = relativeTo?.DistanceTo(waypoint.Location);
-        if (distance != null) { location += $" ({distance.Total.ToString("F").Color(ConsoleColors.Distance)})"; }
-        Console.WriteLine(location);
+        if (distance != null) { ConsoleHelpers.WriteFormatted($" ({distance})"); }
+        Console.WriteLine();
 
-        Console.WriteLine("  Traits:");
-        foreach (var trait in waypoint.Traits)
+        WriteWaypointTraits(waypoint.Traits);
+    }
+
+    private static void WriteWaypointTraits(IEnumerable<WaypointTrait> traits)
+    {
+        var table = new Table { Title = new TableTitle("Traits") };
+
+        table.AddColumn("Trait");
+        table.AddColumn("Name");
+        table.AddColumn("Description");
+
+        foreach (var trait in traits)
         {
-            Console.WriteLine($"  - {trait.Name.Color(ConsoleColors.Information)} ({trait.Id.Value.Color(ConsoleColors.Code)})");
+            table.AddRow(
+                ConsoleHelpers.Renderable($"{trait.Id}"),
+                ConsoleHelpers.Renderable($"{trait.Name}"),
+                ConsoleHelpers.Renderable($"{trait.Description}")
+            );
         }
+
+        AnsiConsole.Write(table);
     }
 }

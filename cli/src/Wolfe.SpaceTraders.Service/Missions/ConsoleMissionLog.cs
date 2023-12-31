@@ -6,6 +6,11 @@ internal class ConsoleMissionLog : IMissionLog
 {
     public void Write(string message)
     {
-        Console.WriteLine($"{message}");
+        Console.WriteLine(message);
+    }
+
+    public void Write(FormattableString message)
+    {
+        Console.WriteLine(message);
     }
 }

@@ -2,7 +2,7 @@
   "profiles": {
     "Wolfe.SpaceTraders.Cli": {
       "commandName": "Project",
-      "commandLineArgs": "shipyard list X1-YG4"
+      "commandLineArgs": "market priority X1-U96-H47"
     }
   }
 }

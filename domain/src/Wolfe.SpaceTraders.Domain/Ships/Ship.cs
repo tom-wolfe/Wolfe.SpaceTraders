@@ -4,9 +4,15 @@ using Wolfe.SpaceTraders.Domain.Marketplaces;
 using Wolfe.SpaceTraders.Domain.Ships.Commands;
 using Wolfe.SpaceTraders.Domain.Ships.Results;
 
-
 namespace Wolfe.SpaceTraders.Domain.Ships;
 
+/// <summary>
+/// Represents an agent ship in the SpaceTraders universe.
+/// </summary>
+/// <param name="client">The client that provides the ship behavior.</param>
+/// <param name="cargo">The cargo contained inside the ship.</param>
+/// <param name="fuel">The currently fuel capacity of the ship.</param>
+/// <param name="navigation">The ships navigation parameters.</param>
 public class Ship(
     IShipClient client,
     ShipCargo cargo,
@@ -14,14 +20,46 @@ public class Ship(
     ShipNavigation navigation
 )
 {
+    /// <summary>
+    /// Gets the unique identifier of the ship.
+    /// </summary>
     public required ShipId Id { get; init; }
+
+    /// <summary>
+    /// Gets the name of the ship (usually the same as the ID).
+    /// </summary>
     public required string Name { get; init; }
+
+    /// <summary>
+    /// Gets the publicly registered role of the ship.
+    /// </summary>
     public required ShipRole Role { get; init; }
+
+    /// <summary>
+    /// Gets the current location of the ship.
+    /// </summary>
     public Point Location => Navigation.Route.Origin.Point;
+
+    /// <summary>
+    /// Gets the ships navigation status.
+    /// </summary>
     public ShipNavigation Navigation { get; private set; } = navigation;
+
+    /// <summary>
+    /// Gets the ship's fuel status.
+    /// </summary>
     public ShipFuel Fuel { get; private set; } = fuel;
+
+    /// <summary>
+    /// Gets the details of the ship's cargo storage.
+    /// </summary>
     public ShipCargo Cargo { get; private set; } = cargo;
 
+    /// <summary>
+    /// Waits for the ship to arrive at its destination. If the ship is not in transit, this method will return immediately.
+    /// </summary>
+    /// <param name="cancellationToken">A token that can be used to cancel the operation.</param>
+    /// <returns>a task to monitor the status of the operation.</returns>
     public ValueTask AwaitArrival(CancellationToken cancellationToken = default)
     {
         var tta = Navigation.Route.TimeToArrival;
@@ -32,11 +70,19 @@ public class Ship(
 
         var delay = Task
             .Delay(tta, cancellationToken)
-            .ContinueWith(async t => Navigation = await client.GetNavigation(Id, cancellationToken), cancellationToken)
+            .ContinueWith(async _ => Navigation = await client.GetNavigation(Id, cancellationToken), cancellationToken)
             .Unwrap();
         return new ValueTask(delay);
     }
 
+    /// <summary>
+    /// Sets the ship to start navigating to the specified waypoint at the given speed. If no speed is specified, the previous speed will be used.
+    /// </summary>
+    /// <param name="waypointId">The ID of the waypoint to travel to.</param>
+    /// <param name="speed">The speed at which to travel. If no speed is specified, the current speed will be used.s</param>
+    /// <param name="cancellationToken">A token that can be used to cancel the operation.</param>
+    /// <returns>The result of the navigation, or null if the ship is already at its destination.</returns>
+    /// <exception cref="InvalidOperationException"></exception>
     public async ValueTask<ShipNavigateResult?> BeginNavigationTo(WaypointId waypointId, ShipSpeed? speed = null, CancellationToken cancellationToken = default)
     {
         if (Navigation.Status == ShipNavigationStatus.InTransit)
@@ -114,7 +160,7 @@ public class Ship(
         Navigation = result.Navigation;
     }
 
-    public async Task<MarketData?> ProbeMarketData(CancellationToken cancellationToken)
+    public async Task<MarketData?> ProbeMarketData(CancellationToken cancellationToken = default)
     {
         if (Navigation.Status == ShipNavigationStatus.InTransit)
         {
@@ -131,7 +177,7 @@ public class Ship(
         Fuel = response.Fuel;
     }
 
-    public async ValueTask SetSpeed(ShipSpeed speed, CancellationToken cancellationToken = default)
+    private async ValueTask SetSpeed(ShipSpeed speed, CancellationToken cancellationToken = default)
     {
         var response = await client.SetSpeed(Id, speed, cancellationToken);
         Navigation = response.Navigation;

@@ -6,6 +6,6 @@ public record Distance(uint X, uint Y)
 
     public override string ToString()
     {
-        return $"{X}, {Y}";
+        return $"{X}, {Y} ({Total:F})";
     }
 }

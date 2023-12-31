@@ -1,6 +1,5 @@
 ﻿using Cocona;
 using Microsoft.Extensions.Hosting;
-using Wolfe.SpaceTraders.Cli.Extensions;
 using Wolfe.SpaceTraders.Cli.Formatters;
 using Wolfe.SpaceTraders.Domain.Contracts;
 
@@ -32,7 +31,7 @@ internal class ContractCommands(IContractService contractService, IHostApplicati
         var contract = await contractService.GetContract(contractId, host.ApplicationStopping) ?? throw new Exception($"Contract {contractId} could not be found.");
 
         await contract.Accept(host.ApplicationStopping);
-        Console.WriteLine("Accepted contract successfully.".Color(ConsoleColors.Success));
+        ConsoleHelpers.WriteLineSuccess($"Accepted contract successfully.");
 
         return ExitCodes.Success;
     }

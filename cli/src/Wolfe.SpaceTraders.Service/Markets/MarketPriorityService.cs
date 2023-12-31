@@ -27,7 +27,8 @@ internal class MarketPriorityService(
 
     private async ValueTask<MarketPriorityRank> Rank(Point location, Marketplace marketplace, CancellationToken cancellationToken = default)
     {
-        var distanceFromShip = Math.Round(location.DistanceTo(marketplace.Location).Total);
+        var distance = location.DistanceTo(marketplace.Location);
+        var totalDistance = Math.Round(location.DistanceTo(marketplace.Location).Total);
 
         var marketData = await marketplaceService.GetMarketData(marketplace.Id, cancellationToken);
         var volatility = marketData == null ? 100 : await marketplaceService.GetPercentileVolatility(marketData.Age, cancellationToken);
@@ -36,17 +37,17 @@ internal class MarketPriorityService(
         // Adjust priority based on percentile chance of market data having changed.
         var rank = volatility switch
         {
-            < 25 => distanceFromShip + age + 9999, // Higher value to discourage frequent updates.
-            < 50 => (distanceFromShip + age) * 1.5,
-            < 75 => (distanceFromShip + age) * 1.25,
-            < 100 => (distanceFromShip + age) * 1.0,
-            _ => (distanceFromShip + age) * 0.8 // Lower value to encourage exploration.
+            < 25 => totalDistance + age + 9999, // Higher value to discourage frequent updates.
+            < 50 => (totalDistance + age) * 1.5,
+            < 75 => (totalDistance + age) * 1.25,
+            < 100 => (totalDistance + age) * 1.0,
+            _ => (totalDistance + age) * 0.8 // Lower value to encourage exploration.
         };
 
         return new MarketPriorityRank(
             marketplace.Id,
             marketplace.Location,
-            Math.Round(location.DistanceTo(marketplace.Location).Total),
+            distance,
             marketData?.Age,
             volatility,
             rank

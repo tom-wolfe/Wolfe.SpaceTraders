@@ -1,6 +1,6 @@
 ﻿using Cocona;
 using Microsoft.Extensions.Hosting;
-using Wolfe.SpaceTraders.Cli.Extensions;
+using Wolfe.SpaceTraders.Cli.Formatters;
 using Wolfe.SpaceTraders.Infrastructure.Exploration;
 using Wolfe.SpaceTraders.Infrastructure.Marketplaces;
 using Wolfe.SpaceTraders.Infrastructure.Shipyards;
@@ -22,7 +22,7 @@ internal class DatabaseCommands(
             marketplaceStore.Clear(host.ApplicationStopping),
             shipyardStore.Clear(host.ApplicationStopping)
         );
-        Console.WriteLine("Database cleared".Color(ConsoleColors.Success));
+        ConsoleHelpers.WriteLineSuccess($"Database cleared");
 
         return ExitCodes.Success;
     }

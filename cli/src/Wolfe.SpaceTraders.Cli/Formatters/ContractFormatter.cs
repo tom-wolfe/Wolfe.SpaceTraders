@@ -1,6 +1,4 @@
-﻿using Humanizer;
-using Wolfe.SpaceTraders.Cli.Extensions;
-using Wolfe.SpaceTraders.Domain.Contracts;
+﻿using Wolfe.SpaceTraders.Domain.Contracts;
 
 namespace Wolfe.SpaceTraders.Cli.Formatters;
 
@@ -8,27 +6,25 @@ internal static class ContractFormatter
 {
     public static void WriteContract(Contract contract)
     {
-        Console.WriteLine($"~ {contract.Id.Value.Color(ConsoleColors.Id)}");
-        Console.WriteLine($"  Type: {contract.Type.Value.Color(ConsoleColors.Category)}");
-        Console.WriteLine($"  Faction: {contract.FactionId.Value.Color(ConsoleColors.Code)}");
-        Console.WriteLine($"  Accepted?: {contract.Accepted.Humanize()}");
-        Console.WriteLine($"  Fulfilled?: {contract.Fulfilled.Humanize()}");
+        ConsoleHelpers.WriteLineFormatted($"~ {contract.Id}");
+        ConsoleHelpers.WriteLineFormatted($"  Type: {contract.Type}");
+        ConsoleHelpers.WriteLineFormatted($"  Faction: {contract.FactionId}");
+        ConsoleHelpers.WriteLineFormatted($"  Accepted?: {contract.Accepted}");
+        ConsoleHelpers.WriteLineFormatted($"  Fulfilled?: {contract.Fulfilled}");
         if (!contract.Accepted)
         {
-            Console.WriteLine($"  Accept Deadline: {contract.DeadlineToAccept.Humanize()}");
+            ConsoleHelpers.WriteLineFormatted($"  Accept Deadline: {contract.DeadlineToAccept}");
         }
 
-        Console.WriteLine($"  Terms:");
-        Console.WriteLine($"  - Deadline: {contract.Terms.Deadline.Humanize()}");
-        var payment = $"{contract.Terms.Payment.OnAccepted}/{contract.Terms.Payment.OnFulfilled} ({(contract.Terms.Payment.OnAccepted + contract.Terms.Payment.OnFulfilled)})".Color(ConsoleColors.Currency);
-        Console.WriteLine($"  - Payment: {payment}");
-        Console.WriteLine($"  - Deliver: ");
+        ConsoleHelpers.WriteLineFormatted($"  Terms:");
+        ConsoleHelpers.WriteLineFormatted($"  - Deadline: {contract.Terms.Deadline}");
+        ConsoleHelpers.WriteLineFormatted($"  - Payment: {contract.Terms.Payment.OnAccepted}/{contract.Terms.Payment.OnFulfilled} ({contract.Terms.Payment.OnAccepted + contract.Terms.Payment.OnFulfilled})");
+        ConsoleHelpers.WriteLineFormatted($"  - Deliver: ");
         foreach (var deliver in contract.Terms.Items)
         {
-            Console.WriteLine($"    * Trade: {deliver.ItemId.Value.Color(ConsoleColors.Code)}");
-            Console.WriteLine($"      - Destination: {deliver.DestinationId.Value.Color(ConsoleColors.Code)}");
-            Console.WriteLine($"      - Quantity: {deliver.QuantityFulfilled}/{deliver.QuantityRequired}");
-            if (deliver != contract.Terms.Items.Last()) { Console.WriteLine(); }
+            ConsoleHelpers.WriteLineFormatted($"    * Trade: {deliver.ItemId}");
+            ConsoleHelpers.WriteLineFormatted($"      - Destination: {deliver.DestinationId}");
+            ConsoleHelpers.WriteLineFormatted($"      - Quantity: {deliver.QuantityFulfilled}/{deliver.QuantityRequired}");
         }
     }
 }

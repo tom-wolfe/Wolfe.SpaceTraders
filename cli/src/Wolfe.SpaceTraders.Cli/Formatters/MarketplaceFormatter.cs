@@ -1,4 +1,4 @@
-﻿using Wolfe.SpaceTraders.Cli.Extensions;
+﻿using Spectre.Console;
 using Wolfe.SpaceTraders.Domain.General;
 using Wolfe.SpaceTraders.Domain.Marketplaces;
 
@@ -8,29 +8,35 @@ internal static class MarketplaceFormatter
 {
     public static void WriteMarketplace(Marketplace marketplace, Point? relativeTo = null)
     {
-        Console.WriteLine($"~ {marketplace.Id.Value.Color(ConsoleColors.Id)}");
+        ConsoleHelpers.WriteLineFormatted($"~ {marketplace.Id} ({marketplace.Type})");
 
-        var location = $"  Location: {marketplace.Location.ToString().Color(ConsoleColors.Point)}";
+        ConsoleHelpers.WriteFormatted($"  Location: {marketplace.Location}");
         var distance = relativeTo?.DistanceTo(marketplace.Location);
-        if (distance != null) { location += $" ({distance.Total.ToString("F").Color(ConsoleColors.Distance)})"; }
-        Console.WriteLine(location);
+        if (distance != null) { ConsoleHelpers.WriteFormatted($" ({distance})"); }
+        Console.WriteLine();
 
-        Console.WriteLine("  Imports:");
-        foreach (var item in marketplace.Imports)
+        WriteMarketPlaceItems("Imports", marketplace.Imports);
+        WriteMarketPlaceItems("Export", marketplace.Exports);
+        WriteMarketPlaceItems("Exchange", marketplace.Exchange);
+    }
+
+    private static void WriteMarketPlaceItems(string title, IEnumerable<MarketplaceItem> items)
+    {
+        var table = new Table { Title = new TableTitle(title) };
+
+        table.AddColumn("Item");
+        table.AddColumn("Name");
+        table.AddColumn("Description");
+
+        foreach (var item in items)
         {
-            Console.WriteLine($"  - {item.Name.Color(ConsoleColors.Information)} ({item.ItemId.Value.Color(ConsoleColors.Code)})");
+            table.AddRow(
+                ConsoleHelpers.Renderable($"{item.ItemId}"),
+                ConsoleHelpers.Renderable($"{item.Name}"),
+                ConsoleHelpers.Renderable($"{item.Description}")
+            );
         }
 
-        Console.WriteLine("  Exports:");
-        foreach (var item in marketplace.Exports)
-        {
-            Console.WriteLine($"  - {item.Name.Color(ConsoleColors.Information)} ({item.ItemId.Value.Color(ConsoleColors.Code)})");
-        }
-
-        Console.WriteLine("  Exchange:");
-        foreach (var item in marketplace.Exchange)
-        {
-            Console.WriteLine($"  - {item.Name.Color(ConsoleColors.Information)} ({item.ItemId.Value.Color(ConsoleColors.Code)})");
-        }
+        AnsiConsole.Write(table);
     }
 }

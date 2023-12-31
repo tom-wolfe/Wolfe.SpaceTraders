@@ -71,7 +71,6 @@ internal class ShipClient(ISpaceTradersApiClient apiClient) : IShipClient
         };
     }
 
-
     public async Task<ShipRefuelResult> Refuel(ShipId shipId, CancellationToken cancellationToken = default)
     {
         var response = await apiClient.ShipRefuel(shipId.Value, cancellationToken);
