@@ -1,4 +1,5 @@
 ﻿using Cocona;
+using Serilog;
 using Wolfe.SpaceTraders.Cli;
 using Wolfe.SpaceTraders.Cli.Commands;
 using Wolfe.SpaceTraders.Cli.Missions;
@@ -8,10 +9,14 @@ using Wolfe.SpaceTraders.Service.Missions;
 
 var builder = CoconaApp.CreateBuilder();
 
-builder.Services.AddLogging(b => b
+var logger = new LoggerConfiguration()
+    .ReadFrom.Configuration(builder.Configuration.GetSection("Logging"))
+    .Enrich.FromLogContext()
+    .CreateLogger();
+
+builder.Logging
     .ClearProviders()
-    .AddJsonFile()
-);
+    .AddSerilog(logger: logger, dispose: true);
 
 builder.Services
     .AddInfrastructureLayer(builder.Configuration)
@@ -19,10 +24,12 @@ builder.Services
     .AddSingleton<IMissionLogFactory, ConsoleMissionLogFactory>();
 
 var app = builder.Build();
-
 app.AddCommands<RootCommand>();
 
+app.Lifetime.ApplicationStopped.Register(Log.CloseAndFlush);
+
 app.Run();
+
 
 namespace Wolfe.SpaceTraders.Cli
 {

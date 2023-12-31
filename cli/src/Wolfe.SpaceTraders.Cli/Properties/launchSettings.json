@@ -2,7 +2,7 @@
   "profiles": {
     "Wolfe.SpaceTraders.Cli": {
       "commandName": "Project",
-      "commandLineArgs": "market priority X1-U96-H47"
+      "commandLineArgs": "agent me"
     }
   }
 }
