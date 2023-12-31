@@ -64,4 +64,9 @@ internal class MongoExplorationStore : IExplorationStore
             yield return result.ToDomain();
         }
     }
+
+    public Task Clear(CancellationToken cancellationToken = default) => Task.WhenAll(
+        _systemsCollection.DeleteManyAsync(_ => true, cancellationToken),
+        _waypointsCollection.DeleteManyAsync(_ => true, cancellationToken)
+    );
 }

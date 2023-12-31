@@ -40,4 +40,9 @@ internal class MongoShipyardStore : IShipyardStore
             yield return result.ToDomain();
         }
     }
+
+    public Task Clear(CancellationToken cancellationToken = default)
+    {
+        return _shipyardsCollection.DeleteManyAsync(_ => true, cancellationToken);
+    }
 }

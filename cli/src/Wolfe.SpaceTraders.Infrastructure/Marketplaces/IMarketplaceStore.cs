@@ -1,14 +1,14 @@
 ﻿using Wolfe.SpaceTraders.Domain.Exploration;
 using Wolfe.SpaceTraders.Domain.Marketplaces;
-using Wolfe.SpaceTraders.Infrastructure.Data;
 
 namespace Wolfe.SpaceTraders.Infrastructure.Marketplaces;
 
-internal interface IMarketplaceStore
+public interface IMarketplaceStore
 {
-    public Task AddMarketData(MarketData marketData, CancellationToken cancellationToken);
+    public Task AddMarketData(MarketData marketData, CancellationToken cancellationToken = default);
     public Task AddMarketplace(Marketplace marketplace, CancellationToken cancellationToken = default);
-    public Task<DataItemResponse<MarketData>?> GetMarketData(WaypointId marketplaceId, CancellationToken cancellationToken);
+    public Task<MarketData?> GetMarketData(WaypointId marketplaceId, CancellationToken cancellationToken = default);
     public Task<Marketplace?> GetMarketplace(WaypointId marketplaceId, CancellationToken cancellationToken = default);
     public IAsyncEnumerable<Marketplace> GetMarketplaces(SystemId systemId, CancellationToken cancellationToken = default);
+    public Task Clear(CancellationToken cancellationToken = default);
 }

@@ -1,14 +1,17 @@
-﻿namespace Wolfe.SpaceTraders.Infrastructure.Data.Models;
+﻿using MongoDB.Bson.Serialization.Attributes;
 
-internal class DataMarketData
+namespace Wolfe.SpaceTraders.Infrastructure.Marketplaces.Models;
+
+internal class MongoMarketData
 {
+    [BsonId]
     public required string WaypointId { get; init; }
-    public required IReadOnlyCollection<DataMarketTransaction> Transactions { get; init; }
-    public required IReadOnlyCollection<DataMarketTradeGood> TradeGoods { get; init; }
+    public required IReadOnlyCollection<MongoMarketTransaction> Transactions { get; init; }
+    public required IReadOnlyCollection<MongoMarketTradeGood> TradeGoods { get; init; }
     public required DateTimeOffset RetrievedAt { get; init; }
 }
 
-internal class DataMarketTradeGood
+internal class MongoMarketTradeGood
 {
     public required string ItemId { get; init; }
     public required string Type { get; init; }
@@ -19,7 +22,7 @@ internal class DataMarketTradeGood
     public required long SellPrice { get; init; }
 }
 
-internal class DataMarketTransaction
+internal class MongoMarketTransaction
 {
     public required string ShipId { get; init; }
     public required string ItemId { get; init; }

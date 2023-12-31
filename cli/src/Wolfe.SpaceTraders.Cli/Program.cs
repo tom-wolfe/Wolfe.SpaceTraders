@@ -25,6 +25,7 @@ namespace Wolfe.SpaceTraders.Cli
 {
     [HasSubCommands(typeof(AgentCommands), "agent")]
     [HasSubCommands(typeof(ContractCommands), "contract")]
+    [HasSubCommands(typeof(DatabaseCommands), "database")]
     [HasSubCommands(typeof(FleetCommands), "fleet")]
     [HasSubCommands(typeof(MarketCommands), "market")]
     [HasSubCommands(typeof(MarketplaceCommands), "marketplace")]

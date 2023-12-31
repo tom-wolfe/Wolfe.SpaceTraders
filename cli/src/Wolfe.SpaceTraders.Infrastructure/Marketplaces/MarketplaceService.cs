@@ -65,9 +65,9 @@ internal class MarketplaceService(
         return Task.FromResult(percentile);
     }
 
-    public async Task<MarketData?> GetMarketData(WaypointId marketplaceId, CancellationToken cancellationToken = default)
+    public Task<MarketData?> GetMarketData(WaypointId marketplaceId, CancellationToken cancellationToken = default)
     {
-        return (await marketplaceStore.GetMarketData(marketplaceId, cancellationToken))?.Item;
+        return marketplaceStore.GetMarketData(marketplaceId, cancellationToken);
     }
 
     public Task AddMarketData(MarketData marketData, CancellationToken cancellationToken = default)

@@ -22,6 +22,15 @@ internal class AgentCommands(IAgentService agentService, ITokenService tokenServ
         return ExitCodes.Success;
     }
 
+    public async Task<int> Logout()
+    {
+        await tokenService.ClearAccessToken(host.ApplicationStopping);
+
+        Console.WriteLine("Logged out successfully.".Color(ConsoleColors.Success));
+
+        return ExitCodes.Success;
+    }
+
     [PrimaryCommand]
     public async Task<int> Me()
     {

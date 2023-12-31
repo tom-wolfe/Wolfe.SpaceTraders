@@ -21,6 +21,11 @@ internal class TokenService : ITokenService
         return _tokensCollection.ReplaceOneAsync(s => s.Id == MongoAccessToken.Default, mongoToken, MongoHelpers.InsertOrUpdate, cancellationToken);
     }
 
+    public Task ClearAccessToken(CancellationToken cancellationToken = default)
+    {
+        return _tokensCollection.DeleteOneAsync(s => s.Id == MongoAccessToken.Default, cancellationToken);
+    }
+
     public async Task<string?> GetAccessToken(CancellationToken cancellationToken)
     {
         var results = await _tokensCollection.FindAsync(s => s.Id == MongoAccessToken.Default, cancellationToken: cancellationToken);

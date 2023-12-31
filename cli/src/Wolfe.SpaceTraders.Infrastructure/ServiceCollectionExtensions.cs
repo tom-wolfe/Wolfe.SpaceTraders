@@ -9,7 +9,6 @@ using Wolfe.SpaceTraders.Domain.Ships;
 using Wolfe.SpaceTraders.Domain.Shipyards;
 using Wolfe.SpaceTraders.Infrastructure.Agents;
 using Wolfe.SpaceTraders.Infrastructure.Contracts;
-using Wolfe.SpaceTraders.Infrastructure.Data;
 using Wolfe.SpaceTraders.Infrastructure.Exploration;
 using Wolfe.SpaceTraders.Infrastructure.Fleet;
 using Wolfe.SpaceTraders.Infrastructure.Marketplaces;
@@ -29,7 +28,6 @@ public static class ServiceCollectionExtensions
         services.Configure<MarketplaceServiceOptions>(configuration.GetSection("Market").Bind);
 
         return services
-            .AddFileDatabase(configuration)
             .AddMongo(configuration)
             .AddSpaceTradersApi(configuration)
             .AddSingleton<IAgentService, SpaceTradersAgentService>()
@@ -71,7 +69,4 @@ public static class ServiceCollectionExtensions
             .AddSingleton<IMarketplaceStore, MongoMarketplaceStore>()
             .AddSingleton<IShipyardStore, MongoShipyardStore>();
     }
-
-    private static IServiceCollection AddFileDatabase(this IServiceCollection services, IConfiguration configuration) => services
-        .Configure<SpaceTradersDataOptions>(configuration.GetSection("Database").Bind);
 }
