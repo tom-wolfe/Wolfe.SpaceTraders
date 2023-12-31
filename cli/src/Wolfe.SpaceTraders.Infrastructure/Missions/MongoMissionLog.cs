@@ -25,7 +25,9 @@ internal class MongoMissionLog : IMissionLog
         {
             Id = ObjectId.GenerateNewId(),
             MissionId = _missionId.Value,
-            Message = message.ToString()
+            Message = message.ToString(),
+            Template = message.Format,
+            Arguments = message.GetArguments()
         };
         await _missionLogCollection.InsertOneAsync(data, cancellationToken: cancellationToken);
     }
