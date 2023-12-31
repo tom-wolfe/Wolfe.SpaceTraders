@@ -2,7 +2,7 @@
 
 namespace Wolfe.SpaceTraders.Service.Missions;
 
-internal interface IMissionLogFactory
+public interface IMissionLogProvider
 {
     public IMissionLog CreateLog(MissionId missionId);
 }

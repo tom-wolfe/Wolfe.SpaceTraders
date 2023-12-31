@@ -5,9 +5,10 @@ namespace Wolfe.SpaceTraders.Cli.Missions;
 
 internal class ConsoleMissionLog : IMissionLog
 {
-    public void Write(FormattableString message)
+    public ValueTask Write(FormattableString message, CancellationToken cancellationToken = default)
     {
         ConsoleHelpers.WriteFormatted($"{DateTimeOffset.UtcNow:u}: ");
         ConsoleHelpers.WriteLineFormatted(message);
+        return ValueTask.CompletedTask;
     }
 }

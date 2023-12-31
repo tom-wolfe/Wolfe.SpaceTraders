@@ -2,5 +2,5 @@
 
 public interface IMissionLog
 {
-    public void Write(FormattableString message);
+    public ValueTask Write(FormattableString message, CancellationToken cancellationToken = default);
 }

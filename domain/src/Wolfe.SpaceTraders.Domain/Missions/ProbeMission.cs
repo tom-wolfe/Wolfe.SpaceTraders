@@ -1,6 +1,5 @@
 ﻿using Wolfe.SpaceTraders.Domain.Marketplaces;
 using Wolfe.SpaceTraders.Domain.Ships;
-using ShipSpeed = Wolfe.SpaceTraders.Domain.Ships.ShipSpeed;
 
 namespace Wolfe.SpaceTraders.Domain.Missions;
 
@@ -10,16 +9,18 @@ namespace Wolfe.SpaceTraders.Domain.Missions;
 /// <remarks>
 /// A mission that will navigate between marketplaces and probe their market data.
 /// </remarks>
+/// <param name="id">A unique identifier for the mission.</param>
 /// <param name="log">The log to write entries to.</param>
 /// <param name="ship">The ship that will navigate and perform the probe.</param>
 /// <param name="marketplaceService">The service that provides market data.</param>
 /// <param name="priorityService">The service that prioritizes market exploration.</param>
 public class ProbeMission(
+    MissionId id,
     IMissionLog log,
     Ship ship,
     IMarketplaceService marketplaceService,
     IMarketPriorityService priorityService
-) : Mission(log)
+) : Mission(id, MissionType.Probe, log)
 {
     /// <inheritdoc/>
     public override async Task Execute(CancellationToken cancellationToken = default)

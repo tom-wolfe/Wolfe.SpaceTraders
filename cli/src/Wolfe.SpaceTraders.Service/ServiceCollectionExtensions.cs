@@ -15,6 +15,7 @@ public static class ServiceCollectionExtensions
         return services
             .AddSingleton<IMarketPriorityService, MarketPriorityService>()
             .AddSingleton<IMissionService, MissionService>()
+            .AddSingleton<IMissionLogFactory, MissionLogFactory>()
             .AddSingleton<IWayfinderService, AStarWayfinderService>();
     }
 }

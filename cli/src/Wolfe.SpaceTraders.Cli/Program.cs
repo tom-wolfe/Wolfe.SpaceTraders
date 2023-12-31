@@ -21,7 +21,8 @@ builder.Logging
 builder.Services
     .AddInfrastructureLayer(builder.Configuration)
     .AddServiceLayer(builder.Configuration)
-    .AddSingleton<IMissionLogFactory, ConsoleMissionLogFactory>();
+    .AddSingleton<IMissionLogProvider, ConsoleMissionLogProvider>()
+    .AddSingleton<IMissionLogProvider, LoggerMissionLogProvider>();
 
 var app = builder.Build();
 app.AddCommands<RootCommand>();
@@ -29,7 +30,6 @@ app.AddCommands<RootCommand>();
 app.Lifetime.ApplicationStopped.Register(Log.CloseAndFlush);
 
 app.Run();
-
 
 namespace Wolfe.SpaceTraders.Cli
 {

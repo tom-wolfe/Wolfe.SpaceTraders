@@ -2,7 +2,7 @@
   "profiles": {
     "Wolfe.SpaceTraders.Cli": {
       "commandName": "Project",
-      "commandLineArgs": "agent me"
+      "commandLineArgs": "mission probe WOLFE-2"
     }
   }
 }

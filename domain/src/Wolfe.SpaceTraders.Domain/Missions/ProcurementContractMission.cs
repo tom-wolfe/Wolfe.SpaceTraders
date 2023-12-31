@@ -3,7 +3,7 @@ using Wolfe.SpaceTraders.Domain.Ships;
 
 namespace Wolfe.SpaceTraders.Domain.Missions;
 
-public class ProcurementContractMission(IMissionLog log, Ship ship, Contract contract) : Mission(log)
+public class ProcurementContractMission(MissionId id, IMissionLog log, Ship ship, Contract contract) : Mission(id, MissionType.ProcurementContract, log)
 {
     public override async Task Execute(CancellationToken cancellationToken = default)
     {
