@@ -1,4 +1,5 @@
-﻿using MongoDB.Bson.Serialization.Attributes;
+﻿using MongoDB.Bson;
+using MongoDB.Bson.Serialization.Attributes;
 
 namespace Wolfe.SpaceTraders.Infrastructure.Marketplaces.Models;
 
@@ -8,6 +9,8 @@ internal class MongoMarketData
     public required string WaypointId { get; init; }
     public required IReadOnlyCollection<MongoMarketTransaction> Transactions { get; init; }
     public required IReadOnlyCollection<MongoMarketTradeGood> TradeGoods { get; init; }
+
+    [BsonRepresentation(BsonType.String)]
     public required DateTimeOffset RetrievedAt { get; init; }
 }
 

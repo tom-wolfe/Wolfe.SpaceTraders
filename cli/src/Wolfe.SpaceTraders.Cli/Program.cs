@@ -1,8 +1,10 @@
 ﻿using Cocona;
 using Wolfe.SpaceTraders.Cli;
 using Wolfe.SpaceTraders.Cli.Commands;
+using Wolfe.SpaceTraders.Cli.Missions;
 using Wolfe.SpaceTraders.Infrastructure;
 using Wolfe.SpaceTraders.Service;
+using Wolfe.SpaceTraders.Service.Missions;
 
 var builder = CoconaApp.CreateBuilder();
 
@@ -13,7 +15,8 @@ builder.Services.AddLogging(b => b
 
 builder.Services
     .AddInfrastructureLayer(builder.Configuration)
-    .AddServiceLayer(builder.Configuration);
+    .AddServiceLayer(builder.Configuration)
+    .AddSingleton<IMissionLogFactory, ConsoleMissionLogFactory>();
 
 var app = builder.Build();
 

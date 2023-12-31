@@ -1,5 +1,4 @@
-﻿using Humanizer;
-using Wolfe.SpaceTraders.Domain.Marketplaces;
+﻿using Wolfe.SpaceTraders.Domain.Marketplaces;
 using Wolfe.SpaceTraders.Domain.Ships;
 using ShipSpeed = Wolfe.SpaceTraders.Domain.Ships.ShipSpeed;
 
@@ -31,38 +30,37 @@ public class ProbeMission(
             {
                 log.Write($"Scanning system for un-probed markets near {ship.Navigation.WaypointId}...");
                 var market = await priorityService.GetPriorityMarkets(ship.Navigation.WaypointId, cancellationToken).FirstAsync(cancellationToken);
-                log.Write($"Setting course for next marketplace: {market.MarketId.Value} at a distance of {market.Distance}.");
+                log.Write($"Setting course for next marketplace: {market.MarketId} at a distance of {market.Distance}.");
 
                 cancellationToken.ThrowIfCancellationRequested();
 
                 if (ship.Navigation.WaypointId == market.MarketId)
                 {
-                    log.Write("Ship is already at destination. Collecting market data.");
+                    log.Write($"Ship is already at destination. Collecting market data.");
                 }
                 else
                 {
                     var result = await ship.BeginNavigationTo(market.MarketId, ShipSpeed.Burn, CancellationToken.None)
                                  ?? throw new Exception("Probe ship already at destination.");
-                    log.Write($"Expected to arrive in {result.Navigation.Route.TimeToArrival.Humanize()}.");
+                    log.Write($"Expected to arrive in {result.Navigation.Route.TimeToArrival}.");
 
                     await ship.AwaitArrival(CancellationToken.None);
-                    log.Write("Arrived at destination. Collecting market data.");
+                    log.Write($"Arrived at destination. Collecting market data.");
                 }
 
                 var marketData = await ship.ProbeMarketData(CancellationToken.None) ?? throw new Exception("Missing market data.");
                 await marketplaceService.AddMarketData(marketData, CancellationToken.None);
-                log.Write("Data collected.");
-                log.Write("");
+                log.Write($"Data collected.");
 
                 cancellationToken.ThrowIfCancellationRequested();
             }
         }
         catch (OperationCanceledException)
         {
-            log.Write("Cancellation requested. Terminating mission.");
+            log.Write($"Cancellation requested. Terminating mission.");
         }
 
-        log.Write("Mission complete.");
+        log.Write($"Mission complete.");
     }
 
 

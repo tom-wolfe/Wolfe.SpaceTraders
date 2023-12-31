@@ -15,7 +15,7 @@ internal static class ConsoleHelpers
 {
     private static readonly Style Category = new(foreground: Color.Yellow, decoration: Decoration.Bold);
     private static readonly Style Currency = new(foreground: Color.Maroon, decoration: Decoration.Bold);
-    private static readonly Style Date = new(foreground: Color.LightPink1, decoration: Decoration.Bold);
+    private static readonly Style Date = new(foreground: Color.HotPink3_1, decoration: Decoration.Bold);
     private static readonly Style Distance = new(foreground: Color.Magenta1, decoration: Decoration.Bold);
     private static readonly Style Fuel = new(foreground: Color.Orange1, decoration: Decoration.Bold);
     private static readonly Style Id = new(foreground: Color.Green, decoration: Decoration.Bold);
@@ -48,6 +48,7 @@ internal static class ConsoleHelpers
             [typeof(ShipNavigationStatus)] = Status,
             [typeof(SystemId)] = Id,
             [typeof(SystemType)] = Category,
+            [typeof(TimeSpan)] = Date,
             [typeof(WaypointId)] = Location,
             [typeof(WaypointTraitId)] = Id,
             [typeof(WaypointType)] = Category,

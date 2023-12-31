@@ -1,5 +1,4 @@
-﻿using Humanizer;
-using Spectre.Console;
+﻿using Spectre.Console;
 using Wolfe.SpaceTraders.Domain.Marketplaces;
 
 namespace Wolfe.SpaceTraders.Cli.Formatters;
@@ -37,8 +36,14 @@ internal static class MarketFormatter
     public static void WriteMarketData(MarketData data)
     {
         ConsoleHelpers.WriteLineFormatted($"~ {data.WaypointId}");
-        ConsoleHelpers.WriteLineFormatted($"  Age: {data.Age.Humanize()}");
+        ConsoleHelpers.WriteLineFormatted($"  Age: {data.Age}");
 
+        WriteTradeGoods(data.TradeGoods);
+        WriteTransactions(data.Transactions);
+    }
+
+    private static void WriteTradeGoods(IEnumerable<MarketTradeGood> goods)
+    {
         var tradeTable = new Table { Title = new TableTitle("Trade Goods") };
 
         tradeTable.AddColumn("Item");
@@ -49,7 +54,7 @@ internal static class MarketFormatter
         tradeTable.AddColumn(new TableColumn("Purchase Price").RightAligned());
         tradeTable.AddColumn(new TableColumn("Volume").RightAligned());
 
-        foreach (var good in data.TradeGoods)
+        foreach (var good in goods)
         {
             tradeTable.AddRow(
                 ConsoleHelpers.Renderable($"{good.ItemId}"),
@@ -61,8 +66,35 @@ internal static class MarketFormatter
                 ConsoleHelpers.Renderable($"{good.Volume}")
             );
         }
-        AnsiConsole.Write(tradeTable);
 
-        Console.WriteLine("  Transactions:");
+        AnsiConsole.Write(tradeTable);
+    }
+
+    private static void WriteTransactions(IEnumerable<MarketTransaction> transactions)
+    {
+        var tradeTable = new Table { Title = new TableTitle("Transactions") };
+
+        tradeTable.AddColumn("Ship");
+        tradeTable.AddColumn("Type");
+        tradeTable.AddColumn(new TableColumn("Quantity").RightAligned());
+        tradeTable.AddColumn("Item");
+        tradeTable.AddColumn(new TableColumn("Price Per Unit").RightAligned());
+        tradeTable.AddColumn(new TableColumn("Total").RightAligned());
+        tradeTable.AddColumn(new TableColumn("Time").RightAligned());
+
+        foreach (var transaction in transactions)
+        {
+            tradeTable.AddRow(
+                ConsoleHelpers.Renderable($"{transaction.ShipId}"),
+                ConsoleHelpers.Renderable($"{transaction.Type}"),
+                ConsoleHelpers.Renderable($"{transaction.Quantity}"),
+                ConsoleHelpers.Renderable($"{transaction.ItemId}"),
+                ConsoleHelpers.Renderable($"{transaction.PricePerUnit}"),
+                ConsoleHelpers.Renderable($"{transaction.TotalPrice}"),
+                ConsoleHelpers.Renderable($"{transaction.Timestamp}")
+            );
+        }
+
+        AnsiConsole.Write(tradeTable);
     }
 }
