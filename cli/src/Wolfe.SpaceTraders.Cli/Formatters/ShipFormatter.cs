@@ -1,7 +1,4 @@
-﻿using Humanizer;
-using Wolfe.SpaceTraders.Cli.Extensions;
-using Wolfe.SpaceTraders.Domain.Navigation;
-using Wolfe.SpaceTraders.Domain.Ships;
+﻿using Wolfe.SpaceTraders.Domain.Ships;
 
 namespace Wolfe.SpaceTraders.Cli.Formatters;
 
@@ -9,26 +6,24 @@ internal static class ShipFormatter
 {
     public static void WriteShip(Ship ship)
     {
-        Console.WriteLine($"~ {ship.Id.Value.Color(ConsoleColors.Id)} ({ship.Role.Value.Color(ConsoleColors.Category)}) [{ship.Navigation.Status.Value.Color(ConsoleColors.Status)}]");
-        Console.WriteLine($"  Location: {ship.Navigation.WaypointId.Value.Color(ConsoleColors.Code)}");
-
+        ConsoleHelpers.WriteLineFormatted($"~ {ship.Id} ({ship.Role}) [[{ship.Navigation.Status}]]");
+        ConsoleHelpers.WriteLineFormatted($"  Location: {ship.Navigation.WaypointId}");
         if (ship.Navigation.Status == ShipNavigationStatus.InTransit)
         {
-            Console.WriteLine($"  Arrival: {ship.Navigation.Route.Arrival.Humanize().Color(ConsoleColors.Information)}");
+            ConsoleHelpers.WriteLineFormatted($"  Arrival: {ship.Navigation.Route.Arrival}");
         }
 
         if (!ship.Fuel.IsEmpty)
         {
-            var fuel = $"{ship.Fuel.Current}/{ship.Fuel.Capacity} ({ship.Fuel.PercentRemaining}%)".Color(ConsoleColors.Fuel);
-            Console.WriteLine($"  Fuel: {fuel}");
+            ConsoleHelpers.WriteLineFormatted($"  Fuel: {ship.Fuel.Current}/{ship.Fuel.Capacity} ({ship.Fuel.PercentRemaining}%)");
         }
 
         if (ship.Cargo.Capacity > 0)
         {
-            Console.WriteLine($"  Cargo: {ship.Cargo.Quantity}/{ship.Cargo.Capacity} ({ship.Cargo.PercentRemaining}%)");
+            ConsoleHelpers.WriteLineFormatted($"  Cargo: {ship.Cargo.Quantity}/{ship.Cargo.Capacity} ({ship.Cargo.PercentRemaining}%)");
             foreach (var item in ship.Cargo.Items)
             {
-                Console.WriteLine($"  - {item.Quantity} {item.Name.Color(ConsoleColors.Information)} ({item.Id.Value.Color(ConsoleColors.Code)})");
+                ConsoleHelpers.WriteLineFormatted($"  - {item.Quantity} * ({item.Id}) {item.Name}");
             }
         }
     }

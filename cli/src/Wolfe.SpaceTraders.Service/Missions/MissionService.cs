@@ -15,13 +15,27 @@ internal class MissionService(
 {
     public IMission CreateContractMission(Ship ship, Contract contract)
     {
+        var missionId = MissionId.Generate();
+        var log = logFactory.CreateLog(missionId);
+
         if (contract.Type == ContractType.Procurement)
         {
-            return new ProcurementContractMission(logFactory.CreateMissionLog(), ship, contract);
+            return new ProcurementContractMission(missionId, log, ship, contract);
         }
         throw new NotImplementedException();
     }
 
-    public IMission CreateProbeMission(Ship ship) => new ProbeMission(logFactory.CreateMissionLog(), ship, marketplaceService, marketPriorityService);
-    public IMission CreateTradeMission(Ship ship) => new TradingMission(logFactory.CreateMissionLog(), ship, wayfinderService);
+    public IMission CreateProbeMission(Ship ship)
+    {
+        var missionId = MissionId.Generate();
+        return new ProbeMission(missionId, logFactory.CreateLog(missionId), ship, marketplaceService, marketPriorityService);
+    }
+
+    public IMission CreateTradeMission(Ship ship)
+    {
+        var missionId = MissionId.Generate();
+
+        return new TradingMission(missionId, logFactory.CreateLog(missionId), ship, wayfinderService);
+    }
 }
+

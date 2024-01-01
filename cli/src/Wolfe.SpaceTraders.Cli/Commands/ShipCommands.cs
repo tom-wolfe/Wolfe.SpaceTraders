@@ -1,24 +1,25 @@
 ﻿using Cocona;
-using Humanizer;
 using Microsoft.Extensions.Hosting;
-using Wolfe.SpaceTraders.Cli.Extensions;
 using Wolfe.SpaceTraders.Cli.Formatters;
 using Wolfe.SpaceTraders.Domain.Exploration;
 using Wolfe.SpaceTraders.Domain.Marketplaces;
-using Wolfe.SpaceTraders.Domain.Navigation;
 using Wolfe.SpaceTraders.Domain.Ships;
 using Wolfe.SpaceTraders.Service.Ships;
 
 namespace Wolfe.SpaceTraders.Cli.Commands;
 
-internal class ShipCommands(IShipService shipService, IHostApplicationLifetime host)
+internal class ShipCommands(
+    IShipService shipService,
+    IMarketplaceService marketplaceService,
+    IHostApplicationLifetime host
+)
 {
     public async Task<int> Dock([Argument] ShipId shipId)
     {
         var ship = await shipService.GetShip(shipId, host.ApplicationStopping) ?? throw new Exception($"Ship {shipId} could not be found.");
 
         await ship.Dock(host.ApplicationStopping);
-        Console.WriteLine("Your ship is now docked.".Color(ConsoleColors.Success));
+        ConsoleHelpers.WriteLineSuccess($"Your ship is now docked.");
 
         return ExitCodes.Success;
     }
@@ -29,9 +30,8 @@ internal class ShipCommands(IShipService shipService, IHostApplicationLifetime h
 
         var result = await ship.Extract(host.ApplicationStopping);
 
-        Console.WriteLine($"Successfully extracted {result.Yield.Quantity} {result.Yield.ItemId.Value}.".Color(ConsoleColors.Success));
-        Console.WriteLine($"Next extraction possible in {result.Cooldown.Remaining.Humanize()}.".Color(ConsoleColors.Success));
-        Console.WriteLine();
+        ConsoleHelpers.WriteLineSuccess($"Successfully extracted {result.Yield.Quantity} {result.Yield.ItemId}.");
+        ConsoleHelpers.WriteLineFormatted($"Next extraction possible in {result.Cooldown.Remaining}.");
 
         return ExitCodes.Success;
     }
@@ -64,18 +64,18 @@ internal class ShipCommands(IShipService shipService, IHostApplicationLifetime h
 
         if (result == null)
         {
-            Console.WriteLine("Your ship is already at its destination.".Color(ConsoleColors.Success));
+            ConsoleHelpers.WriteLineSuccess($"Your ship is already at its destination.");
             return ExitCodes.Success;
         }
 
-        Console.WriteLine("Your ship is now in transit.".Color(ConsoleColors.Success));
-        Console.WriteLine($"Expected to arrive {ship.Navigation.Route.Arrival.Humanize()}.");
+        ConsoleHelpers.WriteLineSuccess($"Your ship is now in transit.");
+        ConsoleHelpers.WriteLineFormatted($"Expected to arrive {ship.Navigation.Route.Arrival}.");
 
         if (wait)
         {
             Console.WriteLine("Waiting...");
             await ship.AwaitArrival(host.ApplicationStopping);
-            Console.WriteLine("Your ship has arrived.".Color(ConsoleColors.Success));
+            ConsoleHelpers.WriteLineSuccess($"Your ship has arrived.");
         }
 
         return ExitCodes.Success;
@@ -86,7 +86,19 @@ internal class ShipCommands(IShipService shipService, IHostApplicationLifetime h
         var ship = await shipService.GetShip(shipId, host.ApplicationStopping) ?? throw new Exception($"Ship {shipId} could not be found.");
 
         await ship.Orbit(host.ApplicationStopping);
-        Console.WriteLine("Your ship is now in orbit.".Color(ConsoleColors.Success));
+        ConsoleHelpers.WriteLineSuccess($"Your ship is now in orbit.");
+
+        return ExitCodes.Success;
+    }
+
+    public async Task<int> Probe([Argument] ShipId shipId)
+    {
+        var ship = await shipService.GetShip(shipId, host.ApplicationStopping) ?? throw new Exception($"Ship {shipId} could not be found.");
+
+        var marketData = await ship.ProbeMarketData(CancellationToken.None) ?? throw new Exception($"There is no market at {ship.Navigation.WaypointId}.");
+        await marketplaceService.AddMarketData(marketData, CancellationToken.None);
+
+        MarketFormatter.WriteMarketData(marketData);
 
         return ExitCodes.Success;
     }
@@ -97,8 +109,8 @@ internal class ShipCommands(IShipService shipService, IHostApplicationLifetime h
 
         var transaction = await ship.Sell(itemId, quantity, host.ApplicationStopping);
 
-        Console.WriteLine($"Sold {transaction.Quantity} {transaction.ItemId.ToString()!.Color(ConsoleColors.Code)} for {transaction.TotalPrice.ToString().Color(ConsoleColors.Currency)}");
-        Console.WriteLine("Sale concluded successfully.".Color(ConsoleColors.Success));
+        ConsoleHelpers.WriteLineFormatted($"Sold {transaction.Quantity} {transaction.ItemId} for {transaction.TotalPrice}");
+        ConsoleHelpers.WriteLineSuccess($"Sale concluded successfully.");
 
         return ExitCodes.Success;
     }
@@ -108,7 +120,7 @@ internal class ShipCommands(IShipService shipService, IHostApplicationLifetime h
         var ship = await shipService.GetShip(shipId, host.ApplicationStopping) ?? throw new Exception($"Ship {shipId} could not be found.");
 
         await ship.Refuel(host.ApplicationStopping);
-        Console.WriteLine("Your ship has been refueled.".Color(ConsoleColors.Success));
+        ConsoleHelpers.WriteLineSuccess($"Your ship has been refueled.");
 
         return ExitCodes.Success;
     }
@@ -117,8 +129,9 @@ internal class ShipCommands(IShipService shipService, IHostApplicationLifetime h
     {
         var ship = await shipService.GetShip(shipId, host.ApplicationStopping) ?? throw new Exception($"Ship {shipId} could not be found.");
 
+        ConsoleHelpers.WriteLineFormatted($"Waiting for approximately {ship.Navigation.Route.TimeToArrival}...");
         await ship.AwaitArrival(host.ApplicationStopping);
-        Console.WriteLine("Your ship has arrived.".Color(ConsoleColors.Success));
+        ConsoleHelpers.WriteLineSuccess($"Your ship has arrived.");
 
         return ExitCodes.Success;
     }

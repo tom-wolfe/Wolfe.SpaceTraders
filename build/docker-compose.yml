@@ -1,0 +1,23 @@
+name: space-traders
+
+services:
+  mongo:
+    container_name: mongo
+    image: mongo
+    restart: always
+    ports:
+      - 27017:27017 # Default port for MongoDB
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: spacetraders
+      MONGO_INITDB_ROOT_PASSWORD: password
+      
+  mongo-ui:
+    container_name: mongo-ui
+    image: mongo-express
+    restart: always
+    ports:
+      - 8081:8081
+    environment:
+      ME_CONFIG_MONGODB_AUTH_USERNAME: spacetraders
+      ME_CONFIG_MONGODB_AUTH_PASSWORD: password
+      ME_CONFIG_MONGODB_URL: mongodb://spacetraders:password@mongo:27017/

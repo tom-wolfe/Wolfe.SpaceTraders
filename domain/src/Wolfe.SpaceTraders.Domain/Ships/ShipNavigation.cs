@@ -1,5 +1,4 @@
 ﻿using Wolfe.SpaceTraders.Domain.Exploration;
-using Wolfe.SpaceTraders.Domain.Navigation;
 
 namespace Wolfe.SpaceTraders.Domain.Ships;
 

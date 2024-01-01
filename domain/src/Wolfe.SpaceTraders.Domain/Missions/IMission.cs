@@ -6,6 +6,16 @@
 public interface IMission
 {
     /// <summary>
+    /// Gets the unique identifier for the mission.
+    /// </summary>
+    public MissionId Id { get; }
+
+    /// <summary>
+    /// Gets the type of the mission, for example, "Trading" or "Probe".
+    /// </summary>
+    public MissionType Type { get; }
+
+    /// <summary>
     /// Executes the mission.
     /// </summary>
     /// <param name="cancellationToken">A token that can be used to request early termination of the mission.</param>

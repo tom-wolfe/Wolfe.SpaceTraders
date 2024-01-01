@@ -1,6 +1,7 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Options;
 using Refit;
+using System.Net;
 using System.Net.Http.Json;
 using Wolfe.SpaceTraders.Sdk.Responses;
 
@@ -8,7 +9,7 @@ namespace Wolfe.SpaceTraders.Sdk;
 
 public static class ServiceCollectionExtensions
 {
-    public static IServiceCollection AddSpaceTradersApi(this IServiceCollection services, Action<SpaceTradersOptions> configure)
+    public static IServiceCollection AddSpaceTraders(this IServiceCollection services, Action<SpaceTradersOptions> configure)
     {
         services
             .AddOptions<SpaceTradersOptions>()
@@ -25,7 +26,7 @@ public static class ServiceCollectionExtensions
                     AuthorizationHeaderValueGetter = (_, ct) => options.ApiKeyProvider!(provider, ct),
                     ExceptionFactory = async response =>
                     {
-                        if (response.IsSuccessStatusCode) { return null; }
+                        if (response.IsSuccessStatusCode || response.StatusCode == HttpStatusCode.NotFound) { return null; }
 
                         var error = await response.Content.ReadFromJsonAsync<SpaceTradersErrorResponse>();
                         throw new SpaceTradersApiException(

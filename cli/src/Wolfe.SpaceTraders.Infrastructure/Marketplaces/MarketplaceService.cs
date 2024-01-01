@@ -4,25 +4,21 @@ using System.Runtime.CompilerServices;
 using Wolfe.SpaceTraders.Domain.Exploration;
 using Wolfe.SpaceTraders.Domain.Marketplaces;
 using Wolfe.SpaceTraders.Infrastructure.Api;
-using Wolfe.SpaceTraders.Infrastructure.Data;
 using Wolfe.SpaceTraders.Sdk;
 
 namespace Wolfe.SpaceTraders.Infrastructure.Marketplaces;
 
 internal class MarketplaceService(
-    IOptions<MarketServiceOptions> options,
+    IOptions<MarketplaceServiceOptions> options,
     ISpaceTradersApiClient apiClient,
-    ISpaceTradersDataClient dataClient,
+    IMarketplaceStore marketplaceStore,
     IExplorationService explorationService
 ) : IMarketplaceService
 {
     public async Task<Marketplace?> GetMarketplace(WaypointId marketplaceId, CancellationToken cancellationToken = default)
     {
-        var cached = await dataClient.GetMarketplace(marketplaceId, cancellationToken);
-        if (cached != null)
-        {
-            return cached.Item;
-        }
+        var cached = await marketplaceStore.GetMarketplace(marketplaceId, cancellationToken);
+        if (cached != null) { return cached; }
 
         var waypoint = await explorationService.GetWaypoint(marketplaceId, cancellationToken);
         if (waypoint == null) { return null; }
@@ -30,21 +26,21 @@ internal class MarketplaceService(
         if (response.StatusCode == HttpStatusCode.NotFound) { return null; }
         var market = response.GetContent().Data.ToDomain(waypoint);
 
-        await dataClient.AddMarketplace(market, cancellationToken);
+        await marketplaceStore.AddMarketplace(market, cancellationToken);
         return market;
     }
 
     public async IAsyncEnumerable<Marketplace> GetMarketplaces(SystemId systemId, [EnumeratorCancellation] CancellationToken cancellationToken = default)
     {
-        var cached = dataClient.GetMarketplaces(systemId, cancellationToken);
-        if (cached != null)
+        var cached = marketplaceStore.GetMarketplaces(systemId, cancellationToken);
+        var hasCached = false;
+
+        await foreach (var marketplace in cached)
         {
-            await foreach (var marketplace in cached)
-            {
-                yield return marketplace.Item;
-            }
-            yield break;
+            hasCached = true;
+            yield return marketplace;
         }
+        if (hasCached) { yield break; }
 
         var waypoints = explorationService.GetWaypoints(systemId, cancellationToken);
         await foreach (var waypoint in waypoints)
@@ -57,11 +53,9 @@ internal class MarketplaceService(
             var market = await GetMarketplace(waypoint.Id, cancellationToken);
             if (market == null) { continue; }
 
-            await dataClient.AddMarketplace(market, cancellationToken);
             yield return market;
         }
     }
-
 
     public Task<double> GetPercentileVolatility(TimeSpan age, CancellationToken cancellationToken = default)
     {
@@ -71,13 +65,13 @@ internal class MarketplaceService(
         return Task.FromResult(percentile);
     }
 
-    public async Task<MarketData?> GetMarketData(WaypointId marketplaceId, CancellationToken cancellationToken = default)
+    public Task<MarketData?> GetMarketData(WaypointId marketplaceId, CancellationToken cancellationToken = default)
     {
-        return (await dataClient.GetMarketData(marketplaceId, cancellationToken))?.Item;
+        return marketplaceStore.GetMarketData(marketplaceId, cancellationToken);
     }
 
     public Task AddMarketData(MarketData marketData, CancellationToken cancellationToken = default)
     {
-        return dataClient.AddMarketData(marketData, cancellationToken);
+        return marketplaceStore.AddMarketData(marketData, cancellationToken);
     }
 }

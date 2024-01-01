@@ -16,8 +16,6 @@ internal static class Shipyards
         Location = waypoint.Location,
         Traits = [.. waypoint.Traits],
         ShipTypes = shipyard.ShipTypes.Select(s => s.ToDomain()).ToList(),
-        Ships = shipyard.Ships?.Select(s => s.ToDomain()).ToList() ?? new List<ShipyardShip>(),
-        Transactions = shipyard.Transactions?.Select(s => s.ToDomain()).ToList() ?? new List<ShipyardTransaction>(),
     };
 
     public static ShipyardShip ToDomain(this SpaceTradersShipyardShip ship) => new()

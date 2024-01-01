@@ -1,4 +1,4 @@
-﻿using Wolfe.SpaceTraders.Cli.Extensions;
+﻿using Spectre.Console;
 using Wolfe.SpaceTraders.Domain.General;
 using Wolfe.SpaceTraders.Domain.Shipyards;
 
@@ -8,22 +8,29 @@ internal static class ShipyardFormatter
 {
     public static void WriteShipyard(Shipyard shipyard, Point? relativeTo = null)
     {
-        Console.WriteLine($"~ {shipyard.Id.Value.Color(ConsoleColors.Id)}");
+        ConsoleHelpers.WriteLineFormatted($"~ {shipyard.Id} ({shipyard.Type})");
 
-        var location = $"  Location: {shipyard.Location.ToString().Color(ConsoleColors.Point)}";
+        ConsoleHelpers.WriteFormatted($"  Location: {shipyard.Location}");
         var distance = relativeTo?.DistanceTo(shipyard.Location);
-        if (distance != null) { location += $" ({distance.Total.ToString("F").Color(ConsoleColors.Distance)})"; }
-        Console.WriteLine(location);
+        if (distance != null) { ConsoleHelpers.WriteFormatted($" ({distance})"); }
+        Console.WriteLine();
 
-        Console.WriteLine("  Ship Types:");
-        foreach (var type in shipyard.ShipTypes)
+        WriteShipTypes(shipyard.ShipTypes);
+    }
+
+    private static void WriteShipTypes(IEnumerable<ShipyardShipType> types)
+    {
+        var table = new Table { Title = new TableTitle("Ship Types") };
+
+        table.AddColumn("Type");
+
+        foreach (var item in types)
         {
-            Console.WriteLine($"  - {type.Type.Value.Color(ConsoleColors.Code)}");
+            table.AddRow(
+                ConsoleHelpers.Renderable($"{item.Type}")
+            );
         }
-        Console.WriteLine("  Ships:");
-        foreach (var ship in shipyard.Ships)
-        {
-            Console.WriteLine($"  - {ship.Type.Value.Color(ConsoleColors.Code)} ({ship.PurchasePrice.ToString().Color(ConsoleColors.Currency)})");
-        }
+
+        AnsiConsole.Write(table);
     }
 }

@@ -4,7 +4,7 @@ using Wolfe.SpaceTraders.Domain.Ships;
 
 namespace Wolfe.SpaceTraders.Domain.Missions;
 
-public class TradingMission(IMissionLog log, Ship ship, IWayfinderService wayfinderService) : Mission(log)
+public class TradingMission(MissionId id, IMissionLog log, Ship ship, IWayfinderService wayfinderService) : Mission(id, MissionType.Trading, log)
 {
     public override async Task Execute(CancellationToken cancellationToken = default)
     {

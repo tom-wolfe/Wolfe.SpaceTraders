@@ -1,6 +1,6 @@
 ﻿using Cocona;
 using Microsoft.Extensions.Hosting;
-using Wolfe.SpaceTraders.Cli.Extensions;
+using Wolfe.SpaceTraders.Cli.Formatters;
 using Wolfe.SpaceTraders.Domain.Exploration;
 using Wolfe.SpaceTraders.Domain.Fleet;
 using Wolfe.SpaceTraders.Domain.Fleet.Commands;
@@ -18,7 +18,7 @@ internal class FleetCommands(IFleetService fleetService, IHostApplicationLifetim
             ShipyardId = shipyardId
         };
         await fleetService.PurchaseShip(request, host.ApplicationStopping);
-        Console.WriteLine("Purchased ship successfully".Color(ConsoleColors.Success));
+        ConsoleHelpers.WriteLineSuccess($"Purchased ship successfully.");
 
         return ExitCodes.Success;
     }

@@ -1,5 +1,4 @@
-﻿using Humanizer;
-using Spectre.Console;
+﻿using Spectre.Console;
 using Wolfe.SpaceTraders.Domain.Marketplaces;
 
 namespace Wolfe.SpaceTraders.Cli.Formatters;
@@ -12,25 +11,90 @@ internal static class MarketFormatter
 
         // Add some columns
         table.AddColumn("Market");
-        table.AddColumn("Location");
+        table.AddColumn(new TableColumn("Location").RightAligned());
         table.AddColumn(new TableColumn("Distance").RightAligned());
         table.AddColumn("Age");
-        table.AddColumn("Volatility");
+        table.AddColumn(new TableColumn("Volatility").RightAligned());
         table.AddColumn(new TableColumn("Rank").RightAligned());
 
         foreach (var rank in ranks)
         {
             table.AddRow(
-                rank.MarketId.ToString()!,
-                rank.Location.ToString(),
-                rank.Distance.ToString(),
-                rank.DataAge?.Humanize() ?? "N/a",
-                Math.Round(rank.Volatility, 2) + "%",
-                rank.Rank.ToString("F")
+                ConsoleHelpers.Renderable($"{rank.MarketId}"),
+                ConsoleHelpers.Renderable($"{rank.Location}"),
+                ConsoleHelpers.Renderable($"{rank.Distance}"),
+                ConsoleHelpers.Renderable($"{rank.DataAge}"),
+                ConsoleHelpers.Renderable($"{rank.Volatility:N}"),
+                ConsoleHelpers.Renderable($"{rank.Rank:N}")
             );
         }
 
         // Render the table to the console
         AnsiConsole.Write(table);
+    }
+
+    public static void WriteMarketData(MarketData data)
+    {
+        ConsoleHelpers.WriteLineFormatted($"~ {data.WaypointId}");
+        ConsoleHelpers.WriteLineFormatted($"  Age: {data.Age}");
+
+        WriteTradeGoods(data.TradeGoods);
+        WriteTransactions(data.Transactions);
+    }
+
+    private static void WriteTradeGoods(IEnumerable<MarketTradeGood> goods)
+    {
+        var tradeTable = new Table { Title = new TableTitle("Trade Goods") };
+
+        tradeTable.AddColumn("Item");
+        tradeTable.AddColumn("Type");
+        tradeTable.AddColumn("Activity");
+        tradeTable.AddColumn("Supply");
+        tradeTable.AddColumn(new TableColumn("Sell Price").RightAligned());
+        tradeTable.AddColumn(new TableColumn("Purchase Price").RightAligned());
+        tradeTable.AddColumn(new TableColumn("Volume").RightAligned());
+
+        foreach (var good in goods)
+        {
+            tradeTable.AddRow(
+                ConsoleHelpers.Renderable($"{good.ItemId}"),
+                ConsoleHelpers.Renderable($"{good.Type}"),
+                ConsoleHelpers.Renderable($"{good.Activity}"),
+                ConsoleHelpers.Renderable($"{good.Supply}"),
+                ConsoleHelpers.Renderable($"{good.SellPrice}"),
+                ConsoleHelpers.Renderable($"{good.PurchasePrice}"),
+                ConsoleHelpers.Renderable($"{good.Volume}")
+            );
+        }
+
+        AnsiConsole.Write(tradeTable);
+    }
+
+    private static void WriteTransactions(IEnumerable<MarketTransaction> transactions)
+    {
+        var tradeTable = new Table { Title = new TableTitle("Transactions") };
+
+        tradeTable.AddColumn("Ship");
+        tradeTable.AddColumn("Type");
+        tradeTable.AddColumn(new TableColumn("Quantity").RightAligned());
+        tradeTable.AddColumn("Item");
+        tradeTable.AddColumn(new TableColumn("Price Per Unit").RightAligned());
+        tradeTable.AddColumn(new TableColumn("Total").RightAligned());
+        tradeTable.AddColumn(new TableColumn("Time").RightAligned());
+
+        foreach (var transaction in transactions)
+        {
+            tradeTable.AddRow(
+                ConsoleHelpers.Renderable($"{transaction.ShipId}"),
+                ConsoleHelpers.Renderable($"{transaction.Type}"),
+                ConsoleHelpers.Renderable($"{transaction.Quantity}"),
+                ConsoleHelpers.Renderable($"{transaction.ItemId}"),
+                ConsoleHelpers.Renderable($"{transaction.PricePerUnit}"),
+                ConsoleHelpers.Renderable($"{transaction.TotalPrice}"),
+                ConsoleHelpers.Renderable($"{transaction.Timestamp}")
+            );
+        }
+
+        AnsiConsole.Write(tradeTable);
     }
 }
