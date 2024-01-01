@@ -28,7 +28,29 @@ internal class MongoMissionLog : IMissionLog
             MissionId = _missionId.Value,
             Message = message.ToString(),
             Template = message.Format,
-            Arguments = message.GetArguments()
+            Data = message
+                .GetArguments()
+                .Select((value, index) => (value, index))
+                .ToDictionary(v => v.index, v => v.value)
+        };
+        await _missionLogCollection.InsertOneAsync(data, cancellationToken: cancellationToken);
+    }
+
+    public async ValueTask WriteError(Exception ex, CancellationToken cancellationToken = default)
+    {
+        var data = new MongoMissionLogData
+        {
+            Id = ObjectId.GenerateNewId(),
+            MissionId = _missionId.Value,
+            Template = ex.Message,
+            Message = ex.Message,
+            Data = ex.Data,
+            Error = new MongoMissionLogError
+            {
+                Type = ex.GetType().FullName ?? ex.GetType().Name,
+                Message = ex.Message,
+                StackTrace = ex.StackTrace ?? string.Empty
+            }
         };
         await _missionLogCollection.InsertOneAsync(data, cancellationToken: cancellationToken);
     }

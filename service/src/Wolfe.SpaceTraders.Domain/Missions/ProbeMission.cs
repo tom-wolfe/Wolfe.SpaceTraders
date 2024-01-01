@@ -1,5 +1,6 @@
 ﻿using Wolfe.SpaceTraders.Domain.Marketplaces;
 using Wolfe.SpaceTraders.Domain.Missions.Logs;
+using Wolfe.SpaceTraders.Domain.Missions.Scheduling;
 using Wolfe.SpaceTraders.Domain.Ships;
 
 namespace Wolfe.SpaceTraders.Domain.Missions;
@@ -15,55 +16,48 @@ namespace Wolfe.SpaceTraders.Domain.Missions;
 /// <param name="ship">The ship that will navigate and perform the probe.</param>
 /// <param name="marketplaceService">The service that provides market data.</param>
 /// <param name="priorityService">The service that prioritizes market exploration.</param>
+/// <param name="scheduler">The object that will used to handle the running of the mission.</param>
 public class ProbeMission(
-    MissionId id,
     IMissionLog log,
     Ship ship,
     IMarketplaceService marketplaceService,
-    IMarketPriorityService priorityService
-) : Mission(id, MissionType.Probe, log)
+    IMarketPriorityService priorityService,
+    IMissionScheduler scheduler
+) : Mission(ship, log, scheduler)
 {
     /// <inheritdoc/>
-    public override async Task Execute(CancellationToken cancellationToken = default)
+    public override MissionType Type => MissionType.Probe;
+
+    /// <inheritdoc/>
+    protected override async Task ExecuteCore(CancellationToken cancellationToken = default)
     {
-        try
+        while (true)
         {
-            while (true)
+            await Log.Write($"Scanning system for un-probed markets near {Ship.Navigation.WaypointId}...", cancellationToken);
+            var market = await priorityService.GetPriorityMarkets(Ship.Navigation.WaypointId, cancellationToken).FirstAsync(cancellationToken);
+            await Log.Write($"Setting course for next marketplace: {market.MarketId} at a distance of {market.Distance}.", cancellationToken);
+
+            cancellationToken.ThrowIfCancellationRequested();
+
+            if (Ship.Navigation.WaypointId == market.MarketId)
             {
-                log.Write($"Scanning system for un-probed markets near {ship.Navigation.WaypointId}...");
-                var market = await priorityService.GetPriorityMarkets(ship.Navigation.WaypointId, cancellationToken).FirstAsync(cancellationToken);
-                log.Write($"Setting course for next marketplace: {market.MarketId} at a distance of {market.Distance}.");
-
-                cancellationToken.ThrowIfCancellationRequested();
-
-                if (ship.Navigation.WaypointId == market.MarketId)
-                {
-                    log.Write($"Ship is already at destination. Collecting market data.");
-                }
-                else
-                {
-                    var result = await ship.BeginNavigationTo(market.MarketId, ShipSpeed.Burn, CancellationToken.None)
-                                 ?? throw new Exception("Probe ship already at destination.");
-                    log.Write($"Expected to arrive in {result.Navigation.Route.TimeToArrival}.");
-
-                    await ship.AwaitArrival(CancellationToken.None);
-                    log.Write($"Arrived at destination. Collecting market data.");
-                }
-
-                var marketData = await ship.ProbeMarketData(CancellationToken.None) ?? throw new Exception("Missing market data.");
-                await marketplaceService.AddMarketData(marketData, CancellationToken.None);
-                log.Write($"Data collected.");
-
-                cancellationToken.ThrowIfCancellationRequested();
+                await Log.Write($"Ship is already at destination. Collecting market data.", cancellationToken);
             }
-        }
-        catch (OperationCanceledException)
-        {
-            log.Write($"Cancellation requested. Terminating mission.");
-        }
+            else
+            {
+                var result = await Ship.BeginNavigationTo(market.MarketId, ShipSpeed.Burn, CancellationToken.None)
+                             ?? throw new Exception("Probe ship already at destination.");
+                await Log.Write($"Expected to arrive in {result.Navigation.Route.TimeToArrival}.", cancellationToken);
 
-        log.Write($"Mission complete.");
+                await Ship.AwaitArrival(CancellationToken.None);
+                await Log.Write($"Arrived at destination. Collecting market data.", cancellationToken);
+            }
+
+            var marketData = await Ship.ProbeMarketData(CancellationToken.None) ?? throw new Exception("Missing market data.");
+            await marketplaceService.AddMarketData(marketData, CancellationToken.None);
+            await Log.Write($"Data collected.", cancellationToken);
+
+            cancellationToken.ThrowIfCancellationRequested();
+        }
     }
-
-
 }

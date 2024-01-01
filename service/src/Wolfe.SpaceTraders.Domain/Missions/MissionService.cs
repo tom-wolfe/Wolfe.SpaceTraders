@@ -1,7 +1,6 @@
-﻿using Wolfe.SpaceTraders.Domain.Contracts;
-using Wolfe.SpaceTraders.Domain.Exploration;
-using Wolfe.SpaceTraders.Domain.Marketplaces;
+﻿using Wolfe.SpaceTraders.Domain.Marketplaces;
 using Wolfe.SpaceTraders.Domain.Missions.Logs;
+using Wolfe.SpaceTraders.Domain.Missions.Scheduling;
 using Wolfe.SpaceTraders.Domain.Ships;
 
 namespace Wolfe.SpaceTraders.Domain.Missions;
@@ -10,31 +9,30 @@ internal class MissionService(
     IMissionLogFactory logFactory,
     IMarketplaceService marketplaceService,
     IMarketPriorityService marketPriorityService,
-    IWayfinderService wayfinderService
+    IMissionScheduler missionScheduler
 ) : IMissionService
 {
-    public IMission CreateContractMission(Ship ship, Contract contract)
-    {
-        var missionId = MissionId.Generate();
-        var log = logFactory.CreateLog(missionId);
-
-        if (contract.Type == ContractType.Procurement)
-        {
-            return new ProcurementContractMission(missionId, log, ship, contract);
-        }
-        throw new NotImplementedException();
-    }
+    private readonly List<IMission> _missions = [];
 
     public IMission CreateProbeMission(Ship ship)
     {
+        if (_missions.Any(m => m.ShipId == ship.Id))
+        {
+            throw new InvalidOperationException("Ship has already been assigned a mission.");
+        }
+
         var missionId = MissionId.Generate();
-        return new ProbeMission(missionId, logFactory.CreateLog(missionId), ship, marketplaceService, marketPriorityService);
+        var mission = new ProbeMission(logFactory.CreateLog(missionId), ship, marketplaceService, marketPriorityService, missionScheduler)
+        {
+            Id = missionId
+        };
+
+        _missions.Add(mission);
+        return mission;
     }
 
-    public IMission CreateTradeMission(Ship ship)
+    public IAsyncEnumerable<IMission> GetMissions(CancellationToken cancellationToken = default)
     {
-        var missionId = MissionId.Generate();
-
-        return new TradingMission(missionId, logFactory.CreateLog(missionId), ship, wayfinderService);
+        return _missions.ToAsyncEnumerable();
     }
 }

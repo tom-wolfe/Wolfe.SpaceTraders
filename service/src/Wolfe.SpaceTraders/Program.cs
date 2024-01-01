@@ -36,6 +36,7 @@ app
     .MapDatabaseEndpoints()
     .MapExplorationEndpoints()
     .MapHomeEndpoints()
+    .MapMissionEndpoints()
     .MapShipEndpoints()
     .MapShipyardEndpoints();
 

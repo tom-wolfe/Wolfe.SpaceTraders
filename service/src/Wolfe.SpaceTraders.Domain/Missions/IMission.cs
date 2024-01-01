@@ -1,4 +1,6 @@
-﻿namespace Wolfe.SpaceTraders.Domain.Missions;
+﻿using Wolfe.SpaceTraders.Domain.Ships;
+
+namespace Wolfe.SpaceTraders.Domain.Missions;
 
 /// <summary>
 /// Defines a mission that can be executed by a ship.
@@ -16,9 +18,34 @@ public interface IMission
     public MissionType Type { get; }
 
     /// <summary>
-    /// Executes the mission.
+    /// Gets the current status of the mission.
     /// </summary>
-    /// <param name="cancellationToken">A token that can be used to request early termination of the mission.</param>
-    /// <returns>A task that resolves when the mission has been completed. Some missions run indefinitely, in which case, <paramref name="cancellationToken"/> can be used to request the mission be terminated.</returns>
+    public MissionStatus Status { get; }
+
+    /// <summary>
+    /// Gets the ID of the ship that is executing the mission.
+    /// </summary>
+    public ShipId ShipId { get; }
+
+    /// <summary>
+    /// Starts the mission.
+    /// </summary>
+    /// <param name="cancellationToken">A cancellation token that can be used to cancel the mission start.</param>
+    /// <returns>A task that will resolve when the mission has started.</returns>
+    /// <exception cref="InvalidOperationException">Thrown when the mission is in an incorrect status.</exception>
+    public Task Start(CancellationToken cancellationToken = default);
+
+    /// <summary>
+    /// Stops the mission.
+    /// </summary>
+    /// <param name="cancellationToken">A cancellation token that can be used to force-stop the mission.</param>
+    /// <returns>A task that will resolve when the mission has stopped.</returns>
+    public Task Stop(CancellationToken cancellationToken = default);
+
+    /// <summary>
+    /// Executes the mission on the current thread.
+    /// </summary>
+    /// <param name="cancellationToken">A cancellation token that can be used to cancel the mission start.</param>
+    /// <returns>A task that will resolve when the mission has completed.</returns>
     public Task Execute(CancellationToken cancellationToken = default);
 }
