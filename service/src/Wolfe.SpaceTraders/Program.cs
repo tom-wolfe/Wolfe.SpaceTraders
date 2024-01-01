@@ -31,7 +31,12 @@ app.UseHttpsRedirection();
 app.Lifetime.ApplicationStopped.Register(Log.CloseAndFlush);
 
 app
+    .MapAgentEndpoints()
+    .MapContractEndpoints()
+    .MapDatabaseEndpoints()
+    .MapExplorationEndpoints()
     .MapHomeEndpoints()
-    .MapAgentEndpoints();
+    .MapShipEndpoints()
+    .MapShipyardEndpoints();
 
 app.Run();

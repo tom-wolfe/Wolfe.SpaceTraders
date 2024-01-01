@@ -1,1 +1,1 @@
-﻿[assembly: StronglyTypedIdDefaults(backingType: StronglyTypedIdBackingType.String, converters: StronglyTypedIdConverter.TypeConverter | StronglyTypedIdConverter.SystemTextJson)]
+﻿[assembly: StronglyTypedIdDefaults(Template.String)]

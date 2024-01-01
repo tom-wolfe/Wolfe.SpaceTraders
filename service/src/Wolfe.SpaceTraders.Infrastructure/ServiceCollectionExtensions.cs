@@ -38,7 +38,6 @@ public static class ServiceCollectionExtensions
             .AddSingleton<IMarketplaceService, MarketplaceService>()
             .AddSingleton<IShipyardService, ShipyardService>()
             .AddSingleton<IShipClient, ShipClient>()
-            .AddSingleton<IShipService, ShipService>()
             .AddSingleton<ITokenService, TokenService>()
             .AddSingleton<IMissionLogProvider, MongoMissionLogProvider>()
             .AddSingleton<IMissionLogProvider, LoggerMissionLogProvider>();
