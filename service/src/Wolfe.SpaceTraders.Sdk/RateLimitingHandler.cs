@@ -1,50 +1,9 @@
-﻿using Microsoft.Extensions.Options;
-using System.Net;
+﻿namespace Wolfe.SpaceTraders.Sdk;
 
-namespace Wolfe.SpaceTraders.Sdk;
-
-public class RateLimitingHandler : DelegatingHandler
+internal class RateLimitingHandler(RateLimiter limiter) : DelegatingHandler
 {
-    private readonly SpaceTradersRateLimits _options;
-    private readonly SemaphoreSlim _semaphore;
-    private uint _backlog;
-
-    public RateLimitingHandler(IOptions<SpaceTradersOptions> options)
+    protected override Task<HttpResponseMessage> SendAsync(HttpRequestMessage request, CancellationToken cancellationToken)
     {
-        _options = options.Value.RateLimits;
-        _semaphore = new SemaphoreSlim(_options.RequestsPerInterval, _options.RequestsPerInterval);
-    }
-
-    protected override async Task<HttpResponseMessage> SendAsync(HttpRequestMessage request, CancellationToken cancellationToken)
-    {
-        try
-        {
-            if (_backlog >= _options.MaxQueueLength)
-            {
-                throw new SpaceTradersApiException("Request queue length exceed.", -1, HttpStatusCode.TooManyRequests);
-            }
-            Interlocked.Increment(ref _backlog);
-
-            await _semaphore.WaitAsync(cancellationToken);
-            try
-            {
-                return await base.SendAsync(request, cancellationToken);
-            }
-            finally
-            {
-                Release();
-            }
-        }
-        finally
-        {
-            Interlocked.Decrement(ref _backlog);
-        }
-    }
-
-    private void Release()
-    {
-        Task
-            .Delay(_options.Interval, CancellationToken.None)
-            .ContinueWith(_ => _semaphore.Release(), CancellationToken.None);
+        return limiter.Limit(() => base.SendAsync(request, cancellationToken), cancellationToken);
     }
 }

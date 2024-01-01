@@ -8,10 +8,10 @@ public static class Missions
 {
     public static WebApplication MapMissionEndpoints(this WebApplication app)
     {
-        var shipsGroup = app.MapGroup("/mission");
+        var missionsGroup = app.MapGroup("/missions");
 
-        shipsGroup.MapGet("/", (IFleetService fleetService, CancellationToken cancellationToken = default) => fleetService.GetShips(cancellationToken));
-        shipsGroup.MapPost("/probe", async (IFleetService fleetService, IMissionService missionService, CreateProbeMissionRequest request, CancellationToken cancellationToken = default) =>
+        missionsGroup.MapGet("/", (IMissionService missionService, CancellationToken cancellationToken = default) => missionService.GetMissions(cancellationToken));
+        missionsGroup.MapPost("/probe", async (IFleetService fleetService, IMissionService missionService, CreateProbeMissionRequest request, CancellationToken cancellationToken = default) =>
         {
             var ship = await fleetService.GetShip(request.ShipId, cancellationToken);
             if (ship == null) { return Results.NotFound(); }

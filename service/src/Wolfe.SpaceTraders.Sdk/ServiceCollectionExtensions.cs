@@ -17,7 +17,8 @@ public static class ServiceCollectionExtensions
             .Validate(o => o.ApiKeyProvider != null, $"{nameof(SpaceTradersOptions.ApiKeyProvider)} cannot be null.");
 
         services
-            .AddSingleton<RateLimitingHandler>()
+            .AddSingleton<RateLimiter>()
+            .AddTransient<RateLimitingHandler>()
             .AddRefitClient<ISpaceTradersApiClient>(provider =>
             {
                 var options = provider.GetRequiredService<IOptions<SpaceTradersOptions>>().Value;

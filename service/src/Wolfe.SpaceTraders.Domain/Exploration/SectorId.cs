@@ -1,6 +1,9 @@
 ﻿namespace Wolfe.SpaceTraders.Domain.Exploration;
 
+/// <summary>
+/// Defines the unique identifier for a sector.
+/// </summary>
 [StronglyTypedId]
-public partial struct SectorId
+public readonly partial struct SectorId
 {
 }

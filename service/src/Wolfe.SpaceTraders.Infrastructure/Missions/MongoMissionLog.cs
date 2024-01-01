@@ -1,6 +1,7 @@
 ﻿using Microsoft.Extensions.Options;
 using MongoDB.Bson;
 using MongoDB.Driver;
+using System.Collections;
 using Wolfe.SpaceTraders.Domain.Missions;
 using Wolfe.SpaceTraders.Domain.Missions.Logs;
 using Wolfe.SpaceTraders.Infrastructure.Missions.Models;
@@ -31,7 +32,8 @@ internal class MongoMissionLog : IMissionLog
             Data = message
                 .GetArguments()
                 .Select((value, index) => (value, index))
-                .ToDictionary(v => v.index, v => v.value)
+                .ToDictionary(v => v.index.ToString(), v => (object?)v.value?.ToString()),
+            Timestamp = DateTimeOffset.UtcNow
         };
         await _missionLogCollection.InsertOneAsync(data, cancellationToken: cancellationToken);
     }
@@ -44,14 +46,20 @@ internal class MongoMissionLog : IMissionLog
             MissionId = _missionId.Value,
             Template = ex.Message,
             Message = ex.Message,
-            Data = ex.Data,
+            Data = ToDictionary(ex.Data),
             Error = new MongoMissionLogError
             {
                 Type = ex.GetType().FullName ?? ex.GetType().Name,
                 Message = ex.Message,
                 StackTrace = ex.StackTrace ?? string.Empty
-            }
+            },
+            Timestamp = DateTimeOffset.UtcNow
         };
         await _missionLogCollection.InsertOneAsync(data, cancellationToken: cancellationToken);
+    }
+
+    private static Dictionary<string, object?> ToDictionary(IDictionary source)
+    {
+        return source.Keys.Cast<object>().ToDictionary(key => key!.ToString() ?? "", key => source[key]);
     }
 }

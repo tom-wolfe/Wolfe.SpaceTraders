@@ -1,7 +1,7 @@
 ﻿namespace Wolfe.SpaceTraders.Domain.Exploration;
 
 [StronglyTypedId]
-public partial struct WaypointId
+public readonly partial struct WaypointId
 {
     /// <summary>
     /// Gets the system id of the waypoint.

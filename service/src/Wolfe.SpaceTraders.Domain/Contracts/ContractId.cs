@@ -4,7 +4,7 @@
 /// Unique identifier for a contract.
 /// </summary>
 [StronglyTypedId]
-public partial struct ContractId
+public readonly partial struct ContractId
 {
 
 }

@@ -4,7 +4,7 @@
 /// Unique identifier of a user agent.
 /// </summary>
 [StronglyTypedId]
-public partial struct AgentId
+public readonly partial struct AgentId
 {
 
 }

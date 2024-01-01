@@ -1,7 +1,7 @@
 ﻿namespace Wolfe.SpaceTraders.Domain.Exploration;
 
 [StronglyTypedId]
-public partial struct SystemType
+public readonly partial struct SystemType
 {
     public static readonly SystemType NeutronStar = new("NEUTRON_STAR");
     public static readonly SystemType RedStar = new("RED_STAR");

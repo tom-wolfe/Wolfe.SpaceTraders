@@ -4,7 +4,7 @@
 /// The type of contract.
 /// </summary>
 [StronglyTypedId]
-public partial struct ContractType
+public readonly partial struct ContractType
 {
     /// <summary>
     /// Specifies that the contract is to procure goods and deliver them to a location.

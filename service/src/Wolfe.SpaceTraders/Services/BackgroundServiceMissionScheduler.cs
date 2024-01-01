@@ -5,7 +5,7 @@ namespace Wolfe.SpaceTraders.Services;
 
 public class BackgroundServiceMissionScheduler : IMissionScheduler
 {
-    private readonly Dictionary<MissionId, BackgroundServiceMissionRunner> _missionRunners = new();
+    private readonly Dictionary<MissionId, BackgroundServiceMissionRunner> _missionRunners = [];
 
     public async Task Start(IMission mission, CancellationToken cancellationToken = default)
     {

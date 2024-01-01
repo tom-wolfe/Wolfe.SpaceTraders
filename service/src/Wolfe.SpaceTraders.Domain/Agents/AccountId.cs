@@ -4,7 +4,7 @@
 /// Unique identifier of a user account.
 /// </summary>
 [StronglyTypedId]
-public partial struct AccountId
+public readonly partial struct AccountId
 {
 
 }

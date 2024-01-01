@@ -1,7 +1,7 @@
 ﻿namespace Wolfe.SpaceTraders.Domain.Exploration;
 
 [StronglyTypedId]
-public partial struct WaypointType
+public readonly partial struct WaypointType
 {
     public static readonly WaypointType Planet = new("PLANET");
     public static readonly WaypointType GasGiant = new("GAS_GIANT");
