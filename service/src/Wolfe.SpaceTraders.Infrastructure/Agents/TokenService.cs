@@ -7,6 +7,7 @@ namespace Wolfe.SpaceTraders.Infrastructure.Agents;
 
 internal class TokenService : ITokenService
 {
+    private string? _cachedAccessToken;
     private readonly IMongoCollection<MongoAccessToken> _tokensCollection;
 
     public TokenService(IOptions<MongoOptions> mongoOptions, IMongoClient mongoClient)
@@ -17,19 +18,25 @@ internal class TokenService : ITokenService
 
     public Task SetAccessToken(string token, CancellationToken cancellationToken)
     {
+        _cachedAccessToken = token;
         var mongoToken = new MongoAccessToken { Token = token };
         return _tokensCollection.ReplaceOneAsync(s => s.Id == MongoAccessToken.Default, mongoToken, MongoHelpers.InsertOrUpdate, cancellationToken);
     }
 
     public Task ClearAccessToken(CancellationToken cancellationToken = default)
     {
+        _cachedAccessToken = null;
         return _tokensCollection.DeleteOneAsync(s => s.Id == MongoAccessToken.Default, cancellationToken);
     }
 
     public async Task<string?> GetAccessToken(CancellationToken cancellationToken)
     {
-        var results = await _tokensCollection.FindAsync(s => s.Id == MongoAccessToken.Default, cancellationToken: cancellationToken);
-        var mongoToken = await results.FirstOrDefaultAsync(cancellationToken: cancellationToken);
-        return mongoToken?.Token;
+        if (_cachedAccessToken == null)
+        {
+            var results = await _tokensCollection.FindAsync(s => s.Id == MongoAccessToken.Default, cancellationToken: cancellationToken);
+            var mongoToken = await results.FirstOrDefaultAsync(cancellationToken: cancellationToken);
+            _cachedAccessToken = mongoToken?.Token;
+        }
+        return _cachedAccessToken;
     }
 }
