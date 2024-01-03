@@ -1,5 +1,4 @@
 ﻿using Wolfe.SpaceTraders.Domain.Marketplaces;
-using Wolfe.SpaceTraders.Domain.Missions.Logs;
 using Wolfe.SpaceTraders.Domain.Missions.Scheduling;
 using Wolfe.SpaceTraders.Domain.Ships;
 
@@ -11,12 +10,11 @@ namespace Wolfe.SpaceTraders.Domain.Missions;
 /// <remarks>
 /// A mission that will navigate between marketplaces and probe their market data.
 /// </remarks>
-/// <param name="id">A unique identifier for the mission.</param>
 /// <param name="log">The log to write entries to.</param>
 /// <param name="ship">The ship that will navigate and perform the probe.</param>
 /// <param name="marketplaceService">The service that provides market data.</param>
 /// <param name="priorityService">The service that prioritizes market exploration.</param>
-/// <param name="scheduler">The object that will used to handle the running of the mission.</param>
+/// <param name="scheduler">The object that will be used to handle the running of the mission.</param>
 public class ProbeMission(
     IMissionLog log,
     Ship ship,
@@ -33,6 +31,12 @@ public class ProbeMission(
     {
         while (true)
         {
+            if (ship.Navigation.Status == ShipNavigationStatus.InTransit)
+            {
+                await Log.Write($"Ship is already in transit. Expected to arrive in {ship.Navigation.Route.TimeToArrival}.", cancellationToken);
+                await ship.AwaitArrival(cancellationToken);
+            }
+
             await Log.Write($"Scanning system for un-probed markets near {Ship.Navigation.WaypointId}...", cancellationToken);
             var market = await priorityService.GetPriorityMarkets(Ship.Navigation.WaypointId, cancellationToken).FirstAsync(cancellationToken);
             await Log.Write($"Setting course for next marketplace: {market.MarketId} at a distance of {market.Distance}.", cancellationToken);
@@ -49,7 +53,7 @@ public class ProbeMission(
                              ?? throw new Exception("Probe ship already at destination.");
                 await Log.Write($"Expected to arrive in {result.Navigation.Route.TimeToArrival}.", cancellationToken);
 
-                await Ship.AwaitArrival(CancellationToken.None);
+                await Ship.AwaitArrival(cancellationToken);
                 await Log.Write($"Arrived at destination. Collecting market data.", cancellationToken);
             }
 

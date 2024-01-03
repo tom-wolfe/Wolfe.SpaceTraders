@@ -7,7 +7,7 @@ public class BackgroundServiceMissionScheduler : IMissionScheduler
 {
     private readonly Dictionary<MissionId, BackgroundServiceMissionRunner> _missionRunners = [];
 
-    public async Task Start(IMission mission, CancellationToken cancellationToken = default)
+    public async ValueTask Start(IMission mission, CancellationToken cancellationToken = default)
     {
         if (!_missionRunners.TryGetValue(mission.Id, out var runner))
         {
@@ -17,8 +17,11 @@ public class BackgroundServiceMissionScheduler : IMissionScheduler
         await runner.StartAsync(cancellationToken);
     }
 
-    public Task Stop(IMission mission, CancellationToken cancellationToken = default)
+    public async ValueTask Stop(IMission mission, CancellationToken cancellationToken = default)
     {
-        return _missionRunners.TryGetValue(mission.Id, out var runner) ? runner.StopAsync(cancellationToken) : Task.CompletedTask;
+        if (_missionRunners.TryGetValue(mission.Id, out var runner))
+        {
+            await runner.StopAsync(cancellationToken);
+        }
     }
 }

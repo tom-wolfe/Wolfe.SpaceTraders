@@ -38,7 +38,7 @@ internal static class Agents
         Agent = response.Agent.ToDomain(),
         Contract = response.Contract.ToDomain(contractService),
         Faction = response.Faction.ToDomain(),
-        Ship = response.Ship.ToDomain(shipClient),
+        Ship = response.Ship.ToDomain(new AgentId(response.Agent.Symbol), shipClient),
         Token = response.Token
     };
 }

@@ -1,4 +1,5 @@
-﻿using Wolfe.SpaceTraders.Domain.Exploration;
+﻿using Wolfe.SpaceTraders.Domain.Agents;
+using Wolfe.SpaceTraders.Domain.Exploration;
 using Wolfe.SpaceTraders.Domain.General;
 using Wolfe.SpaceTraders.Domain.Marketplaces;
 using Wolfe.SpaceTraders.Domain.Ships;
@@ -13,7 +14,7 @@ namespace Wolfe.SpaceTraders.Infrastructure.Api;
 
 internal static class Ships
 {
-    public static Ship ToDomain(this SpaceTradersShip ship, IShipClient client) => new(
+    public static Ship ToDomain(this SpaceTradersShip ship, AgentId agentId, IShipClient client) => new(
         client,
         ship.Cargo.ToDomain(),
         ship.Fuel.ToDomain(),
@@ -21,6 +22,7 @@ internal static class Ships
     )
     {
         Id = new ShipId(ship.Symbol),
+        AgentId = agentId,
         Name = ship.Registration.Name,
         Role = new ShipRole(ship.Registration.Role),
     };

@@ -3,7 +3,6 @@ using MongoDB.Bson;
 using MongoDB.Driver;
 using System.Collections;
 using Wolfe.SpaceTraders.Domain.Missions;
-using Wolfe.SpaceTraders.Domain.Missions.Logs;
 using Wolfe.SpaceTraders.Infrastructure.Missions.Models;
 using Wolfe.SpaceTraders.Infrastructure.Mongo;
 

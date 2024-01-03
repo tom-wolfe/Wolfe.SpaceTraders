@@ -16,9 +16,30 @@ public static class Missions
             var ship = await fleetService.GetShip(request.ShipId, cancellationToken);
             if (ship == null) { return Results.NotFound(); }
 
-            var mission = missionService.CreateProbeMission(ship);
+            var mission = await missionService.CreateProbeMission(ship, cancellationToken);
             await mission.Start(cancellationToken);
 
+            return Results.Accepted();
+        });
+
+        var missionGroup = missionsGroup.MapGroup("/{missionId}");
+        missionGroup.MapGet("/", async (IMissionService missionService, MissionId missionId, CancellationToken cancellationToken = default) =>
+        {
+            var mission = await missionService.GetMission(missionId, cancellationToken);
+            return mission == null ? Results.NotFound() : Results.Ok(mission);
+        });
+        missionGroup.MapPost("/start", async (IMissionService missionService, MissionId missionId, CancellationToken cancellationToken = default) =>
+        {
+            var mission = await missionService.GetMission(missionId, cancellationToken);
+            if (mission == null) { return Results.NotFound(); }
+            await mission.Start(cancellationToken);
+            return Results.Accepted();
+        });
+        missionGroup.MapPost("/stop", async (IMissionService missionService, MissionId missionId, CancellationToken cancellationToken = default) =>
+        {
+            var mission = await missionService.GetMission(missionId, cancellationToken);
+            if (mission == null) { return Results.NotFound(); }
+            await mission.Stop(cancellationToken);
             return Results.Accepted();
         });
 

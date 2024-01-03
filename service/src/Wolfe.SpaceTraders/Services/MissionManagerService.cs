@@ -12,9 +12,9 @@ public class MissionManagerService(IMissionService missionService) : IHostedServ
 
     public async Task StopAsync(CancellationToken cancellationToken)
     {
-        var stopTasks = await missionService.GetMissions(CancellationToken.None)
-            .Select(m => m.Stop(cancellationToken))
-            .ToListAsync(CancellationToken.None);
+        var stopTasks = missionService
+            .GetRunningMissions()
+            .Select(m => m.Stop(cancellationToken).AsTask());
         await Task.WhenAll(stopTasks);
     }
 }

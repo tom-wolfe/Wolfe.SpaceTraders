@@ -1,4 +1,5 @@
-﻿using Wolfe.SpaceTraders.Domain.Exploration;
+﻿using Wolfe.SpaceTraders.Domain.Agents;
+using Wolfe.SpaceTraders.Domain.Exploration;
 using Wolfe.SpaceTraders.Domain.General;
 using Wolfe.SpaceTraders.Domain.Marketplaces;
 using Wolfe.SpaceTraders.Domain.Ships.Commands;
@@ -11,7 +12,7 @@ namespace Wolfe.SpaceTraders.Domain.Ships;
 /// </summary>
 /// <param name="client">The client that provides the ship behavior.</param>
 /// <param name="cargo">The cargo contained inside the ship.</param>
-/// <param name="fuel">The currently fuel capacity of the ship.</param>
+/// <param name="fuel">The current fuel capacity of the ship.</param>
 /// <param name="navigation">The ships navigation parameters.</param>
 public class Ship(
     IShipClient client,
@@ -24,6 +25,11 @@ public class Ship(
     /// Gets the unique identifier of the ship.
     /// </summary>
     public required ShipId Id { get; init; }
+
+    /// <summary>
+    /// Gets the identifier of the agent who owns the ship.
+    /// </summary>
+    public required AgentId AgentId { get; init; }
 
     /// <summary>
     /// Gets the name of the ship (usually the same as the ID).

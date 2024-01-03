@@ -6,7 +6,7 @@ using Wolfe.SpaceTraders.Domain.Contracts;
 using Wolfe.SpaceTraders.Domain.Exploration;
 using Wolfe.SpaceTraders.Domain.Fleet;
 using Wolfe.SpaceTraders.Domain.Marketplaces;
-using Wolfe.SpaceTraders.Domain.Missions.Logs;
+using Wolfe.SpaceTraders.Domain.Missions;
 using Wolfe.SpaceTraders.Domain.Ships;
 using Wolfe.SpaceTraders.Domain.Shipyards;
 using Wolfe.SpaceTraders.Infrastructure.Agents;
@@ -39,6 +39,9 @@ public static class ServiceCollectionExtensions
             .AddSingleton<IShipyardService, ShipyardService>()
             .AddSingleton<IShipClient, ShipClient>()
             .AddSingleton<ITokenService, TokenService>()
+            .AddSingleton<IMissionService, MissionService>()
+            .AddSingleton<IMissionFactory, MissionFactory>()
+            .AddSingleton<IMissionLogFactory, MissionLogFactory>()
             .AddSingleton<IMissionLogProvider, MongoMissionLogProvider>()
             .AddSingleton<IMissionLogProvider, LoggerMissionLogProvider>();
     }
@@ -69,6 +72,7 @@ public static class ServiceCollectionExtensions
             })
             .AddSingleton<IExplorationStore, MongoExplorationStore>()
             .AddSingleton<IMarketplaceStore, MongoMarketplaceStore>()
+            .AddSingleton<IMissionStore, MongoMissionStore>()
             .AddSingleton<IShipyardStore, MongoShipyardStore>();
     }
 }

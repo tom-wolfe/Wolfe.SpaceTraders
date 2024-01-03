@@ -2,6 +2,6 @@
 
 public interface IMissionScheduler
 {
-    public Task Start(IMission mission, CancellationToken cancellationToken = default);
-    public Task Stop(IMission mission, CancellationToken cancellationToken = default);
+    public ValueTask Start(IMission mission, CancellationToken cancellationToken = default);
+    public ValueTask Stop(IMission mission, CancellationToken cancellationToken = default);
 }

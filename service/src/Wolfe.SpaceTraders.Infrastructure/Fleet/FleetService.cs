@@ -1,4 +1,6 @@
 ﻿using System.Net;
+using System.Runtime.CompilerServices;
+using Wolfe.SpaceTraders.Domain.Agents;
 using Wolfe.SpaceTraders.Domain.Fleet;
 using Wolfe.SpaceTraders.Domain.Fleet.Commands;
 using Wolfe.SpaceTraders.Domain.Fleet.Results;
@@ -22,15 +24,19 @@ internal class FleetService(
 
     public async Task<Ship?> GetShip(ShipId shipId, CancellationToken cancellationToken = default)
     {
+        var me = (await apiClient.GetAgent(cancellationToken)).GetContent().Data;
         var response = await apiClient.GetShip(shipId.Value, cancellationToken);
         if (response.StatusCode == HttpStatusCode.NotFound) { return null; }
-        return response.GetContent().Data.ToDomain(shipClient);
+        return response.GetContent().Data.ToDomain(new AgentId(me.Symbol), shipClient);
     }
 
-    public IAsyncEnumerable<Ship> GetShips(CancellationToken cancellationToken = default)
+    public async IAsyncEnumerable<Ship> GetShips([EnumeratorCancellation] CancellationToken cancellationToken = default)
     {
-        return PaginationHelpers.ToAsyncEnumerable<SpaceTradersShip>(
-            async p => (await apiClient.GetShips(20, p, cancellationToken)).GetContent()
-        ).SelectAwait(s => ValueTask.FromResult(s.ToDomain(shipClient)));
+        var me = (await apiClient.GetAgent(cancellationToken)).GetContent().Data;
+        var results = PaginationHelpers.ToAsyncEnumerable<SpaceTradersShip>(async p => (await apiClient.GetShips(20, p, cancellationToken)).GetContent());
+        await foreach (var result in results)
+        {
+            yield return result.ToDomain(new AgentId(me.Symbol), shipClient);
+        }
     }
 }

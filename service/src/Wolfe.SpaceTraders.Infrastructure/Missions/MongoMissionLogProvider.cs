@@ -1,7 +1,6 @@
 ﻿using Microsoft.Extensions.Options;
 using MongoDB.Driver;
 using Wolfe.SpaceTraders.Domain.Missions;
-using Wolfe.SpaceTraders.Domain.Missions.Logs;
 using Wolfe.SpaceTraders.Infrastructure.Mongo;
 
 namespace Wolfe.SpaceTraders.Infrastructure.Missions;

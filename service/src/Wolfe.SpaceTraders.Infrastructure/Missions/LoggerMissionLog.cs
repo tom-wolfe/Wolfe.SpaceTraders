@@ -1,5 +1,5 @@
 ﻿using Microsoft.Extensions.Logging;
-using Wolfe.SpaceTraders.Domain.Missions.Logs;
+using Wolfe.SpaceTraders.Domain.Missions;
 
 namespace Wolfe.SpaceTraders.Infrastructure.Missions;
 

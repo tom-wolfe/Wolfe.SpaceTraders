@@ -1,4 +1,5 @@
-﻿using Wolfe.SpaceTraders.Domain.Fleet.Commands;
+﻿using Wolfe.SpaceTraders.Domain.Agents;
+using Wolfe.SpaceTraders.Domain.Fleet.Commands;
 using Wolfe.SpaceTraders.Domain.Fleet.Results;
 using Wolfe.SpaceTraders.Domain.Ships;
 using Wolfe.SpaceTraders.Sdk.Requests;
@@ -17,7 +18,7 @@ internal static class Fleets
     public static PurchaseShipResult ToDomain(this SpaceTradersPurchaseShipResponse response, IShipClient client) => new()
     {
         Agent = response.Agent.ToDomain(),
-        Ship = response.Ship.ToDomain(client),
+        Ship = response.Ship.ToDomain(new AgentId(response.Agent.Symbol), client),
         Transaction = response.Transaction.ToDomain(),
     };
 }

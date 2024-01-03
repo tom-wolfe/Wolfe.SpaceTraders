@@ -1,4 +1,6 @@
-﻿using Wolfe.SpaceTraders.Domain.Missions.Logs;
+﻿using System.Reactive.Linq;
+using System.Reactive.Subjects;
+using Wolfe.SpaceTraders.Domain.Agents;
 using Wolfe.SpaceTraders.Domain.Missions.Scheduling;
 using Wolfe.SpaceTraders.Domain.Ships;
 
@@ -10,13 +12,14 @@ namespace Wolfe.SpaceTraders.Domain.Missions;
 public abstract class Mission : IMission
 {
     private readonly IMissionScheduler _scheduler;
+    private readonly BehaviorSubject<MissionStatus> _status = new(MissionStatus.New);
 
     /// <summary>
     /// Creates a new instance of <see cref="Mission"/>.
     /// </summary>
     /// <param name="ship">The ship executing the mission.</param>
     /// <param name="log">An object that can be used to track the progress of the mission.</param>
-    /// <param name="scheduler">The object that will used to handle the running of the mission.</param>
+    /// <param name="scheduler">The object that will be used to handle the running of the mission.</param>
     protected Mission(Ship ship, IMissionLog log, IMissionScheduler scheduler)
     {
         _scheduler = scheduler;
@@ -31,10 +34,16 @@ public abstract class Mission : IMission
     public abstract MissionType Type { get; }
 
     /// <inheritdoc/>
-    public MissionStatus Status { get; private set; } = MissionStatus.New;
+    public MissionStatus Status => _status.Value;
+
+    /// <inheritdoc/>
+    public required AgentId AgentId { get; init; }
 
     /// <inheritdoc/>
     public ShipId ShipId => Ship.Id;
+
+    /// <inheritdoc/>
+    public IObservable<MissionStatus> StatusChanged => _status.AsObservable();
 
     /// <summary>
     /// Gets the ship executing the mission.
@@ -47,7 +56,7 @@ public abstract class Mission : IMission
     protected IMissionLog Log { get; }
 
     /// <inheritdoc/>
-    public Task Start(CancellationToken cancellationToken = default)
+    public ValueTask Start(CancellationToken cancellationToken = default)
     {
         if (Status == MissionStatus.Running)
         {
@@ -57,32 +66,36 @@ public abstract class Mission : IMission
         {
             throw new InvalidOperationException("Mission is already complete.");
         }
-        if (Status == MissionStatus.Error)
-        {
-            throw new InvalidOperationException("Mission is in error state.");
-        }
         return _scheduler.Start(this, cancellationToken);
     }
 
     /// <inheritdoc/>
-    public Task Stop(CancellationToken cancellationToken = default) => _scheduler.Stop(this, cancellationToken);
+    public ValueTask Stop(CancellationToken cancellationToken = default)
+    {
+        if (Status == MissionStatus.Running)
+        {
+            _status.OnNext(MissionStatus.Stopping);
+            return _scheduler.Stop(this, cancellationToken);
+        }
+        return ValueTask.CompletedTask;
+    }
 
     /// <inheritdoc/>
     public async Task Execute(CancellationToken cancellationToken = default)
     {
-        Status = MissionStatus.Running;
+        _status.OnNext(MissionStatus.Running);
         try
         {
             await ExecuteCore(cancellationToken);
-            Status = MissionStatus.Complete;
+            _status.OnNext(MissionStatus.Complete);
         }
         catch (OperationCanceledException) when (cancellationToken.IsCancellationRequested)
         {
-            Status = MissionStatus.Suspended;
+            _status.OnNext(MissionStatus.Suspended);
         }
         catch (Exception ex)
         {
-            Status = MissionStatus.Error;
+            _status.OnNext(MissionStatus.Error);
             await Log.WriteError(ex, CancellationToken.None);
             throw;
         }
