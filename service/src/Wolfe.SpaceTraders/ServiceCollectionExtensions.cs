@@ -10,6 +10,7 @@ public static class ServiceCollectionExtensions
     {
         return services
             .AddSingleton<IWayfinderService, AStarWayfinderService>()
-            .AddSingleton<IMissionScheduler, BackgroundServiceMissionScheduler>();
+            .AddSingleton<IMissionScheduler, BackgroundServiceMissionScheduler>()
+            .AddHostedService<MissionManagerService>();
     }
 }

@@ -6,15 +6,11 @@ public class MissionManagerService(IMissionService missionService) : IHostedServ
 {
     public Task StartAsync(CancellationToken cancellationToken)
     {
-        // TODO: Resume all suspended missions.
-        return Task.CompletedTask;
+        return missionService.ResumeSuspendedMissions(cancellationToken).AsTask();
     }
 
-    public async Task StopAsync(CancellationToken cancellationToken)
+    public Task StopAsync(CancellationToken cancellationToken)
     {
-        var stopTasks = missionService
-            .GetRunningMissions()
-            .Select(m => m.Stop(cancellationToken).AsTask());
-        await Task.WhenAll(stopTasks);
+        return missionService.StopRunningMissions(cancellationToken).AsTask();
     }
 }

@@ -39,6 +39,26 @@ internal class MissionService(IMissionStore missionStore, IMissionFactory missio
         }
     }
 
+    public async ValueTask ResumeSuspendedMissions(CancellationToken cancellationToken = default)
+    {
+        await foreach (var mission in GetMissions(cancellationToken))
+        {
+            if (mission.Status == MissionStatus.Suspended)
+            {
+                await mission.Start(cancellationToken);
+            }
+        };
+    }
+
+    public async ValueTask StopRunningMissions(CancellationToken cancellationToken = default)
+    {
+        var missions = _missions?.Select(m => m.Stop(cancellationToken)).ToList();
+        if (missions?.Count > 0)
+        {
+            await Task.WhenAll(missions.Select(t => t.AsTask()));
+        }
+    }
+
     public async ValueTask<IMission?> GetMission(MissionId missionId, CancellationToken cancellationToken = default)
     {
         var missions = await GetMissions(cancellationToken).ToListAsync(cancellationToken: cancellationToken);

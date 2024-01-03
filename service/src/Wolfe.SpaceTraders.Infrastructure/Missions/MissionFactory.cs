@@ -19,7 +19,7 @@ internal class MissionFactory(
     public IMission CreateProbeMission(Ship ship)
     {
         var missionId = MissionId.Generate();
-        return ConstructProbeMission(missionId, ship);
+        return ConstructProbeMission(missionId, ship, MissionStatus.New);
     }
 
     public async Task<IMission> Rehydrate(MongoMission mongoMission, CancellationToken cancellationToken = default)
@@ -30,15 +30,15 @@ internal class MissionFactory(
 
         if (mongoMission.Type == MissionType.Probe.Value)
         {
-            return ConstructProbeMission(missionId, ship);
+            return ConstructProbeMission(missionId, ship, new MissionStatus(mongoMission.Status));
         }
 
         throw new NotSupportedException($"Mission type {mongoMission.Type} is not supported.");
     }
 
-    private ProbeMission ConstructProbeMission(MissionId missionId, Ship ship)
+    private ProbeMission ConstructProbeMission(MissionId missionId, Ship ship, MissionStatus missionStatus)
     {
-        var mission = new ProbeMission(logFactory.CreateLog(missionId), ship, marketplaceService, marketPriorityService, missionScheduler)
+        var mission = new ProbeMission(missionStatus, logFactory.CreateLog(missionId), ship, marketplaceService, marketPriorityService, missionScheduler)
         {
             Id = missionId,
             AgentId = ship.AgentId,

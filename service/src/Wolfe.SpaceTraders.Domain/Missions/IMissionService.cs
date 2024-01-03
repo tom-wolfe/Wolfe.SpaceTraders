@@ -8,4 +8,6 @@ public interface IMissionService
     public IEnumerable<IMission> GetRunningMissions();
     public ValueTask<IMission?> GetMission(MissionId missionId, CancellationToken cancellationToken = default);
     public IAsyncEnumerable<IMission> GetMissions(CancellationToken cancellationToken = default);
+    public ValueTask ResumeSuspendedMissions(CancellationToken cancellationToken = default);
+    public ValueTask StopRunningMissions(CancellationToken cancellationToken = default);
 }

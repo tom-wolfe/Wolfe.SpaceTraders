@@ -7,21 +7,20 @@ namespace Wolfe.SpaceTraders.Domain.Missions;
 /// <summary>
 /// A mission that will navigate between marketplaces and probe their market data.
 /// </summary>
-/// <remarks>
-/// A mission that will navigate between marketplaces and probe their market data.
-/// </remarks>
+/// <param name="startingStatus">The status that the mission will start in.</param>
 /// <param name="log">The log to write entries to.</param>
 /// <param name="ship">The ship that will navigate and perform the probe.</param>
 /// <param name="marketplaceService">The service that provides market data.</param>
 /// <param name="priorityService">The service that prioritizes market exploration.</param>
 /// <param name="scheduler">The object that will be used to handle the running of the mission.</param>
 public class ProbeMission(
+    MissionStatus startingStatus,
     IMissionLog log,
     Ship ship,
     IMarketplaceService marketplaceService,
     IMarketPriorityService priorityService,
     IMissionScheduler scheduler
-) : Mission(ship, log, scheduler)
+) : Mission(startingStatus, ship, log, scheduler)
 {
     /// <inheritdoc/>
     public override MissionType Type => MissionType.Probe;

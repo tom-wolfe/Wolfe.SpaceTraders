@@ -12,19 +12,22 @@ namespace Wolfe.SpaceTraders.Domain.Missions;
 public abstract class Mission : IMission
 {
     private readonly IMissionScheduler _scheduler;
-    private readonly BehaviorSubject<MissionStatus> _status = new(MissionStatus.New);
+    private MissionStatus _statusValue;
+    private readonly Subject<MissionStatus> _status = new();
 
     /// <summary>
     /// Creates a new instance of <see cref="Mission"/>.
     /// </summary>
+    /// <param name="startingStatus">The status that the mission will start in.</param>
     /// <param name="ship">The ship executing the mission.</param>
     /// <param name="log">An object that can be used to track the progress of the mission.</param>
     /// <param name="scheduler">The object that will be used to handle the running of the mission.</param>
-    protected Mission(Ship ship, IMissionLog log, IMissionScheduler scheduler)
+    protected Mission(MissionStatus startingStatus, Ship ship, IMissionLog log, IMissionScheduler scheduler)
     {
         _scheduler = scheduler;
         Ship = ship;
         Log = log;
+        Status = startingStatus;
     }
 
     /// <inheritdoc/>
@@ -34,7 +37,18 @@ public abstract class Mission : IMission
     public abstract MissionType Type { get; }
 
     /// <inheritdoc/>
-    public MissionStatus Status => _status.Value;
+    public MissionStatus Status
+    {
+        get
+        {
+            return _statusValue;
+        }
+        private set
+        {
+            _statusValue = value;
+            _status.OnNext(value);
+        }
+    }
 
     /// <inheritdoc/>
     public required AgentId AgentId { get; init; }
@@ -74,7 +88,7 @@ public abstract class Mission : IMission
     {
         if (Status == MissionStatus.Running)
         {
-            _status.OnNext(MissionStatus.Stopping);
+            Status = MissionStatus.Stopping;
             return _scheduler.Stop(this, cancellationToken);
         }
         return ValueTask.CompletedTask;
@@ -83,19 +97,19 @@ public abstract class Mission : IMission
     /// <inheritdoc/>
     public async Task Execute(CancellationToken cancellationToken = default)
     {
-        _status.OnNext(MissionStatus.Running);
+        Status = MissionStatus.Running;
         try
         {
             await ExecuteCore(cancellationToken);
-            _status.OnNext(MissionStatus.Complete);
+            Status = MissionStatus.Complete;
         }
         catch (OperationCanceledException) when (cancellationToken.IsCancellationRequested)
         {
-            _status.OnNext(MissionStatus.Suspended);
+            Status = MissionStatus.Suspended;
         }
         catch (Exception ex)
         {
-            _status.OnNext(MissionStatus.Error);
+            Status = MissionStatus.Error;
             await Log.WriteError(ex, CancellationToken.None);
             throw;
         }
