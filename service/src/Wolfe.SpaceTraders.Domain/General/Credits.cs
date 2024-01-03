@@ -1,5 +1,8 @@
-﻿namespace Wolfe.SpaceTraders.Domain.General;
+﻿using System.Text.Json.Serialization;
 
+namespace Wolfe.SpaceTraders.Domain.General;
+
+[JsonConverter(typeof(CreditsJsonConverter))]
 public record Credits(long Value)
 {
     public static readonly Credits Zero = new(0);

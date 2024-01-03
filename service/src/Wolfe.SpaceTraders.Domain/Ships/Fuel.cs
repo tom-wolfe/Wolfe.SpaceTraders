@@ -1,5 +1,8 @@
-﻿namespace Wolfe.SpaceTraders.Domain.Ships;
+﻿using System.Text.Json.Serialization;
 
+namespace Wolfe.SpaceTraders.Domain.Ships;
+
+[JsonConverter(typeof(FuelJsonConverter))]
 public record Fuel(int Value)
 {
     public static readonly Fuel Zero = new(0);
