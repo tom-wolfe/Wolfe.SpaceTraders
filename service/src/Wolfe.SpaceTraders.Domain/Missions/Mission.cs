@@ -84,14 +84,20 @@ public abstract class Mission : IMission
     }
 
     /// <inheritdoc/>
-    public ValueTask Stop(CancellationToken cancellationToken = default)
+    public async ValueTask Stop(CancellationToken cancellationToken = default)
     {
         if (Status == MissionStatus.Running)
         {
             Status = MissionStatus.Stopping;
-            return _scheduler.Stop(this, cancellationToken);
+            try
+            {
+                await _scheduler.Stop(this, cancellationToken);
+            }
+            finally
+            {
+                Status = MissionStatus.Suspended;
+            }
         }
-        return ValueTask.CompletedTask;
     }
 
     /// <inheritdoc/>
