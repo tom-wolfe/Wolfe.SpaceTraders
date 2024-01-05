@@ -1,5 +1,4 @@
-﻿using System.Net;
-using System.Runtime.CompilerServices;
+﻿using System.Runtime.CompilerServices;
 using Wolfe.SpaceTraders.Domain.Exploration;
 using Wolfe.SpaceTraders.Infrastructure.Api;
 using Wolfe.SpaceTraders.Sdk;
@@ -12,18 +11,7 @@ internal class ExplorationService(
     IExplorationStore explorationStore
 ) : IExplorationService
 {
-    public async Task<StarSystem?> GetSystem(SystemId systemId, CancellationToken cancellationToken = default)
-    {
-        var cached = await explorationStore.GetSystem(systemId, cancellationToken);
-        if (cached != null) { return cached; }
-
-        var response = await apiClient.GetSystem(systemId.Value, cancellationToken);
-        if (response.StatusCode == HttpStatusCode.NotFound) { return null; }
-        var system = response.GetContent().Data.ToDomain();
-
-        await explorationStore.AddSystem(system, cancellationToken);
-        return system;
-    }
+    public Task<StarSystem?> GetSystem(SystemId systemId, CancellationToken cancellationToken = default) => explorationStore.GetSystem(systemId, cancellationToken);
 
     public async IAsyncEnumerable<StarSystem> GetSystems([EnumeratorCancellation] CancellationToken cancellationToken = default)
     {
@@ -49,18 +37,7 @@ internal class ExplorationService(
         }
     }
 
-    public async Task<Waypoint?> GetWaypoint(WaypointId waypointId, CancellationToken cancellationToken = default)
-    {
-        var cached = await explorationStore.GetWaypoint(waypointId, cancellationToken);
-        if (cached != null) { return cached; }
-
-        var response = await apiClient.GetWaypoint(waypointId.SystemId.Value, waypointId.Value, cancellationToken);
-        if (response.StatusCode == HttpStatusCode.NotFound) { return null; }
-        var waypoint = response.GetContent().Data.ToDomain();
-
-        await explorationStore.AddWaypoint(waypoint, cancellationToken);
-        return waypoint;
-    }
+    public Task<Waypoint?> GetWaypoint(WaypointId waypointId, CancellationToken cancellationToken = default) => explorationStore.GetWaypoint(waypointId, cancellationToken);
 
     public async IAsyncEnumerable<Waypoint> GetWaypoints(SystemId systemId, [EnumeratorCancellation] CancellationToken cancellationToken = default)
     {
