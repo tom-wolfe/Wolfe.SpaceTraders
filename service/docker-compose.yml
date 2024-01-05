@@ -1,0 +1,23 @@
+version: '3.4'
+name: spacetraders
+
+services:
+  service:
+    container_name: spacetraders-service
+    image: ${DOCKER_REGISTRY-}spacetraders-service
+    restart: always
+    ports:
+      - "8080"
+      - "8081"
+    build:
+      context: .
+      dockerfile: src/Wolfe.SpaceTraders/Dockerfile
+
+  mongo:
+    container_name: spacetraders-mongo
+    image: mongo
+    restart: always
+    volumes:
+      - C:\SpaceTraders\MongoDB:/data/db
+    ports:
+      - 27017:27017 # Default port for MongoDB
