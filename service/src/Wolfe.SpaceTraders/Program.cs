@@ -1,6 +1,7 @@
 using Serilog;
 using Wolfe.SpaceTraders;
 using Wolfe.SpaceTraders.Domain;
+using Wolfe.SpaceTraders.Domain.Missions;
 using Wolfe.SpaceTraders.Endpoints;
 using Wolfe.SpaceTraders.Infrastructure;
 
@@ -29,6 +30,13 @@ app.UseHttpsRedirection();
 
 // Make sure the Serilog logger is flushed on app shutdown.
 app.Lifetime.ApplicationStopped.Register(Log.CloseAndFlush);
+
+// Make sure the Serilog logger is flushed on app shutdown.
+app.Lifetime.ApplicationStopped.Register(() =>
+{
+    var missions = app.Services.GetRequiredService<IMissionService>();
+    missions.StopRunningMissions().GetAwaiter().GetResult();
+});
 
 app
     .MapAgentEndpoints()

@@ -1,5 +1,6 @@
 ﻿using System.Reactive.Linq;
 using System.Reactive.Subjects;
+using System.Text.Json.Serialization;
 using Wolfe.SpaceTraders.Domain.Agents;
 using Wolfe.SpaceTraders.Domain.Missions.Scheduling;
 using Wolfe.SpaceTraders.Domain.Ships;
@@ -56,7 +57,10 @@ public abstract class Mission : IMission
     /// <inheritdoc/>
     public ShipId ShipId => Ship.Id;
 
-    /// <inheritdoc/>
+    /// <summary>
+    /// Gets an observable that will emit the current status of the mission whenever it changes.
+    /// </summary>
+    [JsonIgnore]
     public IObservable<MissionStatus> StatusChanged => _status.AsObservable();
 
     /// <summary>

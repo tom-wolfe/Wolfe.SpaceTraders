@@ -34,11 +34,6 @@ public interface IMission
     public ShipId ShipId { get; }
 
     /// <summary>
-    /// Gets an observable that will emit the current status of the mission whenever it changes.
-    /// </summary>
-    public IObservable<MissionStatus> StatusChanged { get; }
-
-    /// <summary>
     /// Starts the mission.
     /// </summary>
     /// <param name="cancellationToken">A cancellation token that can be used to cancel the mission start.</param>
