@@ -17,7 +17,7 @@ public class Ship
     private readonly Subject<WaypointId> _arrived = new();
 
     private readonly IShipClient _client;
-    private ShipNavigation _navigation;
+    private readonly ShipNavigation _navigation;
     private readonly ShipFuel _fuel;
     private readonly ShipCargo _cargo;
 
@@ -240,6 +240,18 @@ public class Ship
         _arrived.OnNext(Navigation.WaypointId);
     }
 
+    /// <summary>
+    /// Creates a new ship.
+    /// </summary>
+    /// <param name="client">The behaviour client for making external calls.</param>
+    /// <param name="shipId">The unique identifier of the ship.</param>
+    /// <param name="agentId">The identifier of the agent that owns the ship.</param>
+    /// <param name="name">The name of the ship.</param>
+    /// <param name="role">The role the ship takes in the fleet.</param>
+    /// <param name="fuel">The amount of fuel the ship has.</param>
+    /// <param name="navigation">The current navigation status of the ship.</param>
+    /// <param name="cargo">The ship's cargo hold.</param>
+    /// <returns>The created ship.</returns>
     public static Ship Create(IShipClient client, ShipId shipId, AgentId agentId, string name, ShipRole role, IShipFuelBase fuel, IShipNavigation navigation, IShipCargoBase cargo)
     {
         var ship = new Ship(
