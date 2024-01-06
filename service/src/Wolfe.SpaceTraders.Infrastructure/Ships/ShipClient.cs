@@ -11,20 +11,15 @@ namespace Wolfe.SpaceTraders.Infrastructure.Ships;
 
 internal class ShipClient(ISpaceTradersApiClient apiClient) : IShipClient
 {
-    public async Task<SetShipSpeedResult> SetSpeed(ShipId shipId, ShipSpeed speed, CancellationToken cancellationToken = default)
+    public Task SetSpeed(ShipId shipId, ShipSpeed speed, CancellationToken cancellationToken = default)
     {
         var request = new SpaceTradersPatchShipNavRequest { FlightMode = speed.Value };
-        var response = await apiClient.PatchShipNav(shipId.Value, request, cancellationToken);
-        return new SetShipSpeedResult
-        {
-            Navigation = response.GetContent().Data.ToDomain()
-        };
+        return apiClient.PatchShipNav(shipId.Value, request, cancellationToken);
     }
 
-    public async Task<ShipDockResult> Dock(ShipId shipId, CancellationToken cancellationToken = default)
+    public Task Dock(ShipId shipId, CancellationToken cancellationToken = default)
     {
-        var response = await apiClient.ShipDock(shipId.Value, cancellationToken);
-        return response.GetContent().Data.ToDomain();
+        return apiClient.ShipDock(shipId.Value, cancellationToken);
     }
 
     public async Task<ShipExtractResult> Extract(ShipId shipId, CancellationToken cancellationToken)
@@ -33,16 +28,15 @@ internal class ShipClient(ISpaceTradersApiClient apiClient) : IShipClient
         return response.GetContent().Data.ToDomain();
     }
 
-    public async Task<ShipNavigation> GetNavigation(ShipId shipId, CancellationToken cancellationToken = default)
+    public async Task<IShipNavigation> GetNavigation(ShipId shipId, CancellationToken cancellationToken = default)
     {
         var response = await apiClient.GetShip(shipId.Value, cancellationToken);
         return response.GetContent().Data.Nav.ToDomain();
     }
 
-    public async Task<ShipJettisonResult> Jettison(ShipId shipId, ShipJettisonCommand command, CancellationToken cancellationToken)
+    public Task Jettison(ShipId shipId, ShipJettisonCommand command, CancellationToken cancellationToken)
     {
-        var response = await apiClient.ShipJettison(shipId.Value, command.ToApi(), cancellationToken);
-        return response.GetContent().Data.ToDomain();
+        return apiClient.ShipJettison(shipId.Value, command.ToApi(), cancellationToken);
     }
 
     public async Task<ShipNavigateResult> Navigate(ShipId shipId, ShipNavigateCommand command, CancellationToken cancellationToken = default)
@@ -51,10 +45,9 @@ internal class ShipClient(ISpaceTradersApiClient apiClient) : IShipClient
         return response.GetContent().Data.ToDomain();
     }
 
-    public async Task<ShipOrbitResult> Orbit(ShipId shipId, CancellationToken cancellationToken = default)
+    public Task Orbit(ShipId shipId, CancellationToken cancellationToken = default)
     {
-        var response = await apiClient.ShipOrbit(shipId.Value, cancellationToken);
-        return response.GetContent().Data.ToDomain();
+        return apiClient.ShipOrbit(shipId.Value, cancellationToken);
     }
 
     public async Task<ShipProbeMarketDataResult?> ProbeMarketData(WaypointId waypointId, CancellationToken cancellationToken = default)

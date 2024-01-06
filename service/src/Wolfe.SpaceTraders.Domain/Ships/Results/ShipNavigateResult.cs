@@ -2,6 +2,6 @@
 
 public class ShipNavigateResult
 {
-    public required ShipFuel Fuel { get; init; }
-    public required ShipNavigation Navigation { get; init; }
+    public required IShipFuelBase Fuel { get; init; }
+    public required IShipNavigation Navigation { get; init; }
 }

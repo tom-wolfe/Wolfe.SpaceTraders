@@ -1,12 +1,16 @@
 ﻿namespace Wolfe.SpaceTraders.Domain.Ships;
 
-public class ShipFuel
+internal record ShipFuel : IShipFuel
 {
-    public required Fuel Current { get; init; }
-    public required Fuel Capacity { get; init; }
-    public ShipFuelConsumed? Consumed { get; init; }
+    public ShipFuel(IShipFuelBase fuel)
+    {
+        Current = fuel.Current;
+        Capacity = fuel.Capacity;
+    }
+
+    public virtual Fuel Current { get; set; }
+    public virtual Fuel Capacity { get; set; }
 
     public bool IsEmpty => Current == Fuel.Zero;
     public decimal PercentRemaining => Capacity == Fuel.Zero ? 0 : Current / Capacity * 100m;
-
 }

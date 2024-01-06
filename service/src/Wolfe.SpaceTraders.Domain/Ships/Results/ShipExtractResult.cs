@@ -3,6 +3,5 @@
 public class ShipExtractResult
 {
     public required ShipCooldown Cooldown { get; init; }
-    public required ExtractionYield Yield { get; init; }
-    public required ShipCargo Cargo { get; init; }
+    public required ShipCargoItem Yield { get; init; }
 }

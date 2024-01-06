@@ -1,4 +1,5 @@
-﻿using Wolfe.SpaceTraders.Domain.Agents;
+﻿using System.Data;
+using Wolfe.SpaceTraders.Domain.Agents;
 using Wolfe.SpaceTraders.Domain.Exploration;
 using Wolfe.SpaceTraders.Domain.General;
 using Wolfe.SpaceTraders.Domain.Marketplaces;
@@ -6,7 +7,6 @@ using Wolfe.SpaceTraders.Domain.Ships;
 using Wolfe.SpaceTraders.Domain.Ships.Commands;
 using Wolfe.SpaceTraders.Domain.Ships.Results;
 using Wolfe.SpaceTraders.Sdk.Models.Extraction;
-using Wolfe.SpaceTraders.Sdk.Models.Jettison;
 using Wolfe.SpaceTraders.Sdk.Models.Ships;
 using Wolfe.SpaceTraders.Sdk.Requests;
 
@@ -14,38 +14,26 @@ namespace Wolfe.SpaceTraders.Infrastructure.Api;
 
 internal static class Ships
 {
-    public static Ship ToDomain(this SpaceTradersShip ship, AgentId agentId, IShipClient client) => new(
-        client,
-        ship.Cargo.ToDomain(),
-        ship.Fuel.ToDomain(),
-        ship.Nav.ToDomain()
-    )
-    {
-        Id = new ShipId(ship.Symbol),
-        AgentId = agentId,
-        Name = ship.Registration.Name,
-        Role = new ShipRole(ship.Registration.Role),
-    };
+    public static Ship ToDomain(this SpaceTradersShip ship, AgentId agentId, IShipClient client) => Ship.Create(
+        client: client,
+        shipId: new ShipId(ship.Symbol),
+        agentId: agentId,
+        name: ship.Registration.Name,
+        role: new ShipRole(ship.Registration.Role),
+        fuel: ship.Fuel.ToDomain(),
+        navigation: ship.Nav.ToDomain(),
+        cargo: ship.Cargo.ToDomain()
+    );
 
-    public static ShipCargo ToDomain(this SpaceTradersShipCargo cargo) => new()
-    {
-        Quantity = cargo.Units,
-        Capacity = cargo.Capacity,
-        Items = cargo.Inventory.Select(i => i.ToDomain()).ToList()
-    };
+    public static IShipCargoBase ToDomain(this SpaceTradersShipCargo cargo) => new SpaceTradersShipCargoBase(
+        Capacity: cargo.Capacity,
+        Items: cargo.Inventory.Select(i => i.ToDomain()).ToList()
+    );
 
-    public static ShipFuelConsumed ToDomain(this SpaceTradersShipFuelConsumed consumed) => new()
-    {
-        Amount = new Fuel(consumed.Amount),
-        Timestamp = consumed.Timestamp,
-    };
-
-    public static ShipFuel ToDomain(this SpaceTradersShipFuel fuel) => new()
-    {
-        Capacity = new Fuel(fuel.Capacity),
-        Current = new Fuel(fuel.Current),
-        Consumed = fuel.Consumed?.ToDomain()
-    };
+    public static IShipFuelBase ToDomain(this SpaceTradersShipFuel fuel) => new SpaceTradersShipFuelBase(
+        Current: new Fuel(fuel.Current),
+        Capacity: new Fuel(fuel.Capacity)
+    );
 
     public static ShipCooldown ToDomain(this SpaceTradersShipCooldown cooldown) => new()
     {
@@ -56,29 +44,13 @@ internal static class Ships
     public static ShipExtractResult ToDomain(this SpaceTradersShipExtractResult result) => new()
     {
         Cooldown = result.Cooldown.ToDomain(),
-        Yield = result.Extraction.Yield.ToDomain(),
-        Cargo = result.Cargo.ToDomain(),
-    };
-
-    public static ShipDockResult ToDomain(this SpaceTradersShipDockResult result) => new()
-    {
-        Navigation = result.Nav.ToDomain(),
-    };
-
-    public static ShipJettisonResult ToDomain(this SpaceTradersShipJettisonResult result) => new()
-    {
-        Cargo = result.Cargo.ToDomain()
+        Yield = result.Extraction.Yield.ToDomain(result.Cargo),
     };
 
     public static ShipNavigateResult ToDomain(this SpaceTradersShipNavigateResult result) => new()
     {
         Navigation = result.Nav.ToDomain(),
         Fuel = result.Fuel.ToDomain(),
-    };
-
-    public static ShipOrbitResult ToDomain(this SpaceTradersShipOrbitResult result) => new()
-    {
-        Navigation = result.Nav.ToDomain(),
     };
 
     public static ShipRefuelResult ToDomain(this SpaceTradersShipRefuelResult result) => new()
@@ -91,7 +63,6 @@ internal static class Ships
     public static ShipSellResult ToDomain(this SpaceTradersShipSellResult result) => new()
     {
         Agent = result.Agent.ToDomain(),
-        Cargo = result.Cargo.ToDomain(),
         Transaction = result.Transaction.ToDomain()
     };
 
@@ -103,9 +74,11 @@ internal static class Ships
         Quantity = item.Units,
     };
 
-    public static ExtractionYield ToDomain(this SpaceTradersExtractionYield yield) => new()
+    public static ShipCargoItem ToDomain(this SpaceTradersExtractionYield yield, SpaceTradersShipCargo cargo) => new()
     {
-        ItemId = new ItemId(yield.Symbol),
+        Id = new ItemId(yield.Symbol),
+        Name = cargo.Inventory.First(f => f.Symbol == yield.Symbol).Name,
+        Description = cargo.Inventory.First(f => f.Symbol == yield.Symbol).Description,
         Quantity = yield.Units,
     };
 
@@ -120,27 +93,29 @@ internal static class Ships
         Units = command.Quantity
     };
 
-    public static ShipNavigationRoute ToDomain(this SpaceTradersShipNavRoute route) => new()
-    {
-        Arrival = route.Arrival,
-        Origin = route.Origin.ToDomain(),
-        Destination = route.Destination.ToDomain(),
-        DepartureTime = route.DepartureTime,
-    };
-
-    public static ShipNavigation ToDomain(this SpaceTradersShipNav navigation) => new()
+    public static IShipNavigation ToDomain(this SpaceTradersShipNav navigation) => new SpaceTradersShipNavigation
     {
         WaypointId = new WaypointId(navigation.WaypointSymbol),
+        Location = new Point(navigation.Route.Origin.X, navigation.Route.Origin.Y),
         Status = new ShipNavigationStatus(navigation.Status),
         Speed = new ShipSpeed(navigation.FlightMode),
-        Route = navigation.Route.ToDomain()
+        Destination = navigation.Route.Origin.Symbol == navigation.Route.Destination.Symbol ? null : new ShipNavigationDestination
+        {
+            Location = new Point(navigation.Route.Destination.X, navigation.Route.Destination.Y),
+            WaypointId = new(navigation.Route.Destination.Symbol),
+            Arrival = navigation.Route.Arrival
+        },
     };
 
-    public static ShipNavigationRouteWaypoint ToDomain(this SpaceTradersShipNavRouteWaypoint location) => new()
+    private record SpaceTradersShipCargoBase(int Capacity, IReadOnlyCollection<ShipCargoItem> Items) : IShipCargoBase;
+    private record SpaceTradersShipFuelBase(Fuel Current, Fuel Capacity) : IShipFuelBase;
+
+    private record SpaceTradersShipNavigation : IShipNavigation
     {
-        Type = new WaypointType(location.Type),
-        Id = new WaypointId(location.Symbol),
-        SystemId = new SystemId(location.SystemSymbol),
-        Point = new Point(location.X, location.Y),
-    };
+        public WaypointId WaypointId { get; init; }
+        public Point Location { get; init; }
+        public ShipNavigationStatus Status { get; init; }
+        public ShipSpeed Speed { get; init; }
+        public ShipNavigationDestination? Destination { get; init; }
+    }
 }

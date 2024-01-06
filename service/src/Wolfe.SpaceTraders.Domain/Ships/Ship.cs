@@ -2,7 +2,6 @@
 using System.Reactive.Subjects;
 using Wolfe.SpaceTraders.Domain.Agents;
 using Wolfe.SpaceTraders.Domain.Exploration;
-using Wolfe.SpaceTraders.Domain.General;
 using Wolfe.SpaceTraders.Domain.Marketplaces;
 using Wolfe.SpaceTraders.Domain.Ships.Commands;
 using Wolfe.SpaceTraders.Domain.Ships.Results;
@@ -12,19 +11,23 @@ namespace Wolfe.SpaceTraders.Domain.Ships;
 /// <summary>
 /// Represents an agent ship in the SpaceTraders universe.
 /// </summary>
-/// <param name="client">The client that provides the ship behavior.</param>
-/// <param name="cargo">The cargo contained inside the ship.</param>
-/// <param name="fuel">The current fuel capacity of the ship.</param>
-/// <param name="navigation">The ships navigation parameters.</param>
-public class Ship(
-    IShipClient client,
-    ShipCargo cargo,
-    ShipFuel fuel,
-    ShipNavigation navigation
-)
+public class Ship
 {
     private readonly Subject<MarketData> _marketDataProbed = new();
     private readonly Subject<WaypointId> _arrived = new();
+
+    private readonly IShipClient _client;
+    private ShipNavigation _navigation;
+    private ShipFuel _fuel;
+    private ShipCargo _cargo;
+
+    private Ship(IShipClient client, ShipNavigation navigation, ShipFuel fuel, ShipCargo cargo)
+    {
+        _client = client;
+        _navigation = navigation;
+        _fuel = fuel;
+        _cargo = cargo;
+    }
 
     /// <summary>
     /// Gets the unique identifier of the ship.
@@ -47,24 +50,19 @@ public class Ship(
     public required ShipRole Role { get; init; }
 
     /// <summary>
-    /// Gets the current location of the ship.
-    /// </summary>
-    public Point Location => Navigation.Route.Origin.Point;
-
-    /// <summary>
     /// Gets the ships navigation status.
     /// </summary>
-    public ShipNavigation Navigation { get; private set; } = navigation;
+    public IShipNavigation Navigation => _navigation;
 
     /// <summary>
     /// Gets the ship's fuel status.
     /// </summary>
-    public ShipFuel Fuel { get; private set; } = fuel;
+    public IShipFuel Fuel => _fuel;
 
     /// <summary>
     /// Gets the details of the ship's cargo storage.
     /// </summary>
-    public ShipCargo Cargo { get; private set; } = cargo;
+    public IShipCargo Cargo => _cargo;
 
     /// <summary>
     /// An observable that will emit a value whenever the ship arrives at a destination waypoint.
@@ -101,16 +99,21 @@ public class Ship(
 
         if (speed != null) { await SetSpeed(speed.Value, cancellationToken); }
 
-        var result = await client.Navigate(Id, new ShipNavigateCommand { WaypointId = waypointId }, cancellationToken);
-        Navigation = result.Navigation;
-        Fuel = result.Fuel;
+        var result = await _client.Navigate(Id, new ShipNavigateCommand { WaypointId = waypointId }, cancellationToken);
+        _navigation = new ShipNavigation(result.Navigation);
+        _fuel = new ShipFuel(result.Fuel);
+
+        if (Navigation.Destination == null)
+        {
+            throw new InvalidOperationException("Ship navigation destination is null.");
+        }
 
         Observable
-            .Interval(result.Navigation.Route.TimeToArrival)
+            .Interval(Navigation.Destination.TimeToArrival)
             .Take(1)
             .Select(_ => Observable.FromAsync(async () =>
             {
-                Navigation = await client.GetNavigation(Id, cancellationToken);
+                _navigation = new ShipNavigation(await _client.GetNavigation(Id, cancellationToken));
                 _arrived.OnNext(Navigation.WaypointId);
             }))
             .Concat()
@@ -131,8 +134,8 @@ public class Ship(
             return;
         }
 
-        var response = await client.Dock(Id, cancellationToken);
-        Navigation = response.Navigation;
+        await _client.Dock(Id, cancellationToken);
+        _navigation.Status = ShipNavigationStatus.Docked;
     }
 
     public async ValueTask<ShipExtractResult> Extract(CancellationToken cancellationToken = default)
@@ -144,16 +147,20 @@ public class Ship(
 
         await Dock(cancellationToken);
 
-        var response = await client.Extract(Id, cancellationToken);
-        Cargo = response.Cargo;
+        var response = await _client.Extract(Id, cancellationToken);
+        _cargo.Add(response.Yield);
 
         return response;
     }
 
     public async ValueTask Jettison(ItemId itemId, int quantity, CancellationToken cancellationToken = default)
     {
-        var result = await client.Jettison(Id, new ShipJettisonCommand { ItemId = itemId, Quantity = quantity }, cancellationToken);
-        Cargo = result.Cargo;
+        if (!_cargo.Contains(itemId, quantity))
+        {
+            throw new InvalidOperationException("Ship does not contain the specified item and quantity.");
+        }
+        await _client.Jettison(Id, new ShipJettisonCommand { ItemId = itemId, Quantity = quantity }, cancellationToken);
+        _cargo.Remove(itemId, quantity);
     }
 
     public async ValueTask Orbit(CancellationToken cancellationToken = default)
@@ -168,8 +175,8 @@ public class Ship(
             return;
         }
 
-        var result = await client.Orbit(Id, cancellationToken);
-        Navigation = result.Navigation;
+        await _client.Orbit(Id, cancellationToken);
+        _navigation.Status = ShipNavigationStatus.InOrbit;
     }
 
     public async Task<MarketData?> ProbeMarketData(CancellationToken cancellationToken = default)
@@ -179,7 +186,7 @@ public class Ship(
             throw new InvalidOperationException("Cannot probe market data while in transit.");
         }
 
-        var result = await client.ProbeMarketData(Navigation.WaypointId, cancellationToken);
+        var result = await _client.ProbeMarketData(Navigation.WaypointId, cancellationToken);
         if (result?.Data != null) { _marketDataProbed.OnNext(result.Data); }
 
         return result?.Data;
@@ -187,26 +194,50 @@ public class Ship(
 
     public async ValueTask Refuel(CancellationToken cancellationToken = default)
     {
-        var response = await client.Refuel(Id, cancellationToken);
-        Fuel = response.Fuel;
+        var response = await _client.Refuel(Id, cancellationToken);
+        _fuel.Current = response.Fuel.Current;
     }
 
     private async ValueTask SetSpeed(ShipSpeed speed, CancellationToken cancellationToken = default)
     {
-        var response = await client.SetSpeed(Id, speed, cancellationToken);
-        Navigation = response.Navigation;
+        await _client.SetSpeed(Id, speed, cancellationToken);
+        _navigation.Speed = speed;
     }
 
     public async ValueTask<MarketTransaction> Sell(ItemId itemId, int quantity, CancellationToken cancellationToken = default)
     {
+        if (!_cargo.Contains(itemId, quantity))
+        {
+            throw new InvalidOperationException("Ship does not contain the specified item and quantity.");
+        }
+
         var request = new ShipSellCommand
         {
             ItemId = itemId,
             Quantity = quantity,
         };
-        var result = await client.Sell(Id, request, cancellationToken);
-        Cargo = result.Cargo;
+        var result = await _client.Sell(Id, request, cancellationToken);
+
+        _cargo.Remove(itemId, quantity);
 
         return result.Transaction;
+    }
+
+    public static Ship Create(IShipClient client, ShipId shipId, AgentId agentId, string name, ShipRole role, IShipFuelBase fuel, IShipNavigation navigation, IShipCargoBase cargo)
+    {
+        var ship = new Ship(
+            client: client,
+            navigation: new ShipNavigation(navigation),
+            fuel: new ShipFuel(fuel),
+            cargo: new ShipCargo(cargo)
+        )
+        {
+            Id = shipId,
+            AgentId = agentId,
+            Name = name,
+            Role = role,
+        };
+
+        return ship;
     }
 }
