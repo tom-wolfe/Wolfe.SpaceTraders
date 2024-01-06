@@ -6,6 +6,8 @@ namespace Wolfe.SpaceTraders.Domain.Fleet;
 
 public interface IFleetService
 {
+    public IObservable<Ship> ShipRegistered { get; }
+
     public Task<PurchaseShipResult> PurchaseShip(PurchaseShipCommand command, CancellationToken cancellationToken = default);
     public Task<Ship?> GetShip(ShipId shipId, CancellationToken cancellationToken = default);
     public IAsyncEnumerable<Ship> GetShips(CancellationToken cancellationToken = default);

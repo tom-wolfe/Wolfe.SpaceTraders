@@ -1,6 +1,5 @@
 ﻿using System.Reactive.Linq;
 using System.Reactive.Subjects;
-using System.Text.Json.Serialization;
 using Wolfe.SpaceTraders.Domain.Agents;
 using Wolfe.SpaceTraders.Domain.Missions.Scheduling;
 using Wolfe.SpaceTraders.Domain.Ships;
@@ -14,20 +13,21 @@ public abstract class Mission : IMission
 {
     private readonly IMissionScheduler _scheduler;
     private MissionStatus _statusValue;
+
     private readonly Subject<MissionStatus> _status = new();
+    protected readonly Subject<FormattableString> _log = new();
+    protected readonly Subject<Exception> _error = new();
 
     /// <summary>
     /// Creates a new instance of <see cref="Mission"/>.
     /// </summary>
     /// <param name="startingStatus">The status that the mission will start in.</param>
     /// <param name="ship">The ship executing the mission.</param>
-    /// <param name="log">An object that can be used to track the progress of the mission.</param>
     /// <param name="scheduler">The object that will be used to handle the running of the mission.</param>
-    protected Mission(MissionStatus startingStatus, Ship ship, IMissionLog log, IMissionScheduler scheduler)
+    protected Mission(MissionStatus startingStatus, Ship ship, IMissionScheduler scheduler)
     {
         _scheduler = scheduler;
         Ship = ship;
-        Log = log;
         Status = startingStatus;
     }
 
@@ -58,20 +58,18 @@ public abstract class Mission : IMission
     public ShipId ShipId => Ship.Id;
 
     /// <summary>
-    /// Gets an observable that will emit the current status of the mission whenever it changes.
-    /// </summary>
-    [JsonIgnore]
-    public IObservable<MissionStatus> StatusChanged => _status.AsObservable();
-
-    /// <summary>
     /// Gets the ship executing the mission.
     /// </summary>
     protected Ship Ship { get; }
 
-    /// <summary>
-    /// Gets the mission log.
-    /// </summary>
-    protected IMissionLog Log { get; }
+    /// <inheritdoc/>
+    public IObservable<MissionStatus> StatusChanged => _status.AsObservable();
+
+    /// <inheritdoc/>
+    public IObservable<FormattableString> Event => _log.AsObservable();
+
+    /// <inheritdoc/>
+    public IObservable<Exception> Error => _error.AsObservable();
 
     /// <inheritdoc/>
     public ValueTask Start(CancellationToken cancellationToken = default)
@@ -120,7 +118,7 @@ public abstract class Mission : IMission
         catch (Exception ex)
         {
             Status = MissionStatus.Error;
-            await Log.WriteError(ex, CancellationToken.None);
+            _error.OnNext(ex);
             throw;
         }
     }

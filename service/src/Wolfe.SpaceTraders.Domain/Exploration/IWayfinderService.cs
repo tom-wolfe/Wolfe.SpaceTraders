@@ -1,10 +1,6 @@
-﻿using Wolfe.SpaceTraders.Domain.Ships;
-
-namespace Wolfe.SpaceTraders.Domain.Exploration;
+﻿namespace Wolfe.SpaceTraders.Domain.Exploration;
 
 public interface IWayfinderService
 {
-    public IAsyncEnumerable<WayfinderStop> PlotRoute(Ship ship, WaypointId destination);
+    public Task<WayfinderRoute> PlotRoute(WaypointId start, WaypointId destination, CancellationToken cancellationToken = default);
 }
-
-public record WayfinderStop(WaypointId Waypoint, bool Refuel);

@@ -7,6 +7,7 @@ internal class MongoMarketData
 {
     [BsonId]
     public required string WaypointId { get; init; }
+    public required string SystemId { get; init; }
     public required IReadOnlyCollection<MongoMarketTransaction> Transactions { get; init; }
     public required IReadOnlyCollection<MongoMarketTradeGood> TradeGoods { get; init; }
 

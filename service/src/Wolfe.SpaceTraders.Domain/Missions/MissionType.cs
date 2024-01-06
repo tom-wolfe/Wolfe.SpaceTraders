@@ -7,4 +7,5 @@
 public partial struct MissionType
 {
     public static readonly MissionType Probe = new("PROBE");
+    public static readonly MissionType Trading = new("TRADING");
 }

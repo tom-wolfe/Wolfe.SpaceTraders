@@ -41,9 +41,8 @@ public static class ServiceCollectionExtensions
             .AddSingleton<ITokenService, TokenService>()
             .AddSingleton<IMissionService, MissionService>()
             .AddSingleton<IMissionFactory, MissionFactory>()
-            .AddSingleton<IMissionLogFactory, MissionLogFactory>()
-            .AddSingleton<IMissionLogProvider, MongoMissionLogProvider>()
-            .AddSingleton<IMissionLogProvider, LoggerMissionLogProvider>();
+            .AddSingleton<IMissionLog, MongoMissionLog>()
+            .AddSingleton<IMissionLog, LoggerMissionLog>();
     }
 
     private static IServiceCollection AddSpaceTradersApi(this IServiceCollection services, IConfiguration configuration) => services

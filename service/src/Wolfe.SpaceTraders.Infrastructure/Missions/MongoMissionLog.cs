@@ -10,22 +10,22 @@ namespace Wolfe.SpaceTraders.Infrastructure.Missions;
 
 internal class MongoMissionLog : IMissionLog
 {
-    private readonly MissionId _missionId;
     private readonly IMongoCollection<MongoMissionLogData> _missionLogCollection;
 
-    public MongoMissionLog(IOptions<MongoOptions> mongoOptions, IMongoClient mongoClient, MissionId missionId)
+    public MongoMissionLog(IOptions<MongoOptions> mongoOptions, IMongoClient mongoClient)
     {
-        _missionId = missionId;
         var database = mongoClient.GetDatabase(mongoOptions.Value.Database);
         _missionLogCollection = database.GetCollection<MongoMissionLogData>(mongoOptions.Value.MissionLogsCollection);
     }
 
-    public async ValueTask Write(FormattableString message, CancellationToken cancellationToken = default)
+    public void OnStatusChanged(IMission mission, MissionStatus status) => OnEvent(mission, $"Mission status changed to: {status}.");
+
+    public async void OnEvent(IMission mission, FormattableString message)
     {
         var data = new MongoMissionLogData
         {
             Id = ObjectId.GenerateNewId(),
-            MissionId = _missionId.Value,
+            MissionId = mission.Id.Value,
             Message = message.ToString(),
             Template = message.Format,
             Data = message
@@ -34,15 +34,15 @@ internal class MongoMissionLog : IMissionLog
                 .ToDictionary(v => v.index.ToString(), v => (object?)v.value?.ToString()),
             Timestamp = DateTimeOffset.UtcNow
         };
-        await _missionLogCollection.InsertOneAsync(data, cancellationToken: cancellationToken);
+        await _missionLogCollection.InsertOneAsync(data);
     }
 
-    public async ValueTask WriteError(Exception ex, CancellationToken cancellationToken = default)
+    public async void OnError(IMission mission, Exception ex)
     {
         var data = new MongoMissionLogData
         {
             Id = ObjectId.GenerateNewId(),
-            MissionId = _missionId.Value,
+            MissionId = mission.Id.Value,
             Template = ex.Message,
             Message = ex.Message,
             Data = ToDictionary(ex.Data),
@@ -54,7 +54,7 @@ internal class MongoMissionLog : IMissionLog
             },
             Timestamp = DateTimeOffset.UtcNow
         };
-        await _missionLogCollection.InsertOneAsync(data, cancellationToken: cancellationToken);
+        await _missionLogCollection.InsertOneAsync(data);
     }
 
     private static Dictionary<string, object?> ToDictionary(IDictionary source)

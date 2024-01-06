@@ -24,9 +24,20 @@ internal class MissionService(IMissionStore missionStore, IMissionFactory missio
         return mission;
     }
 
-    public IEnumerable<IMission> GetRunningMissions()
+    public async Task<IMission> CreateTradingMission(Ship ship, CancellationToken cancellationToken = default)
     {
-        return _missions ?? Enumerable.Empty<IMission>();
+        var missions = await GetMissions(cancellationToken).ToListAsync(cancellationToken);
+        if (missions.Any(m => m.ShipId == ship.Id))
+        {
+            throw new InvalidOperationException("Ship has already been assigned a mission.");
+        }
+
+        var mission = missionFactory.CreateTradingMission(ship);
+
+        _missions!.Add(mission);
+        await missionStore.UpdateMission(mission, cancellationToken);
+
+        return mission;
     }
 
     public async IAsyncEnumerable<IMission> GetMissions([EnumeratorCancellation] CancellationToken cancellationToken = default)

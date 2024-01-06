@@ -7,5 +7,6 @@ namespace Wolfe.SpaceTraders.Infrastructure.Missions;
 internal interface IMissionFactory
 {
     public IMission CreateProbeMission(Ship ship);
+    public IMission CreateTradingMission(Ship ship);
     public Task<IMission> Rehydrate(MongoMission mongoMission, CancellationToken cancellationToken = default);
 }

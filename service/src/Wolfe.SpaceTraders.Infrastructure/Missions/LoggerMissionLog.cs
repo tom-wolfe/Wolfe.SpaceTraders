@@ -5,15 +5,9 @@ namespace Wolfe.SpaceTraders.Infrastructure.Missions;
 
 internal class LoggerMissionLog(ILogger<LoggerMissionLog> logger) : IMissionLog
 {
-    public ValueTask Write(FormattableString message, CancellationToken cancellationToken = default)
-    {
-        logger.LogInformation(message.Format, message.GetArguments());
-        return ValueTask.CompletedTask;
-    }
+    public void OnStatusChanged(IMission mission, MissionStatus status) => OnEvent(mission, $"Mission status changed to: {status}.");
 
-    public ValueTask WriteError(Exception ex, CancellationToken cancellationToken = default)
-    {
-        logger.LogError(ex, "Unhandled error while executing mission.");
-        return ValueTask.CompletedTask;
-    }
+    public void OnEvent(IMission mission, FormattableString message) => logger.LogInformation(message.Format, message.GetArguments());
+
+    public void OnError(IMission mission, Exception ex) => logger.LogError(ex, "Unhandled error while executing mission.");
 }

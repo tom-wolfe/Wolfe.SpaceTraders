@@ -43,6 +43,7 @@ internal static class Mapping
     public static MongoMarketData ToMongo(this MarketData marketData) => new()
     {
         WaypointId = marketData.WaypointId.Value,
+        SystemId = marketData.WaypointId.SystemId.Value,
         RetrievedAt = marketData.RetrievedAt,
         TradeGoods = marketData.TradeGoods.Select(t => t.ToMongo()).ToList(),
         Transactions = marketData.Transactions.Select(t => t.ToMongo()).ToList(),

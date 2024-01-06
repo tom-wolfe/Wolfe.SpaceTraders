@@ -1,4 +1,5 @@
-﻿using Wolfe.SpaceTraders.Domain.Agents;
+﻿using System.Text.Json.Serialization;
+using Wolfe.SpaceTraders.Domain.Agents;
 using Wolfe.SpaceTraders.Domain.Ships;
 
 namespace Wolfe.SpaceTraders.Domain.Missions;
@@ -32,6 +33,24 @@ public interface IMission
     /// Gets the ID of the ship that is executing the mission.
     /// </summary>
     public ShipId ShipId { get; }
+
+    /// <summary>
+    /// Gets an observable that will emit the current status of the mission whenever it changes.
+    /// </summary>
+    [JsonIgnore]
+    public IObservable<MissionStatus> StatusChanged { get; }
+
+    /// <summary>
+    /// Gets an observable that will emit a log message when an event occurs during the mission.
+    /// </summary>
+    [JsonIgnore]
+    public IObservable<FormattableString> Event { get; }
+
+    /// <summary>
+    /// Gets an observable that will emit an error whenever an error occurs during the mission.
+    /// </summary>
+    [JsonIgnore]
+    public IObservable<Exception> Error { get; }
 
     /// <summary>
     /// Starts the mission.

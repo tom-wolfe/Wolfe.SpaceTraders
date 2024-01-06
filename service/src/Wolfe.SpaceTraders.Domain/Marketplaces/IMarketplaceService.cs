@@ -32,6 +32,14 @@ public interface IMarketplaceService
     Task<double> GetPercentileVolatility(TimeSpan age, CancellationToken cancellationToken = default);
 
     /// <summary>
+    /// Gets all the market data in the given system.
+    /// </summary>
+    /// <param name="systemId">The ID of the system to get market data for.</param>
+    /// <param name="cancellationToken">A token that can be used to cancel the operation.</param>
+    /// <returns>The probed market data in the system.</returns>
+    IAsyncEnumerable<MarketData> GetMarketData(SystemId systemId, CancellationToken cancellationToken = default);
+
+    /// <summary>
     /// Gets the market data for the given marketplace.
     /// </summary>
     /// <param name="marketplaceId">The ID of the market to get data for.</param>

@@ -1,4 +1,6 @@
-﻿using Wolfe.SpaceTraders.Domain.Agents;
+﻿using System.Reactive.Linq;
+using System.Reactive.Subjects;
+using Wolfe.SpaceTraders.Domain.Agents;
 using Wolfe.SpaceTraders.Domain.Exploration;
 using Wolfe.SpaceTraders.Domain.General;
 using Wolfe.SpaceTraders.Domain.Marketplaces;
@@ -21,6 +23,8 @@ public class Ship(
     ShipNavigation navigation
 )
 {
+    private readonly Subject<MarketData> _marketDataProbed = new();
+
     /// <summary>
     /// Gets the unique identifier of the ship.
     /// </summary>
@@ -62,6 +66,11 @@ public class Ship(
     public ShipCargo Cargo { get; private set; } = cargo;
 
     /// <summary>
+    /// An observable that will emit a value whenever the ship probes market data.
+    /// </summary>
+    public IObservable<MarketData> MarketDataProbed => _marketDataProbed.AsObservable();
+
+    /// <summary>
     /// Waits for the ship to arrive at its destination. If the ship is not in transit, this method will return immediately.
     /// </summary>
     /// <param name="cancellationToken">A token that can be used to cancel the operation.</param>
@@ -76,7 +85,11 @@ public class Ship(
 
         var delay = Task
             .Delay(tta, cancellationToken)
-            .ContinueWith(async _ => Navigation = await client.GetNavigation(Id, cancellationToken), cancellationToken)
+            .ContinueWith(async _ =>
+            {
+
+                return Navigation = await client.GetNavigation(Id, cancellationToken);
+            }, cancellationToken)
             .Unwrap();
         return new ValueTask(delay);
     }
@@ -174,6 +187,8 @@ public class Ship(
         }
 
         var result = await client.ProbeMarketData(Navigation.WaypointId, cancellationToken);
+        if (result?.Data != null) { _marketDataProbed.OnNext(result.Data); }
+
         return result?.Data;
     }
 

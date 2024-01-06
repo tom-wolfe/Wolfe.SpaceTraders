@@ -1,6 +1,7 @@
 ﻿using Wolfe.SpaceTraders.Domain.Exploration;
 using Wolfe.SpaceTraders.Domain.Missions.Scheduling;
 using Wolfe.SpaceTraders.Services;
+using Wolfe.SpaceTraders.Services.Exploration;
 
 namespace Wolfe.SpaceTraders;
 

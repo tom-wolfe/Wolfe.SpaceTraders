@@ -32,6 +32,16 @@ internal class MongoMarketplaceStore : IMarketplaceStore
         return _marketplacesCollection.ReplaceOneAsync(x => x.Id == mongoMarketplace.Id, mongoMarketplace, MongoHelpers.InsertOrUpdate, cancellationToken);
     }
 
+    public async IAsyncEnumerable<MarketData> GetMarketData(SystemId systemId, [EnumeratorCancellation] CancellationToken cancellationToken = default)
+    {
+        var query = await _marketDataCollection.FindAsync(m => m.SystemId == systemId.Value, cancellationToken: cancellationToken);
+        var results = query.ToAsyncEnumerable(cancellationToken: cancellationToken);
+        await foreach (var result in results)
+        {
+            yield return result.ToDomain();
+        }
+    }
+
     public async Task<MarketData?> GetMarketData(WaypointId marketplaceId, CancellationToken cancellationToken)
     {
         var results = await _marketDataCollection.FindAsync(s => s.WaypointId == marketplaceId.Value, cancellationToken: cancellationToken);
@@ -56,11 +66,8 @@ internal class MongoMarketplaceStore : IMarketplaceStore
         }
     }
 
-    public Task Clear(CancellationToken cancellationToken = default)
-    {
-        return Task.WhenAll(
-            _marketDataCollection.DeleteManyAsync(_ => true, cancellationToken),
-            _marketplacesCollection.DeleteManyAsync(_ => true, cancellationToken)
-        );
-    }
+    public Task Clear(CancellationToken cancellationToken = default) => Task.WhenAll(
+        _marketDataCollection.DeleteManyAsync(_ => true, cancellationToken),
+        _marketplacesCollection.DeleteManyAsync(_ => true, cancellationToken)
+    );
 }

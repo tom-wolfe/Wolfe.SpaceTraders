@@ -1,8 +1,12 @@
-﻿using Wolfe.SpaceTraders.Domain.Missions;
+﻿using Wolfe.SpaceTraders.Domain.Marketplaces;
+using Wolfe.SpaceTraders.Domain.Missions;
 
 namespace Wolfe.SpaceTraders.Services;
 
-public class MissionManagerService(IMissionService missionService) : IHostedService
+public class MissionManagerService(
+    IMissionService missionService,
+    IMarketplaceService marketplaceService
+) : IHostedService
 {
     public Task StartAsync(CancellationToken cancellationToken)
     {
