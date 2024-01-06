@@ -2,7 +2,7 @@
 
 public class WayfinderRoute
 {
-    public IReadOnlyCollection<WaypointId> Waypoints { get; init; }
+    public required IReadOnlyCollection<WaypointId> Waypoints { get; init; }
 
-    public double TotalDistance { get; init; }
+    public required double TotalDistance { get; init; }
 }

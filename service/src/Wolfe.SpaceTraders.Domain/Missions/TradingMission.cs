@@ -101,6 +101,6 @@ public class TradingMission(
         ItemId TradeItem,
         WaypointId ExportDestination,
         WaypointId ImportDestination,
-        MarketTradeSupply supply
+        MarketTradeSupply Supply
     );
 }

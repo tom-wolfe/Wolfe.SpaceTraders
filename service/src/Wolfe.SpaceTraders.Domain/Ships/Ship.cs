@@ -126,7 +126,7 @@ public class Ship
     {
         if (Navigation.Status == ShipNavigationStatus.InTransit)
         {
-            throw new InvalidOperationException("Cannot dock ship while in transit.");
+            throw new InvalidOperationException("Unable to dock ship while in transit.");
         }
 
         if (Navigation.Status == ShipNavigationStatus.Docked)
@@ -167,7 +167,7 @@ public class Ship
     {
         if (Navigation.Status == ShipNavigationStatus.InTransit)
         {
-            throw new InvalidOperationException("Ship is in transit.");
+            throw new InvalidOperationException("Unable to enter orbit while in transit.");
         }
 
         if (Navigation.Status == ShipNavigationStatus.InOrbit)
@@ -194,8 +194,18 @@ public class Ship
 
     public async ValueTask Refuel(CancellationToken cancellationToken = default)
     {
+        if (Navigation.Status == ShipNavigationStatus.InTransit)
+        {
+            throw new InvalidOperationException("Unable to refuel while in transit.");
+        }
+
+        if (Navigation.Status == ShipNavigationStatus.InOrbit)
+        {
+            await Dock(cancellationToken);
+        }
+
         var response = await _client.Refuel(Id, cancellationToken);
-        _fuel.Current = response.Fuel.Current;
+        _fuel.Current = response.NewValue;
     }
 
     private async ValueTask SetSpeed(ShipSpeed speed, CancellationToken cancellationToken = default)

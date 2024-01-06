@@ -55,9 +55,8 @@ internal static class Ships
 
     public static ShipRefuelResult ToDomain(this SpaceTradersShipRefuelResult result) => new()
     {
-        Fuel = result.Fuel.ToDomain(),
-        Agent = result.Agent.ToDomain(),
-        Transaction = result.Transaction.ToDomain(),
+        NewValue = new Fuel(result.Fuel.Current),
+        Cost = new Credits(result.Transaction.TotalPrice),
     };
 
     public static ShipSellResult ToDomain(this SpaceTradersShipSellResult result) => new()

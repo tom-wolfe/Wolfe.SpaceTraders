@@ -1,11 +1,9 @@
-﻿using Wolfe.SpaceTraders.Domain.Agents;
-using Wolfe.SpaceTraders.Domain.Marketplaces;
+﻿using Wolfe.SpaceTraders.Domain.General;
 
 namespace Wolfe.SpaceTraders.Domain.Ships.Results;
 
 public class ShipRefuelResult
 {
-    public required Agent Agent { get; init; }
-    public required IShipFuelBase Fuel { get; init; }
-    public required MarketTransaction Transaction { get; init; }
+    public required Fuel NewValue { get; init; }
+    public required Credits Cost { get; init; }
 }
