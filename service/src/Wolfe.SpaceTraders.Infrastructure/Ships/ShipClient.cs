@@ -28,7 +28,7 @@ internal class ShipClient(ISpaceTradersApiClient apiClient) : IShipClient
         return response.GetContent().Data.ToDomain();
     }
 
-    public async Task<IShipNavigation> GetNavigation(ShipId shipId, CancellationToken cancellationToken = default)
+    public async Task<IShipNavigation> GetNavigationStatus(ShipId shipId, CancellationToken cancellationToken = default)
     {
         var response = await apiClient.GetShip(shipId.Value, cancellationToken);
         return response.GetContent().Data.Nav.ToDomain();

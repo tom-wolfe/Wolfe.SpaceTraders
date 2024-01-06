@@ -18,8 +18,8 @@ public class Ship
 
     private readonly IShipClient _client;
     private ShipNavigation _navigation;
-    private ShipFuel _fuel;
-    private ShipCargo _cargo;
+    private readonly ShipFuel _fuel;
+    private readonly ShipCargo _cargo;
 
     private Ship(IShipClient client, ShipNavigation navigation, ShipFuel fuel, ShipCargo cargo)
     {
@@ -100,8 +100,9 @@ public class Ship
         if (speed != null) { await SetSpeed(speed.Value, cancellationToken); }
 
         var result = await _client.Navigate(Id, new ShipNavigateCommand { WaypointId = waypointId }, cancellationToken);
-        _navigation = new ShipNavigation(result.Navigation);
-        _fuel = new ShipFuel(result.Fuel);
+        _navigation.Status = ShipNavigationStatus.InTransit;
+        _navigation.Destination = result.Destination;
+        _fuel.Current = result.FuelRemaining;
 
         if (Navigation.Destination == null)
         {
@@ -111,11 +112,7 @@ public class Ship
         Observable
             .Interval(Navigation.Destination.TimeToArrival)
             .Take(1)
-            .Select(_ => Observable.FromAsync(async () =>
-            {
-                _navigation = new ShipNavigation(await _client.GetNavigation(Id, cancellationToken));
-                _arrived.OnNext(Navigation.WaypointId);
-            }))
+            .Select(_ => Observable.FromAsync(OnArrival))
             .Concat()
             .Subscribe();
 
@@ -231,6 +228,16 @@ public class Ship
         _cargo.Remove(itemId, quantity);
 
         return result.Transaction;
+    }
+
+    private async Task OnArrival(CancellationToken cancellationToken = default)
+    {
+        var status = await _client.GetNavigationStatus(Id, cancellationToken);
+        _navigation.Location = status.Location;
+        _navigation.WaypointId = status.WaypointId;
+        _navigation.Destination = null;
+        _navigation.Status = status.Status;
+        _arrived.OnNext(Navigation.WaypointId);
     }
 
     public static Ship Create(IShipClient client, ShipId shipId, AgentId agentId, string name, ShipRole role, IShipFuelBase fuel, IShipNavigation navigation, IShipCargoBase cargo)

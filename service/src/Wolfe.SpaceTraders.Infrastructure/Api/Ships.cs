@@ -49,8 +49,8 @@ internal static class Ships
 
     public static ShipNavigateResult ToDomain(this SpaceTradersShipNavigateResult result) => new()
     {
-        Navigation = result.Nav.ToDomain(),
-        Fuel = result.Fuel.ToDomain(),
+        FuelRemaining = new Fuel(result.Fuel.Current),
+        Destination = result.Nav.ToDomain().Destination!,
     };
 
     public static ShipRefuelResult ToDomain(this SpaceTradersShipRefuelResult result) => new()

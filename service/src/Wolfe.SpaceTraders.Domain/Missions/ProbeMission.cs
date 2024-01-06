@@ -45,9 +45,8 @@ public class ProbeMission(
             }
             else
             {
-                var result = await Ship.NavigateTo(market.MarketId, ShipSpeed.Burn, CancellationToken.None)
-                             ?? throw new Exception("Probe ship already at destination.");
-                _log.OnNext($"Expected to arrive in {result.Navigation.Destination?.TimeToArrival}.");
+                var result = await Ship.NavigateTo(market.MarketId, ShipSpeed.Burn, CancellationToken.None) ?? throw new Exception("Probe ship already at destination.");
+                _log.OnNext($"Expected to arrive in {result.Destination.TimeToArrival}.");
 
                 await ship.Arrived.Take(1);
                 _log.OnNext($"Arrived at destination. Collecting market data.");
