@@ -40,7 +40,6 @@ public static class ServiceCollectionExtensions
             .AddSingleton<IShipClient, ShipClient>()
             .AddSingleton<ITokenService, TokenService>()
             .AddSingleton<IMissionService, MissionService>()
-            .AddSingleton<IMissionFactory, MissionFactory>()
             .AddSingleton<IMissionLog, MongoMissionLog>()
             .AddSingleton<IMissionLog, LoggerMissionLog>();
     }

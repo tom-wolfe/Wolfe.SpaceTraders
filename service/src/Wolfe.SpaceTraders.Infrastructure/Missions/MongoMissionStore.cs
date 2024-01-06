@@ -17,26 +17,25 @@ internal class MongoMissionStore : IMissionStore
         _missionsCollection = database.GetCollection<MongoMission>(mongoOptions.Value.MissionsCollection);
     }
 
-    public Task UpdateMission(IMission mission, CancellationToken cancellationToken = default)
+    public Task UpdateMission(MongoMission mission, CancellationToken cancellationToken = default)
     {
-        var mongoMission = mission.ToMongo();
-        return _missionsCollection.ReplaceOneAsync(x => x.Id == mongoMission.Id, mongoMission, MongoHelpers.InsertOrUpdate, cancellationToken);
+        return _missionsCollection.ReplaceOneAsync(x => x.Id == mission.Id, mission, MongoHelpers.InsertOrUpdate, cancellationToken);
     }
 
-    public async Task<IMission?> GetMission(MissionId missionId, IMissionFactory factory, CancellationToken cancellationToken = default)
+    public async Task<MongoMission?> GetMission(MissionId missionId, CancellationToken cancellationToken = default)
     {
         var results = await _missionsCollection.FindAsync(m => m.Id == missionId.Value, cancellationToken: cancellationToken);
         var mongoMission = await results.FirstOrDefaultAsync(cancellationToken: cancellationToken);
-        return mongoMission == null ? null : await factory.Rehydrate(mongoMission, cancellationToken);
+        return mongoMission;
     }
 
-    public async IAsyncEnumerable<IMission> GetMissions(IMissionFactory factory, [EnumeratorCancellation] CancellationToken cancellationToken = default)
+    public async IAsyncEnumerable<MongoMission> GetMissions([EnumeratorCancellation] CancellationToken cancellationToken = default)
     {
         var query = await _missionsCollection.FindAsync(_ => true, cancellationToken: cancellationToken);
         var results = query.ToAsyncEnumerable(cancellationToken: cancellationToken);
         await foreach (var result in results)
         {
-            yield return await factory.Rehydrate(result, cancellationToken);
+            yield return result;
         }
     }
 }

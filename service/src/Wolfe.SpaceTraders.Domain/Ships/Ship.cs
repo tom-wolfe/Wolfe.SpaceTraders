@@ -24,6 +24,7 @@ public class Ship(
 )
 {
     private readonly Subject<MarketData> _marketDataProbed = new();
+    private readonly Subject<WaypointId> _arrived = new();
 
     /// <summary>
     /// Gets the unique identifier of the ship.
@@ -66,33 +67,14 @@ public class Ship(
     public ShipCargo Cargo { get; private set; } = cargo;
 
     /// <summary>
+    /// An observable that will emit a value whenever the ship arrives at a destination waypoint.
+    /// </summary>
+    public IObservable<WaypointId> Arrived => _arrived.AsObservable();
+
+    /// <summary>
     /// An observable that will emit a value whenever the ship probes market data.
     /// </summary>
     public IObservable<MarketData> MarketDataProbed => _marketDataProbed.AsObservable();
-
-    /// <summary>
-    /// Waits for the ship to arrive at its destination. If the ship is not in transit, this method will return immediately.
-    /// </summary>
-    /// <param name="cancellationToken">A token that can be used to cancel the operation.</param>
-    /// <returns>a task to monitor the status of the operation.</returns>
-    public ValueTask AwaitArrival(CancellationToken cancellationToken = default)
-    {
-        var tta = Navigation.Route.TimeToArrival;
-        if (Navigation.Status != ShipNavigationStatus.InTransit || tta.TotalMilliseconds <= 0)
-        {
-            return ValueTask.CompletedTask;
-        }
-
-        var delay = Task
-            .Delay(tta, cancellationToken)
-            .ContinueWith(async _ =>
-            {
-
-                return Navigation = await client.GetNavigation(Id, cancellationToken);
-            }, cancellationToken)
-            .Unwrap();
-        return new ValueTask(delay);
-    }
 
     /// <summary>
     /// Sets the ship to start navigating to the specified waypoint at the given speed. If no speed is specified, the previous speed will be used.
@@ -102,7 +84,7 @@ public class Ship(
     /// <param name="cancellationToken">A token that can be used to cancel the operation.</param>
     /// <returns>The result of the navigation, or null if the ship is already at its destination.</returns>
     /// <exception cref="InvalidOperationException"></exception>
-    public async ValueTask<ShipNavigateResult?> BeginNavigationTo(WaypointId waypointId, ShipSpeed? speed = null, CancellationToken cancellationToken = default)
+    public async ValueTask<ShipNavigateResult?> NavigateTo(WaypointId waypointId, ShipSpeed? speed = null, CancellationToken cancellationToken = default)
     {
         if (Navigation.Status == ShipNavigationStatus.InTransit)
         {
@@ -122,6 +104,17 @@ public class Ship(
         var result = await client.Navigate(Id, new ShipNavigateCommand { WaypointId = waypointId }, cancellationToken);
         Navigation = result.Navigation;
         Fuel = result.Fuel;
+
+        Observable
+            .Interval(result.Navigation.Route.TimeToArrival)
+            .Take(1)
+            .Select(_ => Observable.FromAsync(async () =>
+            {
+                Navigation = await client.GetNavigation(Id, cancellationToken);
+                _arrived.OnNext(Navigation.WaypointId);
+            }))
+            .Concat()
+            .Subscribe();
 
         return result;
     }

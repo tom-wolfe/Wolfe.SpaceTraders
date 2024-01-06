@@ -1,4 +1,5 @@
-﻿using Wolfe.SpaceTraders.Domain.Exploration;
+﻿using System.Reactive.Linq;
+using Wolfe.SpaceTraders.Domain.Exploration;
 using Wolfe.SpaceTraders.Domain.Fleet;
 using Wolfe.SpaceTraders.Domain.Fleet.Commands;
 using Wolfe.SpaceTraders.Domain.Marketplaces;
@@ -42,10 +43,12 @@ public static class Ships
             var ship = await fleetService.GetShip(shipId, cancellationToken);
             if (ship == null) { return Results.NotFound(); }
 
-            var result = await ship.BeginNavigationTo(request.WaypointId, request.Speed, cancellationToken);
+            var result = await ship.NavigateTo(request.WaypointId, request.Speed, cancellationToken);
             if (request.Wait == true)
             {
-                await ship.AwaitArrival(cancellationToken);
+                await ship.Arrived
+                    .TakeUntil(_ => cancellationToken.IsCancellationRequested)
+                    .Take(1);
             }
             return Results.Ok(result);
         });
@@ -86,7 +89,9 @@ public static class Ships
             var ship = await fleetService.GetShip(shipId, cancellationToken);
             if (ship == null) { return Results.NotFound(); }
 
-            await ship.AwaitArrival(cancellationToken);
+            await ship.Arrived
+                .TakeUntil(_ => cancellationToken.IsCancellationRequested)
+                .Take(1);
             return Results.Ok(ship);
         });
 

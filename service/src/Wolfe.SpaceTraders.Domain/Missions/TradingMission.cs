@@ -1,4 +1,5 @@
-﻿using Wolfe.SpaceTraders.Domain.Exploration;
+﻿using System.Reactive.Linq;
+using Wolfe.SpaceTraders.Domain.Exploration;
 using Wolfe.SpaceTraders.Domain.Marketplaces;
 using Wolfe.SpaceTraders.Domain.Missions.Scheduling;
 using Wolfe.SpaceTraders.Domain.Ships;
@@ -46,8 +47,10 @@ public class TradingMission(
         var route = await wayfinder.PlotRoute(Ship.Navigation.WaypointId, destination, cancellationToken);
         foreach (var waypoint in route.Waypoints)
         {
-            await Ship.BeginNavigationTo(waypoint, ShipSpeed.Cruise, cancellationToken);
-            await Ship.AwaitArrival(cancellationToken);
+            await Ship.NavigateTo(waypoint, ShipSpeed.Cruise, cancellationToken);
+            await Ship.Arrived
+                .TakeUntil(_ => cancellationToken.IsCancellationRequested)
+                .Take(1);
         }
     }
 
