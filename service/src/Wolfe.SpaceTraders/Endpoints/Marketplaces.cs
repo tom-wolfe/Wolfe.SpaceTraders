@@ -8,7 +8,7 @@ public static class Marketplaces
     public static WebApplication MapMarketplaceEndpoints(this WebApplication app)
     {
         app.MapGet("/systems/{systemId}/marketplaces", (IMarketplaceService marketplaceService, SystemId systemId, CancellationToken cancellationToken = default) => marketplaceService.GetMarketplaces(systemId, cancellationToken));
-
+        app.MapGet("/systems/{systemId}/trade-routes", (IMarketPriorityService marketPriorityService, SystemId systemId, CancellationToken cancellationToken = default) => marketPriorityService.GetAllTradeRoutes(systemId, cancellationToken));
         app.MapGet("/marketplaces/{marketplaceId}", async (IMarketplaceService marketplaceService, WaypointId marketplaceId, CancellationToken cancellationToken = default) =>
         {
             var marketplace = await marketplaceService.GetMarketplace(marketplaceId, cancellationToken);

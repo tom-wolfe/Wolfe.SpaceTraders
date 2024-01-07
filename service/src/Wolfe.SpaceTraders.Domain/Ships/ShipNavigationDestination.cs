@@ -8,7 +8,7 @@ public class ShipNavigationDestination
     /// <summary>
     /// Buffer used for clock skew when comparing arrival times.
     /// </summary>
-    private static readonly TimeSpan ClockSkew = TimeSpan.FromSeconds(2);
+    private static readonly TimeSpan ClockSkew = TimeSpan.FromSeconds(5);
 
     public required WaypointId WaypointId { get; init; }
     public required Point Location { get; init; }

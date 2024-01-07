@@ -25,6 +25,48 @@ internal class MarketPriorityService(
         }
     }
 
+    public async Task<MarketTradeRoute?> GetBestTradeRoute(SystemId systemId, CancellationToken cancellationToken)
+    {
+        var trades = await GetAllTradeRoutes(systemId, cancellationToken);
+        var bestTrade = trades
+            .OrderByDescending(t => t.SupplyScore)
+            .ThenByDescending(t => t.ProfitScore)
+            .ThenBy(t => t.Distance)
+            .First();
+        return bestTrade;
+    }
+
+    public async Task<List<MarketTradeRoute>> GetAllTradeRoutes(SystemId systemId, CancellationToken cancellationToken)
+    {
+        var marketplaces = await marketplaceService.GetMarketplaces(systemId, cancellationToken).ToListAsync(cancellationToken);
+        var markets = await marketplaceService.GetMarketData(systemId, cancellationToken).ToListAsync(cancellationToken);
+
+        var tradeRoutes = new List<MarketTradeRoute>();
+        foreach (var importMarket in markets)
+        {
+            foreach (var exportMarket in markets)
+            {
+                if (importMarket.WaypointId == exportMarket.WaypointId) { continue; }
+
+                var imports = importMarket.TradeGoods.Where(t => t.Type == MarketTradeType.Import).ToList();
+                var exports = importMarket.TradeGoods.Where(t => t.Type == MarketTradeType.Export).ToList();
+
+                var matches = imports.SelectMany(import => exports
+                    .Where(export => import.ItemId == export.ItemId)
+                    .Select(export => new MarketTradeRoute(
+                        import.ItemId,
+                        marketplaces.First(m => m.Id == importMarket.WaypointId),
+                        marketplaces.First(m => m.Id == exportMarket.WaypointId),
+                        import,
+                        export
+                    ))
+                );
+                tradeRoutes.AddRange(matches);
+            }
+        }
+        return tradeRoutes;
+    }
+
     private MarketPriorityRank Rank(Point location, Marketplace marketplace, IEnumerable<MarketData> allData)
     {
         var distance = location.DistanceTo(marketplace.Location);

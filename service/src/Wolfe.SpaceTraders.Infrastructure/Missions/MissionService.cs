@@ -12,7 +12,6 @@ namespace Wolfe.SpaceTraders.Infrastructure.Missions;
 internal class MissionService(
     IMissionStore missionStore,
     IFleetService fleetService,
-    IMarketplaceService marketplaceService,
     IMarketPriorityService marketPriorityService,
     IMissionScheduler missionScheduler,
     IWayfinderService wayfinder,
@@ -142,7 +141,7 @@ internal class MissionService(
 
     private TradingMission ConstructTradingMission(MissionId missionId, Ship ship, MissionStatus missionStatus)
     {
-        var mission = new TradingMission(missionStatus, ship, marketplaceService, wayfinder, missionScheduler)
+        var mission = new TradingMission(missionStatus, ship, marketPriorityService, wayfinder, missionScheduler)
         {
             Id = missionId,
             AgentId = ship.AgentId,

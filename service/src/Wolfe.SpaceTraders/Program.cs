@@ -44,6 +44,7 @@ app
     .MapDatabaseEndpoints()
     .MapExplorationEndpoints()
     .MapHomeEndpoints()
+    .MapMarketplaceEndpoints()
     .MapMissionEndpoints()
     .MapShipEndpoints()
     .MapShipyardEndpoints();

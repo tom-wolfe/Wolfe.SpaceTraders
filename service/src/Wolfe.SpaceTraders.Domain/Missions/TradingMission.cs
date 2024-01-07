@@ -11,13 +11,13 @@ namespace Wolfe.SpaceTraders.Domain.Missions;
 /// </summary>
 /// <param name="startingStatus">The status that the mission will start in.</param>
 /// <param name="ship">The ship that will navigate and perform the probe.</param>
-/// <param name="marketplaceService">The service that provides market data.</param>
+/// <param name="marketPriority">The service that provides market data.</param>
 /// <param name="wayfinder">The service used to provide pathfinding between waypoints.</param>
 /// <param name="scheduler">The object that will be used to handle the running of the mission.</param>
 public class TradingMission(
     MissionStatus startingStatus,
     Ship ship,
-    IMarketplaceService marketplaceService,
+    IMarketPriorityService marketPriority,
     IWayfinderService wayfinder,
     IMissionScheduler scheduler
 ) : Mission(startingStatus, ship, scheduler)
@@ -30,14 +30,15 @@ public class TradingMission(
     {
         while (true)
         {
-            //var route = await GetBestTradeRoute(cancellationToken);
+            var route = await marketPriority.GetBestTradeRoute(Ship.Navigation.WaypointId.SystemId, cancellationToken)
+                        ?? throw new Exception("No trade routes available.");
 
             cancellationToken.ThrowIfCancellationRequested();
 
-            //await NavigateTo(route.ExportDestination, CancellationToken.None);
-            //await Buy(route.TradeItem, CancellationToken.None);
-            //await NavigateTo(route.ImportDestination, CancellationToken.None);
-            //await Sell(route.TradeItem, CancellationToken.None);
+            await NavigateTo(route.ExportDestination.Id, CancellationToken.None);
+            await Buy(route.TradeItem, CancellationToken.None);
+            await NavigateTo(route.ImportDestination.Id, CancellationToken.None);
+            await Sell(route.TradeItem, CancellationToken.None);
 
             cancellationToken.ThrowIfCancellationRequested();
         }
@@ -52,6 +53,7 @@ public class TradingMission(
             await Ship.Arrived
                 .TakeUntil(_ => cancellationToken.IsCancellationRequested)
                 .Take(1);
+            await Ship.Refuel(cancellationToken);
         }
     }
 
@@ -66,42 +68,4 @@ public class TradingMission(
         var count = Ship.Cargo.Items.Where(i => i.Id == itemId).Sum(i => i.Quantity);
         await Ship.Sell(itemId, count, cancellationToken);
     }
-
-    //private async Task<TradeRoute> GetBestTradeRoute(CancellationToken cancellationToken)
-    //{
-    //    var markets = await marketplaceService.GetMarketData(Ship.Navigation.WaypointId.SystemId, cancellationToken).ToListAsync(cancellationToken);
-
-    //    var tradeRoutes = new List<TradeRoute>();
-    //    foreach (var importMarket in markets)
-    //    {
-    //        foreach (var exportMarket in markets)
-    //        {
-    //            if (importMarket.WaypointId == exportMarket.WaypointId) { continue; }
-
-    //            importMarket.TradeGoods.ElementAt(0).
-
-    //            var importSupply = importMarket.GetSupply(TradeItem);
-    //            var exportSupply = exportMarket.GetSupply(TradeItem);
-
-    //            if (importSupply == null || exportSupply == null)
-    //            {
-    //                continue;
-    //            }
-
-    //            var supply = new MarketTradeSupply(importSupply, exportSupply);
-
-    //            if (supply.Profit > 0)
-    //            {
-    //                tradeRoutes.Add(new TradeRoute(TradeItem, exportMarket.MarketId, importMarket.MarketId, supply));
-    //            }
-    //        }
-    //    }
-    //}
-
-    private record TradeRoute(
-        ItemId TradeItem,
-        WaypointId ExportDestination,
-        WaypointId ImportDestination,
-        MarketTradeSupply Supply
-    );
 }
