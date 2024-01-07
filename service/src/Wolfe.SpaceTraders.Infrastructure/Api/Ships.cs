@@ -98,7 +98,7 @@ internal static class Ships
         Location = new Point(navigation.Route.Origin.X, navigation.Route.Origin.Y),
         Status = new ShipNavigationStatus(navigation.Status),
         Speed = new ShipSpeed(navigation.FlightMode),
-        Destination = navigation.Route.Origin.Symbol == navigation.Route.Destination.Symbol ? null : new ShipNavigationDestination
+        Destination = navigation.WaypointSymbol == navigation.Route.Destination.Symbol ? null : new ShipNavigationDestination
         {
             Location = new Point(navigation.Route.Destination.X, navigation.Route.Destination.Y),
             WaypointId = new(navigation.Route.Destination.Symbol),

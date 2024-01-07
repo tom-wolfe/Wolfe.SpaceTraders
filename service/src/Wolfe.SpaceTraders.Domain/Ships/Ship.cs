@@ -1,5 +1,6 @@
 ﻿using System.Reactive.Linq;
 using System.Reactive.Subjects;
+using System.Text.Json.Serialization;
 using Wolfe.SpaceTraders.Domain.Agents;
 using Wolfe.SpaceTraders.Domain.Exploration;
 using Wolfe.SpaceTraders.Domain.General;
@@ -68,14 +69,17 @@ public class Ship
     /// <summary>
     /// An observable that will emit a value whenever the ship arrives at a destination waypoint.
     /// </summary>
+    [JsonIgnore]
     public IObservable<WaypointId> Arrived => _arrived.AsObservable();
 
     /// <summary>
     /// An observable that will emit a value whenever the ship probes market data.
     /// </summary>
+    [JsonIgnore]
     public IObservable<MarketData> MarketDataProbed => _marketDataProbed.AsObservable();
 
-    public Distance MaximumDistance => new Distance(Fuel.Capacity.Value, 0);
+    [JsonIgnore]
+    public Distance MaximumDistance => new(Fuel.Capacity.Value, 0);
 
     /// <summary>
     /// Sets the ship to start navigating to the specified waypoint at the given speed. If no speed is specified, the previous speed will be used.

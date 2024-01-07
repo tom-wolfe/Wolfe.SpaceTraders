@@ -20,6 +20,7 @@ internal class FleetService(
 {
     private readonly Subject<Ship> _shipRegistered = new();
     private readonly Dictionary<string, Ship> _ships = new();
+    private readonly SemaphoreSlim _shipLock = new(1, 1);
 
     public IObservable<Ship> ShipRegistered => _shipRegistered.AsObservable();
 
@@ -31,18 +32,26 @@ internal class FleetService(
 
     public async Task<Ship?> GetShip(ShipId shipId, CancellationToken cancellationToken = default)
     {
-        if (_ships.TryGetValue(shipId.Value, out var ship)) { return ship; }
+        await _shipLock.WaitAsync(cancellationToken);
+        try
+        {
+            if (_ships.TryGetValue(shipId.Value, out var ship)) { return ship; }
 
-        var me = (await apiClient.GetAgent(cancellationToken)).GetContent().Data;
-        var response = await apiClient.GetShip(shipId.Value, cancellationToken);
-        if (response.StatusCode == HttpStatusCode.NotFound) { return null; }
+            var me = (await apiClient.GetAgent(cancellationToken)).GetContent().Data;
+            var response = await apiClient.GetShip(shipId.Value, cancellationToken);
+            if (response.StatusCode == HttpStatusCode.NotFound) { return null; }
 
-        ship = response.GetContent().Data.ToDomain(new AgentId(me.Symbol), shipClient);
-        _ships.Add(ship.Id.Value, ship);
+            var apiShip = response.GetContent().Data;
+            ship = apiShip.ToDomain(new AgentId(me.Symbol), shipClient);
+            _ships.Add(ship.Id.Value, ship);
+            _shipRegistered.OnNext(ship);
 
-        _shipRegistered.OnNext(ship);
-
-        return ship;
+            return ship;
+        }
+        finally
+        {
+            _shipLock.Release();
+        }
     }
 
     public async IAsyncEnumerable<Ship> GetShips([EnumeratorCancellation] CancellationToken cancellationToken = default)
@@ -51,13 +60,20 @@ internal class FleetService(
         var results = PaginationHelpers.ToAsyncEnumerable<SpaceTradersShip>(async p => (await apiClient.GetShips(20, p, cancellationToken)).GetContent());
         await foreach (var result in results)
         {
-            if (_ships.TryGetValue(result.Symbol, out var ship)) { yield return ship; }
-
-            ship = result.ToDomain(new AgentId(me.Symbol), shipClient);
-            _ships.Add(ship.Id.Value, ship);
-            _shipRegistered.OnNext(ship);
-
-            yield return ship;
+            await _shipLock.WaitAsync(cancellationToken);
+            try
+            {
+                if (!_ships.TryGetValue(result.Symbol, out var ship))
+                {
+                    ship = result.ToDomain(new AgentId(me.Symbol), shipClient);
+                    _shipRegistered.OnNext(ship);
+                }
+                yield return ship;
+            }
+            finally
+            {
+                _shipLock.Release();
+            }
         }
     }
 }
