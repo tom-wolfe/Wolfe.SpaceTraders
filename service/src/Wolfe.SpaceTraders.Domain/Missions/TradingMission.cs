@@ -12,6 +12,7 @@ namespace Wolfe.SpaceTraders.Domain.Missions;
 /// <param name="startingStatus">The status that the mission will start in.</param>
 /// <param name="ship">The ship that will navigate and perform the probe.</param>
 /// <param name="marketplaceService">The service that provides market data.</param>
+/// <param name="wayfinder">The service used to provide pathfinding between waypoints.</param>
 /// <param name="scheduler">The object that will be used to handle the running of the mission.</param>
 public class TradingMission(
     MissionStatus startingStatus,
@@ -44,7 +45,7 @@ public class TradingMission(
 
     private async Task NavigateTo(WaypointId destination, CancellationToken cancellationToken = default)
     {
-        var route = await wayfinder.PlotRoute(Ship.Navigation.WaypointId, destination, cancellationToken);
+        var route = await wayfinder.FindPath(Ship.Navigation.WaypointId, destination, Ship.MaximumDistance, cancellationToken);
         foreach (var waypoint in route.Waypoints)
         {
             await Ship.NavigateTo(waypoint, ShipSpeed.Cruise, cancellationToken);

@@ -27,9 +27,8 @@ public interface IMarketplaceService
     /// Gets the percentage chance that the market data will have changed in the given time period.
     /// </summary>
     /// <param name="age">The time between market data refreshes.</param>
-    /// <param name="cancellationToken">A token that can be used to cancel the operation.</param>
     /// <returns>A number between 0 and 100 indicating the percentage chance that the market data will have changed.</returns>
-    Task<double> GetPercentileVolatility(TimeSpan age, CancellationToken cancellationToken = default);
+    double GetPercentileVolatility(TimeSpan age);
 
     /// <summary>
     /// Gets all the market data in the given system.

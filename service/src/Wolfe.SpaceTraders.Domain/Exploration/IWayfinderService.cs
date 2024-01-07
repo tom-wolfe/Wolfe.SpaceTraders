@@ -1,6 +1,8 @@
-﻿namespace Wolfe.SpaceTraders.Domain.Exploration;
+﻿using Wolfe.SpaceTraders.Domain.General;
+
+namespace Wolfe.SpaceTraders.Domain.Exploration;
 
 public interface IWayfinderService
 {
-    public Task<WayfinderRoute> PlotRoute(WaypointId start, WaypointId destination, CancellationToken cancellationToken = default);
+    public Task<WayfinderPath> FindPath(WaypointId start, WaypointId destination, Distance furthestHop, CancellationToken cancellationToken = default);
 }

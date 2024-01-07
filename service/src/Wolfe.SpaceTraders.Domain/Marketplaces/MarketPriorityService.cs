@@ -12,10 +12,11 @@ internal class MarketPriorityService(
     public async IAsyncEnumerable<MarketPriorityRank> GetPriorityMarkets(WaypointId startingWaypointId, [EnumeratorCancellation] CancellationToken cancellationToken = default)
     {
         var start = await explorationService.GetWaypoint(startingWaypointId, cancellationToken) ?? throw new Exception("Invalid starting position.");
+        var allData = await marketplaceService.GetMarketData(startingWaypointId.SystemId, cancellationToken).ToListAsync(cancellationToken);
 
         var markets = marketplaceService
             .GetMarketplaces(startingWaypointId.SystemId, cancellationToken)
-            .SelectAwaitWithCancellation((m, ct) => Rank(start.Location, m, ct))
+            .Select(m => Rank(start.Location, m, allData))
             .OrderBy(m => m.Rank);
 
         await foreach (var market in markets)
@@ -24,13 +25,13 @@ internal class MarketPriorityService(
         }
     }
 
-    private async ValueTask<MarketPriorityRank> Rank(Point location, Marketplace marketplace, CancellationToken cancellationToken = default)
+    private MarketPriorityRank Rank(Point location, Marketplace marketplace, IEnumerable<MarketData> allData)
     {
         var distance = location.DistanceTo(marketplace.Location);
         var totalDistance = Math.Round(location.DistanceTo(marketplace.Location).Total);
 
-        var marketData = await marketplaceService.GetMarketData(marketplace.Id, cancellationToken);
-        var volatility = marketData == null ? 100 : await marketplaceService.GetPercentileVolatility(marketData.Age, cancellationToken);
+        var marketData = allData.FirstOrDefault(m => m.WaypointId == marketplace.Id);
+        var volatility = marketData == null ? 100 : marketplaceService.GetPercentileVolatility(marketData.Age);
         var age = marketData == null ? 0 : marketData.Age.TotalMinutes;
 
         // Adjust priority based on percentile chance of market data having changed.

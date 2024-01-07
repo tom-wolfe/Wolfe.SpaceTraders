@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Wolfe.SpaceTraders.Domain.Exploration;
+using Wolfe.SpaceTraders.Domain.General;
 
 namespace Wolfe.SpaceTraders.Endpoints;
 
@@ -44,6 +45,13 @@ public static class Exploration
         {
             var waypoint = await explorationService.GetWaypoint(waypointId, cancellationToken);
             return waypoint == null ? Results.NotFound() : Results.Ok(waypoint);
+        });
+
+        app.MapGet("/route", async (IWayfinderService wayfinder, WaypointId from, WaypointId to, uint max, CancellationToken cancellationToken = default) =>
+        {
+            var maxDistance = new Distance(max, 0);
+            var path = await wayfinder.FindPath(from, to, maxDistance, cancellationToken);
+            return path;
         });
 
         return app;

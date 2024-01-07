@@ -3,7 +3,7 @@
 namespace Wolfe.SpaceTraders.Domain.Ships;
 
 [JsonConverter(typeof(FuelJsonConverter))]
-public record Fuel(int Value)
+public record Fuel(uint Value)
 {
     public static readonly Fuel Zero = new(0);
 
@@ -16,13 +16,7 @@ public record Fuel(int Value)
         return Value == other.Value;
     }
 
-    public override int GetHashCode()
-    {
-        return Value;
-    }
+    public override int GetHashCode() => (int)Value;
 
-    public override string ToString()
-    {
-        return Value.ToString();
-    }
+    public override string ToString() => Value.ToString();
 }

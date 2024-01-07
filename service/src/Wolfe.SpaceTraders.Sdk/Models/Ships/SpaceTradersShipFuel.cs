@@ -2,7 +2,7 @@
 
 public class SpaceTradersShipFuel
 {
-    public required int Current { get; set; }
-    public required int Capacity { get; set; }
+    public required uint Current { get; set; }
+    public required uint Capacity { get; set; }
     public SpaceTradersShipFuelConsumed? Consumed { get; set; }
 }

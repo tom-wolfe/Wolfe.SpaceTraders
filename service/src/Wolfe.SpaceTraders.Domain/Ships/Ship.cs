@@ -2,6 +2,7 @@
 using System.Reactive.Subjects;
 using Wolfe.SpaceTraders.Domain.Agents;
 using Wolfe.SpaceTraders.Domain.Exploration;
+using Wolfe.SpaceTraders.Domain.General;
 using Wolfe.SpaceTraders.Domain.Marketplaces;
 using Wolfe.SpaceTraders.Domain.Ships.Commands;
 using Wolfe.SpaceTraders.Domain.Ships.Results;
@@ -73,6 +74,8 @@ public class Ship
     /// An observable that will emit a value whenever the ship probes market data.
     /// </summary>
     public IObservable<MarketData> MarketDataProbed => _marketDataProbed.AsObservable();
+
+    public Distance MaximumDistance => new Distance(Fuel.Capacity.Value, 0);
 
     /// <summary>
     /// Sets the ship to start navigating to the specified waypoint at the given speed. If no speed is specified, the previous speed will be used.

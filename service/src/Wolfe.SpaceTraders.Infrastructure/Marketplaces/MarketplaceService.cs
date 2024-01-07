@@ -74,12 +74,12 @@ internal class MarketplaceService : IMarketplaceService
         }
     }
 
-    public Task<double> GetPercentileVolatility(TimeSpan age, CancellationToken cancellationToken = default)
+    public double GetPercentileVolatility(TimeSpan age)
     {
         var range = _options.Value.MaxAge - _options.Value.MinAge;
         var x = age - _options.Value.MinAge;
         var percentile = x.TotalMilliseconds / range.TotalMilliseconds;
-        return Task.FromResult(percentile);
+        return percentile;
     }
 
     public Task<MarketData?> GetMarketData(WaypointId marketplaceId, CancellationToken cancellationToken = default)

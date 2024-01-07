@@ -30,7 +30,7 @@ public class ProbeMission(
             if (Ship.Navigation.Status == ShipNavigationStatus.InTransit)
             {
                 _log.OnNext($"Ship is already in transit. Expected to arrive in {Ship.Navigation.Destination?.TimeToArrival}.");
-                await ship.Arrived.Take(1);
+                await ship.Arrived.TakeUntil(_ => cancellationToken.IsCancellationRequested).Take(1);
             }
 
             _log.OnNext($"Scanning system for un-probed markets near {Ship.Navigation.WaypointId}...");
@@ -48,7 +48,7 @@ public class ProbeMission(
                 var result = await Ship.NavigateTo(market.MarketId, ShipSpeed.Burn, CancellationToken.None) ?? throw new Exception("Probe ship already at destination.");
                 _log.OnNext($"Expected to arrive in {result.Destination.TimeToArrival}.");
 
-                await ship.Arrived.Take(1);
+                await ship.Arrived.TakeUntil(_ => cancellationToken.IsCancellationRequested).Take(1);
                 _log.OnNext($"Arrived at destination. Collecting market data.");
             }
 

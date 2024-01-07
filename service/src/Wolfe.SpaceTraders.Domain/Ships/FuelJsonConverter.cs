@@ -5,7 +5,7 @@ namespace Wolfe.SpaceTraders.Domain.Ships;
 
 internal class FuelJsonConverter : JsonConverter<Fuel>
 {
-    public override Fuel Read(ref Utf8JsonReader reader, Type typeToConvert, JsonSerializerOptions options) => new(reader.GetInt32());
+    public override Fuel Read(ref Utf8JsonReader reader, Type typeToConvert, JsonSerializerOptions options) => new(reader.GetUInt32());
 
     public override void Write(Utf8JsonWriter writer, Fuel value, JsonSerializerOptions options) => writer.WriteNumberValue(value.Value);
 

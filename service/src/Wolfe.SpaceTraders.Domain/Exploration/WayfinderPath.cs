@@ -1,6 +1,6 @@
 ﻿namespace Wolfe.SpaceTraders.Domain.Exploration;
 
-public class WayfinderRoute
+public class WayfinderPath
 {
     public required IReadOnlyCollection<WaypointId> Waypoints { get; init; }
 
